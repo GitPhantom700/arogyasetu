@@ -224,6 +224,9 @@ class LedgerVisionService:
 
     def _get_client(self):
         if not self.api_key:
+            self.api_key = os.getenv("GEMINI_API_KEY")
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+        if not self.api_key:
             return None
         if self._client is None:
             try:

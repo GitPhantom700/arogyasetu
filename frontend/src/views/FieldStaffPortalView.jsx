@@ -655,9 +655,10 @@ export function FieldStaffPortalView() {
       {/* Sub-Tab Navigation Bar */}
       <div className="flex items-center gap-2 border-b border-slate-200 dark:border-brand-dark-border pb-2">
         <button
+          id="tab-logger"
           onClick={() => setActiveSubTab('logger')}
           className={clsx(
-            'flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-xs',
+            'flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer',
             activeSubTab === 'logger'
               ? 'bg-emerald-600 text-white'
               : 'bg-white dark:bg-brand-dark-card text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
@@ -668,9 +669,10 @@ export function FieldStaffPortalView() {
         </button>
 
         <button
+          id="tab-ocr"
           onClick={() => setActiveSubTab('ocr')}
           className={clsx(
-            'flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-xs',
+            'flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer',
             activeSubTab === 'ocr'
               ? 'bg-teal-600 text-white'
               : 'bg-white dark:bg-brand-dark-card text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
@@ -678,11 +680,29 @@ export function FieldStaffPortalView() {
         >
           <ScanLine className="w-4 h-4" />
           <span>Multimodal Paper Register OCR (Gemini Vision)</span>
-          <span className="px-1.5 py-0.2 rounded text-[9px] font-extrabold bg-teal-200 text-teal-900 dark:bg-teal-900 dark:text-teal-200">
-            AI Flash
+          <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-teal-100 text-teal-800 dark:bg-teal-900/80 dark:text-teal-200">
+            Gemini 3.6 Flash
           </span>
         </button>
       </div>
+
+      {/* Sub-Tab Switcher / OCR Callout Banner */}
+      {activeSubTab === 'logger' && (
+        <div className="flex items-center justify-between p-3.5 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 text-xs shadow-xs">
+          <div className="flex items-center gap-2 text-teal-900 dark:text-teal-200">
+            <ScanLine className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
+            <span>Need to digitize handwritten stock logbooks with <strong>Gemini 3.6 Flash Vision</strong>?</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('ocr')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition shadow-xs cursor-pointer shrink-0"
+          >
+            <span>Open Paper Register OCR</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* SUB-TAB 1: Quick Daily Consumption Logger                                 */}
@@ -1109,11 +1129,14 @@ export function FieldStaffPortalView() {
               {/* Quick Sample Challan Button */}
               <button
                 type="button"
+                id="load-sample-register-btn"
+                data-testid="load-sample-register-btn"
                 onClick={handleLoadSampleChallan}
-                className="px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 dark:bg-teal-950/60 dark:hover:bg-teal-900 text-teal-800 dark:text-teal-200 font-bold text-xs border border-teal-200/80 dark:border-teal-800/60 transition flex items-center gap-1.5 shrink-0"
+                className="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-xs transition flex items-center gap-2 shrink-0 cursor-pointer"
+                title="Load sample photograph of a rural handwritten paper stock logbook"
               >
-                <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-                <span>⚡ Use Authentic DHS Sample Challan</span>
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>⚡ Load Sample Register</span>
               </button>
             </div>
 
@@ -1155,10 +1178,12 @@ export function FieldStaffPortalView() {
 
                     <button
                       type="button"
+                      id="analyze-gemini-vision-btn"
+                      data-testid="analyze-gemini-vision-btn"
                       onClick={handleScanRegister}
                       disabled={isScanning}
                       className={clsx(
-                        'w-full py-2.5 px-4 rounded-xl font-bold text-xs text-white shadow-md transition flex items-center justify-center gap-2',
+                        'w-full py-2.5 px-4 rounded-xl font-bold text-xs text-white shadow-md transition flex items-center justify-center gap-2 cursor-pointer',
                         isScanning
                           ? 'bg-slate-400 cursor-not-allowed'
                           : 'bg-teal-600 hover:bg-teal-500'
@@ -1167,7 +1192,7 @@ export function FieldStaffPortalView() {
                       {isScanning ? (
                         <>
                           <RotateCw className="w-4 h-4 animate-spin" />
-                          <span>Gemini Flash Vision Transcribing...</span>
+                          <span>Gemini 3.6 Flash Vision Transcribing...</span>
                         </>
                       ) : (
                         <>
@@ -1179,7 +1204,7 @@ export function FieldStaffPortalView() {
                   </div>
                 ) : (
                   <div className="text-center text-xs text-slate-400 py-6">
-                    No image selected. Click the box or use the sample challan button.
+                    No image selected. Click the box to upload, or click <strong className="text-teal-600 dark:text-teal-400">"⚡ Load Sample Register"</strong> above.
                   </div>
                 )}
               </div>

@@ -553,8 +553,7 @@ class ExtractedStockItem(BaseModel):
     quantity: int = Field(..., ge=1, description="Quantity received or logged")
     expiry_date: str = Field(
         ...,
-        description="Strict ISO-8601 date in YYYY-MM-DD format. Transcribe the expiration date. If only month/year or month name is visible (e.g. '08/27', 'Oct 25', 'End of 2024'), parse and assume the final calendar day of that month.",
-        examples=["2027-08-31", "2026-12-31"]
+        description="Strict ISO-8601 date in YYYY-MM-DD format. Transcribe the expiration date. If only month/year or month name is visible (e.g. '08/27', 'Oct 25', 'End of 2024'), parse and assume the final calendar day of that month."
     )
     unit_price: Optional[float] = Field(None, ge=0.0, description="Optional unit price if present on receipt")
     confidence_score: float = Field(default=0.95, ge=0.0, le=1.0, description="Model extraction confidence score (0.0 to 1.0)")
