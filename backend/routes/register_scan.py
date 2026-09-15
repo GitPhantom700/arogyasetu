@@ -100,7 +100,7 @@ async def scan_paper_register(
 ):
     """
     Multimodal paper register OCR ingestion endpoint.
-    Accepts photos of physical paper ledgers and utilizes Google Gemini 2.5 Flash / 3.7 Flash Vision
+    Accepts photos of physical paper ledgers and utilizes Google Gemini 3.6 Flash Vision
     to extract medication names, lot/batch numbers, expiration dates, and received quantities into
     strictly typed JSON. Falls back to deterministic clinical OCR emulation if offline.
     """

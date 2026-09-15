@@ -16,7 +16,7 @@ ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperat
 1. **Detects Acute Depletions in Real-Time:** Monitors facility burn rates and calculates dynamic Days of Inventory Remaining (DIR).
 2. **Orchestrates Peer-to-Peer Rebalancing:** Uses Google Gemini AI and multi-objective optimization to calculate optimal donor clinics within a 50 km radius.
 3. **Guarantees Medical & AI Safety:** Enforces a deterministic invariant firewall that physically prevents donor starvation, eliminates phantom inventory, and respects cold-chain and mountain transit physics.
-4. **Digitizes Paper Records via Vision AI:** Transcribes handwritten physical stock ledgers and delivery chalans using Gemini 2.5 Flash Vision OCR with RapidFuzz catalog matching.
+4. **Digitizes Paper Records via Vision AI:** Transcribes handwritten physical stock ledgers and delivery chalans using Gemini 3.6 Flash Vision OCR with RapidFuzz catalog matching.
 5. **Maintains Tamper-Evident DSCSA Chains:** Every milligram of medication moved or consumed is recorded into a cryptographically chained SHA-256 audit ledger.
 
 ---
@@ -28,8 +28,8 @@ ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperat
 │                   ArogyaSetu Enterprise Command Center UI                        │
 │         React 19 • Vite • Tailwind CSS • Lucide Icons • Port 5173                │
 │                                                                                  │
-│  [🗺️ Geospatial Map]  [📦 Stock & Deficits]  [🤖 Rebalancer]  [🚚 Transfer Log]   │
-│  [📷 Ledger OCR]      [🛡️ AI Safety Modal]   [⚡ Crisis Sim]  [🌓 Dark/Light]    │
+│  [🗺️ Geospatial Map]  [📦 Facility Stocks]   [🤖 AI Rebalancer] [🚚 Transfers & Ledger] │
+│  [📷 Field Portal & OCR] [🛡️ AI Safety Modal] [⚡ Crisis Sim]    [🌓 Dark/Light]       │
 └────────────────────────────────────────┬─────────────────────────────────────────┘
                                          │ HTTP REST & SSE EventSource
                                          ▼
@@ -44,7 +44,7 @@ ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperat
 │  ┌────────────────────────────────────────────────────────────────────────────┐  │
 │  │                     Google Gemini AI & Safety Core                         │  │
 │  │                                                                            │  │
-│  │   Gemini 2.5 Flash Rebalancing   ◄──►   Gemini 2.5 Flash Vision OCR        │  │
+│  │   Gemini 3.6 Flash Rebalancing   ◄──►   Gemini 3.6 Flash Vision OCR        │  │
 │  │               │                                      │                     │  │
 │  │               ▼                                      ▼                     │  │
 │  │   ┌────────────────────────────────────────────────────────────────────┐   │  │
@@ -65,7 +65,7 @@ ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperat
 │                   Persistent Relational Core (healthcare.db)                     │
 │                                                                                  │
 │   • facilities (15 PHCs)                 • medicines (10 Emergency Formulations) │
-│   • stock_batches (183 Batches)          • inventory_transactions (SHA-256)      │
+│   • stock_batches (180 Batches)          • inventory_transactions (SHA-256)      │
 │   • transfers (State Machine Lifecycle)  • alerts (SSE Event Log)                │
 │   • ai_safety_violations (Audit Log)     • crisis_snapshots (Durable Recovery)   │
 │   • PRAGMA busy_timeout = 30000          • PRAGMA journal_mode = WAL             │
@@ -164,10 +164,10 @@ npm --prefix frontend run dev
 
 ## 🧪 Test Verification & Quality Gates
 
-ArogyaSetu is validated against 85 automated backend regression tests and strict frontend build checks:
+ArogyaSetu is validated against 107 automated backend regression tests across 16 test modules and strict frontend build checks:
 
 ```bash
-# Run full backend test suite (85 tests across 12 modules)
+# Run full backend test suite (107 tests across 16 modules)
 .venv\Scripts\pytest backend/ -v
 
 # Run frontend production build verification
@@ -175,9 +175,9 @@ npm --prefix frontend run build
 ```
 
 **Results:**
-- **Backend Tests:** `85 passed in 25.22s (100%)`
-- **Frontend Build:** `vite build completed in 1.84s with 0 errors`
-- **DSCSA Cryptographic Audit Ledger:** `192 verified blocks, chain valid`
+- **Backend Tests:** `107 passed in 79.31s (100% Green)`
+- **Frontend Build:** `vite build completed in 2.94s with 0 errors`
+- **DSCSA Cryptographic Audit Ledger:** `180 verified blocks, unbroken SHA-256 chain`
 
 ---
 
@@ -191,16 +191,15 @@ build_with_ai/
 │   ├── burn_rate.py           # Consumption calculations, DIR, and surge detection
 │   ├── crisis_simulator.py    # Crisis simulation engine, shock presets & snapshots
 │   ├── database.py            # SQLite async transactions & connection pool
-│   ├── ledger_vision.py       # Gemini 2.5 Flash Vision OCR & RapidFuzz matcher
+│   ├── ledger_vision.py       # Gemini 3.6 Flash Vision OCR & RapidFuzz matcher
 │   ├── main.py                # FastAPI entry point & CORS configuration
 │   ├── models.py              # Pydantic data transfer schemas
 │   ├── rebalancer.py          # Gemini AI Rebalancer & multi-objective engine
 │   ├── schema.sql             # Relational DDL with CHECK constraints & indexes
 │   ├── schemas.py             # Domain models & validation schemas
-│   ├── seed_data.py           # 15 Pune/Satara PHCs & 183 realistic medicine batches
+│   ├── seed_data.py           # 15 Pune/Satara PHCs, 180 realistic medicine batches & 6 lifecycle transfers
 │   ├── transfers_core.py      # Transfer state machine & DSCSA SHA-256 ledger
 │   ├── routes/                # Modular FastAPI router endpoints
-│   ├── static/                # Fallback vanilla web dashboard
 │   ├── static/                # Fallback vanilla web dashboard
 │   └── test_*.py              # 16 comprehensive test suites (107/107 tests passing)
 │
@@ -210,7 +209,7 @@ build_with_ai/
 │   │   ├── context/           # AppContext, translations.js (मराठी, हिन्दी, English)
 │   │   ├── hooks/             # useAlertsStream (resilient SSE hook)
 │   │   ├── services/          # api.js (unified backend fetch client)
-│   │   ├── views/             # Overview, Transfers, Inventory, Rebalance, FieldPortal, Crisis
+│   │   ├── views/             # Overview, Map, Stocks, Rebalance, Transfers & Ledger, FieldPortal, Crisis
 │   │   ├── App.jsx            # Application shell
 │   │   └── main.jsx           # React DOM root
 │   ├── tailwind.config.js     # Custom clinical color tokens & dark mode

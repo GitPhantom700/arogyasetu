@@ -781,3 +781,59 @@ def verify_audit_ledger():
             status_code=status.HTTP_409_CONFLICT,
             detail=f"Cryptographic Ledger Tampering Detected: {str(e)}"
         )
+
+
+@router.get("/ledger/blocks")
+def get_audit_ledger_blocks(limit: int = Query(50, ge=1, le=200)):
+    """
+    Returns the latest cryptographically sealed DSCSA audit ledger transaction blocks
+    including SHA-256 seals, parent hash pointers, and GS1 GLN/GTIN traceability.
+    """
+    conn = get_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT 
+                it.id,
+                it.transaction_type,
+                it.facility_id,
+                f.name AS facility_name,
+                it.facility_gln,
+                it.medicine_id,
+                m.name AS medicine_name,
+                it.gtin,
+                it.batch_id,
+                it.batch_number,
+                it.serial_number,
+                it.expiry_date,
+                it.quantity,
+                it.balance_after,
+                it.reference_id,
+                it.notes,
+                it.logged_by,
+                it.user_reported_at,
+                it.created_at,
+                it.previous_hash,
+                it.hash
+            FROM inventory_transactions it
+            LEFT JOIN facilities f ON it.facility_id = f.id
+            LEFT JOIN medicines m ON it.medicine_id = m.id
+            ORDER BY it.id DESC
+            LIMIT ?;
+        """, (limit,))
+        rows = cursor.fetchall()
+        blocks = [dict(r) for r in rows]
+
+        # Verify chain integrity
+        integrity = verify_dscsa_ledger_integrity()
+
+        return {
+            "status": integrity.get("status", "VERIFIED"),
+            "total_blocks": integrity.get("total_transactions", len(blocks)),
+            "chain_valid": integrity.get("chain_valid", True),
+            "latest_hash": integrity.get("latest_hash"),
+            "blocks": blocks
+        }
+    finally:
+        conn.close()
+

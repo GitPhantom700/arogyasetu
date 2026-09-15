@@ -9,7 +9,7 @@ Features:
    (Retention Buffer = max(min_safety_stock, ceil(14 * DAC))). Surplus = max(0, stock - Retention Buffer).
 3. Geospatial & terrain-aware transit physics (Haversine + Ghats/Plains/Highway speeds).
 4. Perishable cold-chain compatibility and transit-aware FEFO batch availability.
-5. Google Gemini 2.5 Flash / 3.7 Flash integration with structured Pydantic schema output.
+5. Google Gemini 3.6 Flash integration with structured Pydantic schema output.
 6. Deterministic offline clinical scoring fallback for environments without API keys.
 7. Atomic transfer order application into SQLite transfer state machine.
 """

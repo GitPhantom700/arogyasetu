@@ -62,6 +62,7 @@ export const api = {
   getFacilityInventory: (facilityId) => request(`/inventory/${facilityId}`),
   getDepletionAnalysis: () => request('/inventory/depletion'),
   getLedgerVerification: () => request('/inventory/ledger/verify'),
+  getLedgerBlocks: (limit = 50) => request(`/inventory/ledger/blocks?limit=${limit}`),
   getBatchTransactions: (batchId) => request(`/batches/${batchId}/transactions`),
   consumeStock: (payload) => request('/inventory/consume', {
     method: 'POST',

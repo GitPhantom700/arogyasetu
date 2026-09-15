@@ -37,7 +37,7 @@ async def get_rebalance_recommendation(req: RebalanceRecommendationRequest):
     Evaluates a specific facility and medicine deficit against all candidate donors within radius.
     Enforces that donor must retain at least min_donor_buffer_days (default: 14 days) buffer.
     Supports Monsoon Multiplier (1.5x buffer) for Sahyadri Ghats mountain facilities.
-    Generates explainable clinical and logistical reasoning via Google Gemini 2.5 Flash in medical SOAP format.
+    Generates explainable clinical and logistical reasoning via Google Gemini 3.6 Flash in medical SOAP format.
     """
     try:
         recommendation = autonomous_rebalancing_service.recommend_rebalance(

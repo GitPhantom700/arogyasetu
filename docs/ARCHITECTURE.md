@@ -24,7 +24,7 @@ graph TD
     end
 
     subgraph Intelligence & Safety Firewall
-        C1[Google Gemini 2.5 Flash Vision OCR]
+        C1[Google Gemini 3.6 Flash Vision OCR]
         C2[Gemini Autonomous Rebalancer Agent]
         C3[Deterministic AISafetyGuard Firewall]
         C4[Thread-Safe Monotonic Circuit Breaker]
@@ -63,7 +63,7 @@ graph TD
 
 ### A. Zero-Friction Multimodal Data Ingestion Layer
 - **Problem:** Rural PHC pharmacists maintain physical paper registers (*दैनिक औषध नोंदवही*) and cannot spend time typing into complex ERP systems.
-- **Architecture:** Field staff photograph physical paper registers or drug boxes. The image is processed through Google Gemini 2.5 Flash Vision using strict Pydantic JSON schemas with `RapidFuzz` clinical catalog disambiguation.
+- **Architecture:** Field staff photograph physical paper registers or drug boxes. The image is processed through Google Gemini 3.6 Flash Vision using strict Pydantic JSON schemas with `RapidFuzz` clinical catalog disambiguation.
 - **Pharmacist-in-the-Loop:** Any low-confidence handwriting triggers an explicit clinical cross-verification review gate before committing to the database.
 
 ### B. Dynamic Burn Rate & Acute Outbreak Surge Detection
@@ -102,5 +102,5 @@ graph TD
 | **Geospatial GIS** | Leaflet + React-Leaflet | Canvas-rendered interactive map with live status markers |
 | **Backend API** | Python 3.11 + FastAPI | High-concurrency async REST gateway + SSE pub/sub |
 | **Database** | SQLite (WAL Mode) | ACID relational persistence with Optimistic Concurrency Control |
-| **AI / Multimodal** | Google Gemini 2.5 Flash | Multimodal vision OCR & autonomous rebalancing reasoning |
+| **AI / Multimodal** | Google Gemini 3.6 Flash | Multimodal vision OCR & autonomous rebalancing reasoning |
 | **Containerization** | Docker Multi-Stage | Cloud Run production container (`node:20` + `python:3.11-slim`) |

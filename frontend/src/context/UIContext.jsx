@@ -222,6 +222,16 @@ export function UIProvider({ children }) {
     setSelectedDeficitId,
     crisisStatus,
     setCrisisStatus,
+    addToast: (msg, type = 'info', title = null) => {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('arogya_toast', { detail: { message: msg, type, title } }));
+      }
+    },
+    showToast: (msg, type = 'info', title = null) => {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('arogya_toast', { detail: { message: msg, type, title } }));
+      }
+    },
   };
 
   return (

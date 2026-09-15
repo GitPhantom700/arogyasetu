@@ -60,7 +60,15 @@ export function AlertsProvider({ children }) {
       .catch(err => {
         console.warn('[AlertsContext] Could not fetch alert history:', err);
       });
-  }, []);
+
+    const onCustomToast = (e) => {
+      if (e.detail) {
+        showToast(e.detail.message, e.detail.type, e.detail.title);
+      }
+    };
+    window.addEventListener('arogya_toast', onCustomToast);
+    return () => window.removeEventListener('arogya_toast', onCustomToast);
+  }, [showToast]);
 
   const acknowledgeAlert = useCallback(async (alertId) => {
     try {
@@ -81,6 +89,7 @@ export function AlertsProvider({ children }) {
     isSSEConnected,
     toasts,
     showToast,
+    addToast: showToast,
     acknowledgeAlert,
   };
 

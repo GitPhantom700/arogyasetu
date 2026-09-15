@@ -499,7 +499,7 @@ export function FieldStaffPortalView() {
       const payload = {
         facility_id: Number(currentFacilityId),
         reference_id: challanRef.trim() || `CHALAN-${new Date().toISOString().slice(0, 10)}`,
-        notes: ocrNotes.trim() || 'Digitized via Gemini 2.5 Flash Vision',
+        notes: ocrNotes.trim() || 'Digitized via Gemini 3.6 Flash Vision',
         logged_by: loggedBy.trim() || 'Staff Nurse / Store Incharge',
         items: editableItems.map(item => ({
           medicine_id: Number(item.medicine_id),
@@ -1108,7 +1108,7 @@ export function FieldStaffPortalView() {
       )}
 
       {/* ========================================================================= */}
-      {/* SUB-TAB 2: Multimodal Paper Register OCR (Gemini 2.5 Flash Vision)         */}
+      {/* SUB-TAB 2: Multimodal Paper Register OCR (Gemini 3.6 Flash Vision)         */}
       {/* ========================================================================= */}
       {activeSubTab === 'ocr' && (
         <div className="space-y-6">

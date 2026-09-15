@@ -4,60 +4,91 @@ ArogyaSetu provides role-differentiated interfaces designed for District Medical
 
 ---
 
-## 🧭 Navigation & Role Overview
+## 🧭 Navigation & View Overview
 
-The navigation sidebar allows immediate access to the core functional views:
+The navigation sidebar reflects the exact modules active in the application:
 
-| View | Target User | Key Capabilities |
-| :--- | :--- | :--- |
-| **Command Center** | District Medical Officer | Real-time telemetry across 15 PHCs, critical stockout cards, network sync status. |
-| **Geospatial Map** | Emergency Logistics Officer | Interactive Leaflet GIS map with color/shape status markers, mountain corridors, facility slide-over drawers. |
-| **Facility Stocks** | District Pharmacist | Consolidated inventory grid across 183 batches, FEFO expiry countdowns, cold-chain telemetry. |
-| **AI Rebalancing** | Civil Surgeon / DMO | Autonomous peer-to-peer redistribution recommendations, mountain transit physics, HITL sign-off modal. |
-| **Field Staff Portal** | Rural PHC Nurse / ANM | Mobile-optimized rapid dispensing (-1, -5, -10), hands-free voice dictation, camera paper ledger OCR. |
-| **Crisis Simulator** | Disaster Preparedness Team | Realistic emergency shock injection (Monsoon floods, snakebite spike), swarm dispatch, baseline reset. |
-| **Audit Ledger** | Regulatory / Drug Inspector | Immutable 192-block SHA-256 cryptographic transaction chain with zero-tamper verification. |
+| Sidebar View | Badge | Target User | Key Capabilities |
+| :--- | :--- | :--- | :--- |
+| **Command Center** | — | District Medical Officer | Real-time network telemetry across 15 PHCs, critical stockout cards, active emergency alerts, executive metrics. |
+| **Geospatial Map** | `DAY 13` | Emergency Logistics Officer | Interactive Leaflet GIS map with dual-channel color/shape markers, mountain transit corridors, and facility slide-over drawers. |
+| **Facility Stocks** | Status | District Pharmacist | Consolidated inventory grid across 180 stock batches, FEFO expiry countdowns, and cold-chain temperature telemetry. |
+| **AI Rebalancer** | `GEMINI` | Civil Surgeon / DMO | Autonomous peer-to-peer redistribution recommendations, mountain transit physics, medical SOAP explainability, and Human-in-the-Loop authorization. |
+| **Transfers & Ledger** | Status | Regulatory / Logistics Officer | End-to-end transfer tracking across the 5-stage state machine, 180-block DSCSA Cryptographic Ledger Explorer, and 1-click ledger integrity verification. |
+| **Field Portal & OCR** | `DAY 14` | Rural PHC Nurse / ANM | Dual-mode frontline interface: Rapid touch dispensing logger with Marathi/Hindi speech dictation AND Multimodal Gemini 3.6 Flash Vision OCR for handwritten paper registers. |
+| **Crisis Simulator** | `ACTIVE` | Disaster Response Team | Realistic epidemiological shock injection (Monsoon floods, snakebite spikes), automated swarm dispatch, and baseline state recovery. |
 
 ---
 
 ## 🛠️ Step-by-Step Feature Walkthrough
 
 ### 1. Geospatial GIS Command Map
-- **Navigating:** Click **Command Map** in the sidebar.
+- **Navigating:** Click **Geospatial Map** in the sidebar.
 - **Interpreting Markers:**
-  - 🟢 **Green Pin:** Normal operating stock ($\ge 14$ days buffer).
-  - 🟡 **Yellow Pin:** Low inventory warning ($< 7$ days buffer).
-  - 🔴 **Red Pin + 🚨 Danger Octagon:** Acute stockout risk ($< 48$ hours buffer).
-- **Inspecting a Facility:** Click any pin (e.g. *PHC Bhor* or *CHC Khed*) to slide open the non-destructive facility drawer. View active batches, cold-chain status (`2°C - 8°C OK`), and depletion velocity.
+  - 🟢 **Green Pin (Circle):** Normal operating inventory ($\ge 14$ days buffer).
+  - 🟡 **Yellow Pin (Triangle):** Low inventory warning ($< 7$ days buffer).
+  - 🔴 **Red Pin (Octagon 🚨):** Acute stockout risk ($< 48$ hours buffer).
+- **Inspecting a Facility:** Click any pin (e.g. *PHC Bhor*, *CHC Khed*, or *PHC Wai*) to open the non-destructive facility slide-over drawer. View active medicine batches, cold-chain status (`2°C - 8°C OK`), Daily Average Consumption (DAC), and depletion velocity.
 
-### 2. Autonomous AI Rebalancer (Human-in-the-Loop)
-- **Reviewing Recommendations:** Navigate to **AI Rebalancer**.
-- **Optimization Parameters:** The engine evaluates candidate donors within 50 km, mountain ghat road transit hours, and enforces the mandatory $\ge 14$-day donor retention buffer.
+### 2. Autonomous AI Rebalancer (Gemini 3.6 Flash + Safety Firewall)
+- **Navigating:** Click **AI Rebalancer** in the sidebar.
+- **Evaluating Deficits & Donors:**
+  - Select a facility experiencing a medicine deficit.
+  - The engine scans donor candidates within a 50 km radius, accounting for steep Sahyadri mountain ghat transit hours, cold-chain Ice-Lined Refrigerator (ILR) readiness, and FEFO shelf life.
+  - The deterministic `AISafetyGuard` firewall verifies that the donor retains $\ge 14$ days of reserve stock ($\ge 21$ days during monsoon) to prevent secondary starvation.
 - **Authorizing a Transfer:**
-  1. Click **Review & Authorize Transfer** on any recommended redistribution order.
-  2. Inspect the clinical SOAP reasoning note generated by Google Gemini.
+  1. Click **Review & Authorize Transfer** on any recommended order.
+  2. Inspect the medical SOAP note generated by Gemini 3.6 Flash explaining the clinical and logistical rationale.
   3. Verify cold-chain transport confirmation.
   4. Click **Authorize & Commit Inter-PHC Transfer**.
-  5. Observe the animated route rendered on the map and the instant SHA-256 cryptographic audit block appended to the ledger.
+  5. The transfer moves into the active transfer table and appends a SHA-256 block into the immutable ledger.
 
-### 3. Field Staff Rapid Dispensing Portal
-- **Designed for Rural Rush Hours:** Oversized touch targets ($\ge 48\times 48\text{ px}$) engineered for use with latex PPE gloves.
-- **Rapid Logging:** Click `-1`, `-5`, `-10`, or `-20` to decrement medicine counts with immediate tactile vibration and synthetic audio chimes.
-- **Hands-Free Speech Dictation:**
-  1. Click the microphone icon (**मराठी • हिन्दी • English**).
-  2. Speak a clinical dispensation command (e.g. *"Dispense 5 vials of Anti-Snake Venom"*).
-  3. The Web Speech API populates the form automatically.
+### 3. Inter-Facility Transfers & DSCSA Cryptographic Ledger
+- **Navigating:** Click **Transfers & Ledger** in the sidebar.
+- **Sub-Tab 1: Inter-Facility Transfers:**
+  - Track medicine movements across the state machine: `DRAFT`, `APPROVED`, `DISPATCHED`, `IN_TRANSIT`, `RECEIVED`.
+  - Filter by lifecycle status pills (`All Transfers`, `In-Transit / Dispatched`, `Approved`, `Completed`, `Draft`) or search by transfer number, facility, or medicine name.
+  - View transit distance, estimated travel duration, dispatch vehicle, and cold-chain compliance.
+- **Sub-Tab 2: DSCSA Cryptographic Ledger Explorer:**
+  - Switch to the **DSCSA Cryptographic Ledger Explorer** tab to inspect the blockchain-grade audit trail.
+  - Browse all 180+ SHA-256 transaction blocks with chronological timestamps, GS1 Global Location Numbers (GLN), Global Trade Item Numbers (GTIN), batch numbers, and quantity mutations.
+  - Click any hash badge to copy the full 64-character SHA-256 hexadecimal hash.
+- **Verifying Ledger Integrity:**
+  - Click the green **Verify DSCSA Ledger** button at top right.
+  - The **DSCSA Cryptographic Audit Verification Modal** appears, computing every contiguous parent-child hash pointer in real time.
+  - Displays `100% VALID`, `180 Verified Blocks`, `UNBROKEN Chain`, and the current tip block hash.
 
-### 4. Multimodal Paper Register Scanner (Gemini Vision)
-- **Photographing Paper Registers:** In the Field Portal, scroll to **Scan Physical Register (*दैनिक औषध नोंदवही*)**.
-- **1-Click Demo:** Click **Load Authentic Sample Challan** to test with authentic Maharashtra DHS handwriting.
-- **AI Extraction:** Google Gemini 2.5 Flash Vision digitizes the table into structured batch rows with confidence scores in $< 2\text{ seconds}$.
-- **Pharmacist Review Gate:** If handwriting ambiguity is detected, check the mandatory physical verification box before clicking **Commit to Ledger**.
+### 4. Field Portal: Quick Daily Consumption Logger
+- **Navigating:** Click **Field Portal & OCR** in the sidebar. By default, the view opens on the **Quick Daily Consumption Logger** sub-tab.
+- **Rapid Frontline Logging:**
+  - Select an essential medicine and batch from the facility inventory.
+  - Use enlarged PPE touch buttons (`-1`, `-5`, `-10`, `-20`) to log patient dispensations with immediate tactile vibration and audio confirmation.
+- **Multilingual Hands-Free Speech Dictation:**
+  - Click the microphone icon (**मराठी • हिन्दी • English**).
+  - Speak a clinical dispensation command (e.g. *"Dispensed 5 vials of Anti-Snake Venom"*).
+  - The Web Speech API populates the medicine and quantity fields automatically.
+- **Offline Resilience:**
+  - If rural 2G/3G connectivity drops, transactions are stored securely in the local browser queue and flushed with 1-click sync when connectivity resumes.
 
-### 5. Crisis & Disaster Simulation
+### 5. Multimodal Paper Register OCR (Gemini 3.6 Flash Vision)
+- **Navigating:**
+  - In **Field Portal & OCR**, click the sub-tab: **Multimodal Paper Register OCR (Gemini Vision)** (or click the callout banner *"Need to digitize handwritten stock logbooks with Gemini 3.6 Flash Vision? Open Paper Register OCR →"*).
+- **Loading Sample Data or Uploading:**
+  - Click **`⚡ Load Sample Register`** to immediately load an authentic photograph of a handwritten Maharashtra DHS stock register / delivery challan.
+  - Or drag-and-drop / photograph a physical stock voucher.
+- **AI Transcription:**
+  - Click **`Analyze Register with Gemini Vision`**.
+  - Google Gemini 3.6 Flash Vision scans the handwritten logbook, extracting medicine names, batch numbers, expiry dates, and quantities into a structured digital verification table.
+  - Fuzzy matching via `RapidFuzz` links transcribed names to the state drug formulary with confidence percentages.
+- **Pharmacist Verification Gate:**
+  - Any ambiguous entry highlights a yellow warning with mandatory pharmacist sign-off.
+  - Click **Commit Scanned Items into Inventory** to atomically insert or update batches in SQLite and log SHA-256 ledger transactions.
+
+### 6. Crisis & Disaster Simulation
+- **Navigating:** Click **Crisis Simulator** in the sidebar.
 - **Injecting an Emergency Shock:**
-  1. Go to **Crisis Simulator**.
-  2. Select a scenario (e.g. *Monsoon Flooding South Satara — 400% Snakebite Spike*).
-  3. Click **Activate Emergency Simulation Shock**.
-  4. Observe the high-visibility emergency banner, casualty surges, and automated Swarm Dispatch pairing.
-- **Resetting Baseline:** Click **Reset Simulation to Baseline** to restore initial pre-crisis inventory with automatic line-item reconciliation.
+  1. Select an epidemiological crisis preset (e.g. *Monsoon Flooding & Landslides — South Satara*).
+  2. Click **Activate Emergency Simulation Shock**.
+  3. Observe immediate network-wide changes: casualty surges, acute stockout warnings, automated Swarm Dispatch pairing, and red emergency alerts across the command center.
+- **Restoring Baseline:**
+  - Click **Reset Simulation to Baseline** to restore initial pre-crisis inventory with automatic reconciliation.

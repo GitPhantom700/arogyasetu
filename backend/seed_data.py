@@ -9,7 +9,7 @@ Hardened with Public Health Domain Realities:
 import sys
 import sqlite3
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 BACKEND_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BACKEND_DIR.parent
@@ -595,8 +595,141 @@ def seed_database(db_path=None, reset_schema=True):
                     )
                     total_transactions += 1
 
+        # 5. Seed realistic inter-facility transfers across state machine lifecycle
+        print("[SEED] Seeding realistic inter-facility transfers across state machine...")
+        now = datetime.now(timezone.utc)
+        sample_transfers = [
+            {
+                "code": "TRF-20260915-ASV01",
+                "from_fac": "DH-PUN-01",
+                "to_fac": "PHC-PUN-01",
+                "med_sku": "MED-ASV-01",
+                "qty": 10,
+                "status": "IN_TRANSIT",
+                "urgency": "CRITICAL_EMERGENCY",
+                "dist": 48.5,
+                "hours": 1.25,
+                "reason": "Monsoon snakebite spike response (Western Ghats mountain corridor)",
+                "ai_rec": 1,
+                "ai_rationale": "PHC Velhe DIR < 1.0 day; DH Aundh holds 42-day safety buffer.",
+                "req": (now - timedelta(hours=4)).strftime("%Y-%m-%d %H:%M:%S"),
+                "app": (now - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M:%S"),
+                "disp": (now - timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"),
+                "recv": None
+            },
+            {
+                "code": "TRF-20260915-ARV02",
+                "from_fac": "SDH-PUN-01",
+                "to_fac": "PHC-PUN-02",
+                "med_sku": "MED-ARV-01",
+                "qty": 15,
+                "status": "DISPATCHED",
+                "urgency": "URGENT",
+                "dist": 52.0,
+                "hours": 1.40,
+                "reason": "Rabies exposure cluster prophylaxis in Bhor taluka",
+                "ai_rec": 1,
+                "ai_rationale": "Autonomous redistribution from surplus donor SDH Shirur.",
+                "req": (now - timedelta(hours=5)).strftime("%Y-%m-%d %H:%M:%S"),
+                "app": (now - timedelta(hours=3, minutes=30)).strftime("%Y-%m-%d %H:%M:%S"),
+                "disp": (now - timedelta(minutes=45)).strftime("%Y-%m-%d %H:%M:%S"),
+                "recv": None
+            },
+            {
+                "code": "TRF-20260915-INS03",
+                "from_fac": "DH-SAT-01",
+                "to_fac": "CHC-SAT-01",
+                "med_sku": "MED-INS-01",
+                "qty": 20,
+                "status": "APPROVED",
+                "urgency": "ROUTINE",
+                "dist": 35.1,
+                "hours": 0.85,
+                "reason": "Routine NCD diabetic clinic stock rebalancing",
+                "ai_rec": 0,
+                "ai_rationale": None,
+                "req": (now - timedelta(hours=6)).strftime("%Y-%m-%d %H:%M:%S"),
+                "app": (now - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S"),
+                "disp": None,
+                "recv": None
+            },
+            {
+                "code": "TRF-20260915-ORS04",
+                "from_fac": "CHC-PUN-01",
+                "to_fac": "PHC-PUN-03",
+                "med_sku": "MED-ORS-01",
+                "qty": 100,
+                "status": "RECEIVED",
+                "urgency": "ROUTINE",
+                "dist": 28.3,
+                "hours": 0.65,
+                "reason": "Proactive ORS replenishment before weekly rural market day",
+                "ai_rec": 1,
+                "ai_rationale": "High outpatient diarrheal demand anticipated.",
+                "req": (now - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S"),
+                "app": (now - timedelta(hours=22)).strftime("%Y-%m-%d %H:%M:%S"),
+                "disp": (now - timedelta(hours=20)).strftime("%Y-%m-%d %H:%M:%S"),
+                "recv": (now - timedelta(hours=18)).strftime("%Y-%m-%d %H:%M:%S")
+            },
+            {
+                "code": "TRF-20260915-AMX05",
+                "from_fac": "SDH-SAT-01",
+                "to_fac": "PHC-SAT-01",
+                "med_sku": "MED-AMX-01",
+                "qty": 40,
+                "status": "DRAFT",
+                "urgency": "ROUTINE",
+                "dist": 41.2,
+                "hours": 1.10,
+                "reason": "Scheduled pediatric antibiotic stock request",
+                "ai_rec": 0,
+                "ai_rationale": None,
+                "req": (now - timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"),
+                "app": None,
+                "disp": None,
+                "recv": None
+            },
+            {
+                "code": "TRF-20260915-OXY06",
+                "from_fac": "DH-PUN-01",
+                "to_fac": "SDH-PUN-01",
+                "med_sku": "MED-OXY-01",
+                "qty": 8,
+                "status": "DISPATCHED",
+                "urgency": "URGENT",
+                "dist": 67.2,
+                "hours": 1.50,
+                "reason": "High-dependency labor room cold-chain replenishment",
+                "ai_rec": 1,
+                "ai_rationale": "Verified cold-chain active transport with temperature telemetry.",
+                "req": (now - timedelta(hours=3)).strftime("%Y-%m-%d %H:%M:%S"),
+                "app": (now - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S"),
+                "disp": (now - timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S"),
+                "recv": None
+            }
+        ]
+
+        total_transfers = 0
+        for tr in sample_transfers:
+            s_id = facility_id_map.get(tr["from_fac"])
+            d_id = facility_id_map.get(tr["to_fac"])
+            m_id = medicine_id_map.get(tr["med_sku"])
+            if s_id and d_id and m_id:
+                cursor.execute("""
+                    INSERT OR IGNORE INTO transfers (
+                        transfer_code, source_facility_id, destination_facility_id, medicine_id, quantity,
+                        status, urgency, distance_km, estimated_transit_hours, reason, ai_recommended,
+                        ai_rationale, requested_at, approved_at, dispatched_at, received_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """, (
+                    tr["code"], s_id, d_id, m_id, tr["qty"], tr["status"], tr["urgency"],
+                    tr["dist"], tr["hours"], tr["reason"], tr["ai_rec"], tr["ai_rationale"],
+                    tr["req"], tr["app"], tr["disp"], tr["recv"]
+                ))
+                total_transfers += 1
+
         conn.commit()
-        print(f"[SUCCESS] Seed complete! Created {len(facility_id_map)} facilities, {len(medicine_id_map)} medicines, {total_batches} stock batches, and {total_transactions} audit transactions.")
+        print(f"[SUCCESS] Seed complete! Created {len(facility_id_map)} facilities, {len(medicine_id_map)} medicines, {total_batches} stock batches, {total_transactions} audit transactions, and {total_transfers} seed transfers.")
 
     finally:
         conn.close()

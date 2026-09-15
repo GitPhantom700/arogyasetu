@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUI } from '../context/UIContext';
+import { useAlerts } from '../context/AlertsContext';
 import { api } from '../services/api';
 import {
   Package,
@@ -20,7 +21,9 @@ import {
 import clsx from 'clsx';
 
 export function FacilityStocksView() {
-  const { setSelectedFacilityId, setActiveTab, addToast, t } = useUI();
+  const { setSelectedFacilityId, setActiveTab, t } = useUI();
+  const { showToast } = useAlerts();
+  const addToast = showToast;
   const [facilities, setFacilities] = useState([]);
   const [depletionData, setDepletionData] = useState([]);
   const [loading, setLoading] = useState(true);

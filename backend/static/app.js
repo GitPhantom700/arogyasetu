@@ -1724,7 +1724,7 @@ async function executeRebalanceAnalysis() {
     <div class="card" style="background: var(--bg-card); border-radius: 12px; padding: 2.5rem 1.5rem; border: 1px solid var(--border-color); text-align: center;">
       <div class="spinner" style="width: 32px; height: 32px; border-width: 3px; margin: 0 auto 1.25rem;"></div>
       <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.35rem;">
-        Gemini 2.5 / 3.7 Autonomous Rebalancing Engine Active
+        Gemini 3.6 Autonomous Rebalancing Engine Active
       </h3>
       <p style="color: var(--text-secondary); font-size: 0.88rem; max-width: 580px; margin: 0 auto; line-height: 1.5;">
         Evaluating candidate donors within <strong>${radiusKm} km</strong>, verifying <strong>${donorBuffer}-day safety buffer retention</strong>, checking cold chain telemetry, and calculating Western Ghats road transit impedance...

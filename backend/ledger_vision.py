@@ -213,7 +213,7 @@ def normalize_expiry_date(date_str: str) -> str:
 
 class LedgerVisionService:
     """
-    Multimodal Vision Ingestion engine powered by Gemini 2.5 Flash / 3.7 Flash
+    Multimodal Vision Ingestion engine powered by Gemini 3.6 Flash
     with automatic catalog enrichment and clinical offline fallback.
     """
 
