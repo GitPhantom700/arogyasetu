@@ -6,6 +6,7 @@ Hardened with GS1 traceability, deterministic single-phase SHA-256 ledgering, an
 
 import sqlite3
 import os
+import sys
 import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,6 +21,20 @@ DEFAULT_DB_PATH = PROJECT_ROOT / "healthcare.db"
 DEFAULT_SCHEMA_PATH = BACKEND_DIR / "schema.sql"
 
 
+def _sqlite3_connect(path: Path) -> sqlite3.Connection:
+    """
+    Connects to SQLite with autocommit enabled across Python versions.
+    Python 3.12+ added `autocommit=True` (PEP 674), while Python 3.11 and earlier
+    use `isolation_level=None` for explicit transaction management.
+    """
+    kwargs: Dict[str, Any] = {"timeout": 30.0, "check_same_thread": False}
+    if sys.version_info >= (3, 12):
+        kwargs["autocommit"] = True
+    else:
+        kwargs["isolation_level"] = None
+    return sqlite3.connect(str(path), **kwargs)
+
+
 def get_db_path() -> Path:
     """Returns the database file path, allowing override via environment variable."""
     return Path(os.getenv("HEALTHCARE_DB_PATH", str(DEFAULT_DB_PATH)))
@@ -28,10 +43,10 @@ def get_db_path() -> Path:
 def get_connection(db_path: Path = None) -> sqlite3.Connection:
     """
     Creates and returns a SQLite connection with foreign keys and WAL mode enabled,
-    autocommit=True for explicit transaction control, synchronous=NORMAL, and 30s busy_timeout.
+    autocommit enabled for explicit transaction control, synchronous=NORMAL, and 30s busy_timeout.
     """
     path = db_path or get_db_path()
-    conn = sqlite3.connect(str(path), timeout=30.0, autocommit=True, check_same_thread=False)
+    conn = _sqlite3_connect(path)
     conn.execute("PRAGMA foreign_keys = ON;")
     conn.execute("PRAGMA journal_mode = WAL;")
     conn.execute("PRAGMA busy_timeout = 30000;")
@@ -273,7 +288,7 @@ def record_inventory_transaction(
 def execute_write_transaction_sync(db_path: Path, fn: Callable, *args, **kwargs):
     """Executes write transaction using BEGIN IMMEDIATE with busy_timeout=30000."""
     path = db_path or get_db_path()
-    conn = sqlite3.connect(str(path), timeout=30.0, autocommit=True, check_same_thread=False)
+    conn = _sqlite3_connect(path)
     try:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON;")
