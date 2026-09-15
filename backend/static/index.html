@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArogyaSetu — Public Health Logistics Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" type="image/jpeg" href="/static/logo.jpg">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <img src="/static/logo.jpg" alt="ArogyaSetu Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">ArogyaSetu <span class="badge badge-brand">Emergency Command</span></div>
+          <div class="brand-subtitle">Maharashtra Rural Health Supply Chain • Pune & Satara Network</div>
+        </div>
+      </div>
+
+      <!-- Network Live Status Pill -->
+      <div class="network-status-pill">
+        <span class="status-dot pulsing"></span>
+        <span class="status-label">Network Active:</span>
+        <span id="stat-facilities-count" class="status-metric">15 Facilities</span>
+        <span class="divider">•</span>
+        <span id="stat-medicines-count" class="status-metric">10 Medicines</span>
+        <span class="divider">•</span>
+        <span id="stat-batches-count" class="status-metric">165 Batches</span>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <button id="btn-safety" class="btn btn-secondary btn-sm" title="View AI Safety Architecture & Circuit Status" onclick="toggleSafetyModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          AI Safety
+          <span id="safety-header-pill" class="badge badge-pill badge-success" style="background: #10b981; color: #fff; margin-left: 4px; font-size: 0.72rem; padding: 2px 6px;">100% Guarded</span>
+        </button>
+        <button id="btn-alerts" class="btn btn-secondary btn-sm" title="View Real-Time Alerts" onclick="toggleAlertsDrawer()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          Alerts
+          <span id="alerts-unread-badge" class="badge badge-pill badge-danger" style="display: none; background: #e11d48; color: #fff; margin-left: 4px; font-size: 0.72rem; padding: 2px 6px;">0</span>
+        </button>
+        <button id="btn-refresh" class="btn btn-secondary btn-sm" title="Refresh Live Data" onclick="loadAllData()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          Refresh
+        </button>
+        <a href="/docs" target="_blank" class="btn btn-outline btn-sm" title="Open Swagger API Docs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Developer API (/docs)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="app-nav">
+    <div class="nav-container">
+      <button class="nav-tab active" data-tab="transfers-tab" onclick="switchToTab('transfers-tab')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        Active Transfers & Tracking
+        <span id="transfers-counter" class="badge badge-pill">0</span>
+      </button>
+
+      <button class="nav-tab" data-tab="wizard-tab" onclick="switchToTab('wizard-tab')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        New Transfer Wizard
+      </button>
+
+      <button class="nav-tab" data-tab="inventory-tab" onclick="switchToTab('inventory-tab')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        Facility Stock & Deficits
+      </button>
+
+      <button class="nav-tab" data-tab="scan-tab" onclick="switchToTab('scan-tab')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        AI Register OCR
+        <span class="badge badge-pill" style="background: #4f46e5; color: #fff; font-size: 0.72rem; padding: 2px 6px;">Gemini Vision</span>
+      </button>
+
+      <button class="nav-tab" data-tab="rebalance-tab" onclick="switchToTab('rebalance-tab')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="4"/>
+          <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
+          <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>
+          <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
+          <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/>
+        </svg>
+        Autonomous Rebalancer
+        <span class="badge badge-pill" style="background: #059669; color: #fff; font-size: 0.72rem; padding: 2px 6px;">Gemini Agent</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Body -->
+  <main class="app-main">
+
+    <!-- TAB 1: ACTIVE TRANSFERS & TRACKING -->
+    <section id="transfers-tab" class="tab-panel active">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Active Inter-PHC Transfers</h2>
+          <p class="panel-desc">Real-time tracking of medicine movements across rural health centers with state-machine custody verification.</p>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-primary" onclick="switchToTab('wizard-tab')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Create New Transfer
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-card">
+        <div class="filter-group">
+          <label for="filter-status">Status Filter:</label>
+          <select id="filter-status" class="form-select-sm" onchange="filterTransfers()">
+            <option value="">All Statuses</option>
+            <option value="DRAFT">Draft</option>
+            <option value="APPROVED">Approved (Stock Reserved)</option>
+            <option value="DISPATCHED">Dispatched</option>
+            <option value="IN_TRANSIT">In Transit</option>
+            <option value="RECEIVED">Received</option>
+            <option value="RETURN_IN_PROGRESS">Return In Progress</option>
+            <option value="RETURNED">Returned</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+        <div class="filter-group search-group">
+          <label for="filter-search">Search Transfer:</label>
+          <input type="text" id="filter-search" class="form-input-sm" placeholder="Search by code, facility, medicine..." oninput="filterTransfers()">
+        </div>
+      </div>
+
+      <!-- Transfers List Container -->
+      <div id="transfers-container" class="transfers-list">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading live inter-PHC transfer network...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: NEW TRANSFER WIZARD -->
+    <section id="wizard-tab" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Initiate Inter-Facility Medicine Transfer</h2>
+          <p class="panel-desc">Move emergency stock from surplus hubs (e.g. District Hospitals) to deficit rural PHCs with terrain-aware routing.</p>
+        </div>
+      </div>
+
+      <div class="wizard-grid">
+        <!-- Form Column -->
+        <div class="card wizard-card">
+          <h3 class="card-title">Transfer Specification</h3>
+          
+          <form id="transfer-form" onsubmit="handleCreateTransfer(event)">
+            <!-- Source Facility -->
+            <div class="form-group">
+              <label for="src-facility">
+                <span class="label-number">1</span> Source Facility (Donor Hub)
+                <span class="required">*</span>
+              </label>
+              <select id="src-facility" class="form-select" required onchange="onFacilityOrMedicineChanged()">
+                <option value="">-- Select Donor Facility (e.g., District Hospital Aundh) --</option>
+              </select>
+              <div class="form-helper" id="src-stock-hint">Select a facility holding available stock.</div>
+            </div>
+
+            <!-- Destination Facility -->
+            <div class="form-group">
+              <label for="dest-facility">
+                <span class="label-number">2</span> Destination Facility (Recipient PHC)
+                <span class="required">*</span>
+              </label>
+              <select id="dest-facility" class="form-select" required onchange="onFacilityOrMedicineChanged()">
+                <option value="">-- Select Recipient Facility (e.g., Kalyanpur PHC) --</option>
+              </select>
+              <div class="form-helper">The destination health center in need of critical medicine.</div>
+            </div>
+
+            <!-- Medicine Selection -->
+            <div class="form-row">
+              <div class="form-group flex-2">
+                <label for="med-select">
+                  <span class="label-number">3</span> Essential Medicine
+                  <span class="required">*</span>
+                </label>
+                <select id="med-select" class="form-select" required onchange="onFacilityOrMedicineChanged()">
+                  <option value="">-- Select Medicine --</option>
+                </select>
+              </div>
+
+              <!-- Quantity Input -->
+              <div class="form-group flex-1">
+                <label for="med-qty">
+                  <span class="label-number">4</span> Quantity (Units)
+                  <span class="required">*</span>
+                </label>
+                <input type="number" id="med-qty" class="form-input" min="1" max="5000" value="10" required>
+                <div class="form-helper" id="med-qty-max-hint">Max available: --</div>
+              </div>
+            </div>
+
+            <!-- Urgency Level -->
+            <div class="form-group">
+              <label>
+                <span class="label-number">5</span> Priority & Clinical Urgency
+              </label>
+              <div class="urgency-pill-group">
+                <label class="urgency-pill">
+                  <input type="radio" name="urgency" value="ROUTINE" checked>
+                  <span class="pill-content">
+                    <span class="pill-title">Routine</span>
+                    <span class="pill-desc">Standard weekly rebalance</span>
+                  </span>
+                </label>
+
+                <label class="urgency-pill">
+                  <input type="radio" name="urgency" value="URGENT">
+                  <span class="pill-content">
+                    <span class="pill-title">Urgent</span>
+                    <span class="pill-desc">Low stock alert</span>
+                  </span>
+                </label>
+
+                <label class="urgency-pill critical">
+                  <input type="radio" name="urgency" value="CRITICAL_EMERGENCY">
+                  <span class="pill-content">
+                    <span class="pill-title">Critical Emergency</span>
+                    <span class="pill-desc">Immediate stockout / bite spike</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Reason / Clinical Justification -->
+            <div class="form-group">
+              <label for="transfer-reason">Clinical Reason / Notes</label>
+              <input type="text" id="transfer-reason" class="form-input" placeholder="e.g. Emergency snakebite stockout; monsoon surge preparedness">
+            </div>
+
+            <!-- Auto-Approve Checkbox -->
+            <div class="form-check-box">
+              <label class="checkbox-container">
+                <input type="checkbox" id="auto-approve-toggle" checked>
+                <span class="checkmark"></span>
+                <span class="checkbox-label">
+                  <strong>Auto-Approve & Soft-Reserve Stock Immediately</strong>
+                  <span class="checkbox-desc">Skips DRAFT status, locks stock via FEFO and reserves inventory at donor loading dock.</span>
+                </span>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-submit-transfer" class="btn btn-primary btn-lg w-full">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/>
+                <path d="m12 5 7 7-7 7"/>
+              </svg>
+              Initiate Medicine Transfer
+            </button>
+          </form>
+        </div>
+
+        <!-- Logistics Intelligence Preview Column -->
+        <div class="card preview-card">
+          <h3 class="card-title">Logistics & Route Intelligence</h3>
+          <p class="preview-lead">Real-time terrain and physical impedance analysis between selected facilities.</p>
+
+          <div class="route-display-box">
+            <div class="route-node">
+              <div class="node-icon src-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="node-info">
+                <div class="node-label">ORIGIN</div>
+                <div class="node-name" id="preview-src-name">District Hospital Aundh</div>
+                <div class="node-sub" id="preview-src-tier">Tier: District Hospital (DH)</div>
+              </div>
+            </div>
+
+            <div class="route-connector">
+              <div class="connector-line"></div>
+              <div class="connector-badge" id="preview-terrain-badge">PLAINS (45 km/h)</div>
+            </div>
+
+            <div class="route-node">
+              <div class="node-icon dest-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+              </div>
+              <div class="node-info">
+                <div class="node-label">DESTINATION</div>
+                <div class="node-name" id="preview-dest-name">Kalyanpur Primary Health Centre</div>
+                <div class="node-sub" id="preview-dest-tier">Tier: Primary Health Centre (PHC)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Route Metrics Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">Haversine Distance</div>
+              <div class="metric-value" id="preview-distance">-- km</div>
+              <div class="metric-desc">Direct geospatial line</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-label">Estimated Transit Time</div>
+              <div class="metric-value" id="preview-transit-time">-- hrs</div>
+              <div class="metric-desc" id="preview-speed-desc">Bottleneck road speed</div>
+            </div>
+          </div>
+
+          <!-- Regulatory & Safety Notice -->
+          <div class="compliance-box">
+            <div class="compliance-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="compliance-text">
+              <strong>DSCSA & FEFO Certified Allocation:</strong>
+              Batches expiring within the transit duration plus buffer are automatically excluded from donor allocation to eliminate in-transit expiry.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: FACILITY STOCK & DEFICITS -->
+    <section id="inventory-tab" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Facility Network Stock & Emergency Deficits</h2>
+          <p class="panel-desc">Real-time visibility into inventory health across all 15 public healthcare institutions.</p>
+        </div>
+      </div>
+
+      <div id="facilities-inventory-grid" class="facilities-grid">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading facility inventories...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: MULTIMODAL REGISTER INGESTION (GEMINI VISION) -->
+    <section id="scan-tab" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">Multimodal Paper Ledger Ingestion</h2>
+          <p class="panel-desc">Scan physical stock arrival chalans, handwritten dispensing registers, and receipt vouchers with Google Gemini Vision AI to digitize batches into active SQLite inventory with DSCSA cryptographic trails.</p>
+        </div>
+      </div>
+
+      <!-- Ingestion Controls & Upload Area -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <!-- Upload Card -->
+        <div class="card" style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color);">
+          <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>📸 Physical Document Capture</span>
+          </h3>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="scan-facility-select" style="font-weight: 500; font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Target Receiving PHC / Facility:</label>
+            <select id="scan-facility-select" class="form-select" style="width: 100%;">
+              <option value="">-- Select Receiving Facility --</option>
+            </select>
+          </div>
+
+          <!-- Drag & Drop Zone -->
+          <div id="scan-dropzone" style="border: 2px dashed #6366f1; border-radius: 10px; padding: 1.75rem 1rem; text-align: center; background: rgba(99, 102, 241, 0.03); cursor: pointer; transition: all 0.2s ease;" onclick="document.getElementById('scan-file-input').click()">
+            <input type="file" id="scan-file-input" accept="image/*" style="display: none;" onchange="handleRegisterFileSelected(event)">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" style="margin: 0 auto 0.75rem auto; display: block;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p style="font-weight: 600; color: var(--text-main); margin-bottom: 0.25rem;">Click to upload register photo</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">PNG, JPEG, WebP up to 10MB</p>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); document.getElementById('scan-file-input').click()">Browse Image</button>
+          </div>
+
+          <div style="margin-top: 1rem; text-align: center;">
+            <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">— OR TEST WITH AUTHENTIC CLINICAL CHALAN —</span>
+            <button id="btn-use-sample" type="button" class="btn btn-sm btn-outline" style="width: 100%; font-weight: 600; color: #4f46e5; border-color: #4f46e5;" onclick="loadAndScanSampleRegister()">
+              ⚡ Use Sample Register Chalan
+            </button>
+          </div>
+        </div>
+
+        <!-- Vision AI Capabilities Card -->
+        <div class="card" style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🧠 Gemini 2.5 Flash Vision OCR</span>
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+              Purpose-built for irregular handwriting, state medical store delivery chalans, and battered paper registers across Maharashtra PHCs.
+            </p>
+            <ul style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6; padding-left: 1.25rem;">
+              <li><strong>Catalog Disambiguation:</strong> Fuzzy matches abbreviations like <em>"Inj ASV"</em> to full 10-drug essential medicines catalog.</li>
+              <li><strong>Batch & Lot Extraction:</strong> Transcribes alphanumeric manufacturers' batch IDs.</li>
+              <li><strong>Date Standardization:</strong> Normalizes varied date entries (e.g. <em>08/27</em> or <em>31-12-2027</em>) into standard ISO-8601.</li>
+              <li><strong>DSCSA Integrity Seal:</strong> Every committed batch generates a SHA-256 tamper-evident ledger entry.</li>
+            </ul>
+          </div>
+          <div id="scan-status-banner" style="margin-top: 1rem; padding: 0.75rem; border-radius: 8px; background: rgba(99, 102, 241, 0.08); font-size: 0.82rem; color: #4338ca;">
+            <strong>Ready:</strong> Select a facility and upload a register photo or click "Use Sample Register Chalan" to test.
+          </div>
+        </div>
+      </div>
+
+      <!-- Scanned Preview & Review Table -->
+      <div id="scan-results-container" style="display: none;">
+        <div class="card" style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                <span>📋 Extracted Register Preview</span>
+                <span id="scan-badge-model" class="badge" style="background: #10b981; color: #fff; font-size: 0.75rem; padding: 2px 8px;">Gemini Vision</span>
+              </h3>
+              <p id="scan-meta-info" style="font-size: 0.84rem; color: var(--text-muted); margin-top: 0.25rem;">Detected 0 items in 0 ms</p>
+            </div>
+            <div style="display: flex; gap: 0.6rem;">
+              <button class="btn btn-secondary btn-sm" onclick="resetScanView()">Clear / New Scan</button>
+              <button id="btn-commit-scan" class="btn btn-primary btn-sm" style="background: #10b981; border-color: #10b981;" onclick="commitScannedRegister()">
+                ✓ Commit to Facility Inventory
+              </button>
+            </div>
+          </div>
+
+          <!-- Scanned Physical Document Visual Preview Card -->
+          <div id="scan-image-preview-wrapper" style="display: none; margin-bottom: 1.5rem; padding: 1.1rem; background: rgba(248, 250, 252, 0.7); border-radius: 10px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 0.4rem;">
+                <span>📄 Scanned Physical Document:</span>
+                <span id="scan-preview-filename" style="font-weight: 500; color: #4338ca; font-size: 0.82rem;">sample_chalan.png</span>
+              </span>
+              <a id="scan-preview-open-link" href="#" target="_blank" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; text-decoration: none; padding: 3px 10px;">
+                🔍 View Full Resolution
+              </a>
+            </div>
+            <div style="text-align: center; background: #fff; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(226, 232, 240, 0.8); overflow: hidden;">
+              <img id="scanned-image-preview" src="" alt="Scanned Document Preview" style="max-height: 280px; max-width: 100%; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); object-fit: contain; cursor: zoom-in;" onclick="window.open(this.src, '_blank')">
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem; margin-bottom: 0;">
+              💡 <em>Click the document above to inspect printed government headers, batch numbers, and cold-chain certification stamps.</em>
+            </p>
+          </div>
+
+          <!-- Table of extracted items -->
+          <div class="table-responsive">
+            <table class="table" style="width: 100%; text-align: left; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase;">
+                  <th style="padding: 0.75rem;">Transcribed Drug</th>
+                  <th style="padding: 0.75rem;">Matched Catalog Medicine</th>
+                  <th style="padding: 0.75rem;">Batch Number</th>
+                  <th style="padding: 0.75rem;">Expiry Date</th>
+                  <th style="padding: 0.75rem;">Quantity</th>
+                  <th style="padding: 0.75rem;">Confidence</th>
+                  <th style="padding: 0.75rem; text-align: center;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="scan-items-tbody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="scan-commit-success" style="display: none; margin-top: 1.25rem; padding: 1rem; border-radius: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #065f46;">
+            <!-- Injected on successful commit -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: AUTONOMOUS REBALANCING AGENT -->
+    <section id="rebalance-tab" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="display: flex; align-items: center; gap: 0.6rem;">
+            <span>Autonomous Rebalancing Agent</span>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #047857; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; padding: 2px 8px;">
+              Gemini Flash 2.5 / 3.7
+            </span>
+          </h2>
+          <p class="panel-desc">
+            AI-driven emergency stockout redistribution across Maharashtra rural primary healthcare networks with clinical rationale, donor safety stock invariants, and road transit physics.
+          </p>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-outline btn-sm" onclick="scanLiveNetworkDeficits()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            Scan Network Deficits
+          </button>
+        </div>
+      </div>
+
+      <!-- Invariant Highlights Bar -->
+      <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.8rem; color: var(--text-secondary);">
+          <span style="color: #059669;">🛡️</span>
+          <span><strong>14-Day Donor Buffer:</strong> Preserves donor safety stock (21d in Monsoon)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.8rem; color: var(--text-secondary);">
+          <span style="color: #d97706;">⛰️</span>
+          <span><strong>Western Ghats Physics:</strong> 25 km/h mountain speed bottleneck</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.8rem; color: var(--text-secondary);">
+          <span style="color: #0284c7;">❄️</span>
+          <span><strong>Cold-Chain Matching:</strong> ILR storage verification</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.8rem; color: var(--text-secondary);">
+          <span style="color: #7c3aed;">⏱️</span>
+          <span><strong>Consumption-Aware FEFO:</strong> Expiry &ge; transit + consumption window + 7d</span>
+        </div>
+      </div>
+
+      <!-- Two-Column Grid: Rebalance Request Form & Network Deficits Radar -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+        
+        <!-- Rebalancing Config Card -->
+        <div class="card" style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color);">
+          <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🎯 Deficit Rebalancing Target</span>
+          </h3>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.35rem;">
+              Recipient Facility (Deficit / Stockout Center):
+            </label>
+            <select id="rebalance-recipient-select" class="form-select w-full" onchange="onRebalanceSelectionChanged()">
+              <option value="">-- Select Recipient Facility --</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.35rem;">
+              Medicine Required:
+            </label>
+            <select id="rebalance-medicine-select" class="form-select w-full" onchange="onRebalanceSelectionChanged()">
+              <option value="">-- Select Medicine --</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 0.25rem;">Target Days</label>
+              <input type="number" id="rebalance-target-days" class="form-input w-full" value="14" min="3" max="60">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 0.25rem;">Donor Buffer</label>
+              <input type="number" id="rebalance-donor-buffer" class="form-input w-full" value="14" min="7" max="60" title="Donor Retention Buffer Days (WHO Min-Max standard)">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 0.25rem;">Radius (km)</label>
+              <input type="number" id="rebalance-radius-km" class="form-input w-full" value="50" min="10" max="150">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.85rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px;">
+            <input type="checkbox" id="rebalance-monsoon-mode" style="accent-color: #059669; width: 16px; height: 16px; cursor: pointer;">
+            <label for="rebalance-monsoon-mode" style="font-size: 0.8rem; font-weight: 600; color: #065f46; cursor: pointer; user-select: none;">
+              🌧️ Monsoon Mode (1.5× Buffer / 21-Day Sahyadri Landslide Margin)
+            </label>
+          </div>
+
+          <div id="rebalance-recipient-preview" style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--text-secondary);">
+            <div style="display: flex; justify-content: space-between;">
+              <span>Current Stock: <strong id="rebalance-preview-stock">--</strong></span>
+              <span>Daily Consumption (DAC): <strong id="rebalance-preview-dac">--</strong></span>
+            </div>
+            <div style="margin-top: 0.35rem; display: flex; justify-content: space-between;">
+              <span>Days Remaining (DIR): <strong id="rebalance-preview-dir">--</strong></span>
+              <span>Est. Deficit: <strong id="rebalance-preview-deficit" style="color: #e11d48;">--</strong></span>
+            </div>
+          </div>
+
+          <button id="btn-run-rebalance" class="btn btn-primary w-full" onclick="executeRebalanceAnalysis()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            Run Gemini Rebalance Agent
+          </button>
+        </div>
+
+        <!-- Network Deficits Live Radar Card -->
+        <div class="card" style="background: var(--bg-card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🚨 Live Network Deficit Radar</span>
+              <span id="rebalance-deficit-count-badge" class="badge" style="background: #e11d48; color: #fff; font-size: 0.72rem; padding: 2px 6px;">0</span>
+            </h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Auto-detected supply deficits</span>
+          </div>
+
+          <div id="network-deficits-container" style="flex: 1; max-height: 320px; overflow-y: auto; padding-right: 4px;">
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+              Scanning network facilities for stockouts and low inventory...
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recommendation & Tradeoff Analysis Results Card (Hidden until generated) -->
+      <div id="rebalance-results-card" style="display: none;">
+        <!-- Injected dynamically by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Action Modal for Receive / Abort / Return -->
+  <div id="action-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Action Confirmation</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer" id="modal-footer">
+        <!-- Buttons injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Alerts Slide-over Drawer -->
+  <aside id="alerts-drawer" class="alerts-drawer">
+    <div class="alerts-drawer-header">
+      <div class="alerts-drawer-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span>Live System Alerts</span>
+        <span id="alerts-drawer-count" class="badge badge-brand">0</span>
+      </div>
+      <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <span id="sse-status-indicator" class="sse-status-dot connecting" title="SSE Connection Status"></span>
+        <button class="modal-close" onclick="toggleAlertsDrawer()">&times;</button>
+      </div>
+    </div>
+    <div class="alerts-drawer-toolbar">
+      <span class="toolbar-label">Real-Time Event Stream</span>
+      <div style="display: flex; gap: 0.4rem;">
+        <button class="btn btn-primary btn-xs" onclick="simulateLiveAlert()" title="Fire a live test alert via SSE">⚡ Simulate Alert</button>
+        <button class="btn btn-outline btn-xs" onclick="markAllAlertsAcknowledged()">Ack All</button>
+        <button class="btn btn-outline btn-xs" onclick="loadAlertsHistory()">↻</button>
+      </div>
+    </div>
+    <div id="alerts-list" class="alerts-list">
+      <div class="empty-state">
+        <p>No active alerts. System healthy.</p>
+      </div>
+    </div>
+  </aside>
+  <!-- AI Safety & Circuit Breakers Modal -->
+  <div id="safety-modal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 840px; width: 92%; max-height: 88vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.35rem;">🛡️</span>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 700;">AI Safety Architecture & Circuit Telemetry</h3>
+            <p style="margin: 0; font-size: 0.78rem; color: var(--text-muted);">Deterministic Guardrails, Mathematical Clamping & Real-Time Fault-Tolerance</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="toggleSafetyModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" style="overflow-y: auto; flex: 1; padding: 1.5rem;">
+        <!-- Telemetry Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1rem;">
+            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #166534;">AI Guardrail Status</div>
+            <div id="safety-modal-guard-status" style="font-size: 1.15rem; font-weight: 800; color: #15803d; margin-top: 0.25rem;">ACTIVE (100%)</div>
+            <div style="font-size: 0.75rem; color: #166534; margin-top: 0.2rem;">Deterministic Invariant Firewall</div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Rebalance Circuit</span>
+              <span id="safety-modal-rebalance-state" class="badge" style="background: #10b981; color: #fff; font-size: 0.68rem; padding: 1px 6px;">CLOSED</span>
+            </div>
+            <div id="safety-modal-rebalance-detail" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.35rem;">Failures: 0 / 3 (Healthy)</div>
+            <button id="btn-reset-rebalance-circuit" class="btn btn-outline btn-xs" style="margin-top: 0.45rem;" onclick="resetCircuitBreaker('rebalance')">Reset Circuit</button>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Vision OCR Circuit</span>
+              <span id="safety-modal-vision-state" class="badge" style="background: #10b981; color: #fff; font-size: 0.68rem; padding: 1px 6px;">CLOSED</span>
+            </div>
+            <div id="safety-modal-vision-detail" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 0.35rem;">Failures: 0 / 3 (Healthy)</div>
+            <button id="btn-reset-vision-circuit" class="btn btn-outline btn-xs" style="margin-top: 0.45rem;" onclick="resetCircuitBreaker('vision')">Reset Circuit</button>
+          </div>
+        </div>
+
+        <!-- Invariants Enforced Pill Matrix -->
+        <div style="margin-bottom: 1.5rem;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem;">
+            Enforced Physical & Mathematical Invariants
+          </h4>
+          <div id="safety-modal-invariants" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 8px;">✓ 14d Donor Retention Non-Cannibalization (21d Monsoon)</span>
+            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 8px;">✓ Strict Mathematical Quantity Clamping [0 &lt; Q &le; min(Deficit, Surplus)]</span>
+            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 8px;">✓ Consumption-Aware FEFO Shelf-Life Horizon</span>
+            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 8px;">✓ Multimodal Ingestion Temporal Validation (Past Expiry Blocked)</span>
+            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 8px;">✓ Adversarial Prompt Injection Sanitizer</span>
+            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 8px;">✓ Adaptive Cloud API Circuit Breakers & Fallback</span>
+          </div>
+        </div>
+
+        <!-- Historical Audit Log -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin: 0;">
+              Immutable AI Security Audit Log
+            </h4>
+            <span id="safety-modal-violations-count" style="font-size: 0.78rem; color: var(--text-muted);">0 events recorded</span>
+          </div>
+          <div style="overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; max-height: 220px;">
+            <table class="data-table" style="width: 100%; font-size: 0.78rem;">
+              <thead style="background: #f8fafc; position: sticky; top: 0;">
+                <tr>
+                  <th style="padding: 0.5rem 0.75rem;">Time</th>
+                  <th style="padding: 0.5rem 0.75rem;">Component</th>
+                  <th style="padding: 0.5rem 0.75rem;">Violation Type</th>
+                  <th style="padding: 0.5rem 0.75rem;">Severity</th>
+                  <th style="padding: 0.5rem 0.75rem;">Remediation Applied</th>
+                </tr>
+              </thead>
+              <tbody id="safety-modal-violations-tbody">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 1.5rem; color: var(--text-muted);">No active violations. All AI inputs and recommendations within physical bounds.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer" style="background: #f8fafc; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary btn-sm" onclick="toggleSafetyModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

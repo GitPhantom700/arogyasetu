@@ -1,0 +1,235 @@
+# ArogyaSetu (आरोग्यसेतु) — Public Health Logistics Command Center
+
+> **Track 01:** Healthcare Supply Chain & Emergency Logistics  
+> **Event:** Build with AI: Code for Communities (Second Edition) — Hack2Skill & Google  
+> **Geographic Focus:** 15 Rural Primary Health Centres (PHCs) across Pune & Satara Districts, Western Ghats, Maharashtra  
+
+---
+
+## 🌟 Executive Overview
+
+**ArogyaSetu** is an autonomous, federated emergency healthcare logistics and stock rebalancing platform engineered specifically for rural primary health networks in India. 
+
+In remote regions of the Western Ghats (Sahyadri), emergency stockouts of critical life-saving medications—such as **Polyvalent Anti-Snake Venom (ASV)**, **Anti-Rabies Vaccines (ARV)**, and **Human Insulin**—frequently lead to preventable fatalities because central district warehouses take days to dispatch supplies over flooded mountain roads. However, neighboring Primary Health Centres just 15–30 km away often hold surplus supplies that could save a patient's life within hours.
+
+ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperative mesh that:
+1. **Detects Acute Depletions in Real-Time:** Monitors facility burn rates and calculates dynamic Days of Inventory Remaining (DIR).
+2. **Orchestrates Peer-to-Peer Rebalancing:** Uses Google Gemini AI and multi-objective optimization to calculate optimal donor clinics within a 50 km radius.
+3. **Guarantees Medical & AI Safety:** Enforces a deterministic invariant firewall that physically prevents donor starvation, eliminates phantom inventory, and respects cold-chain and mountain transit physics.
+4. **Digitizes Paper Records via Vision AI:** Transcribes handwritten physical stock ledgers and delivery chalans using Gemini 2.5 Flash Vision OCR with RapidFuzz catalog matching.
+5. **Maintains Tamper-Evident DSCSA Chains:** Every milligram of medication moved or consumed is recorded into a cryptographically chained SHA-256 audit ledger.
+
+---
+
+## 🏗️ System Architecture
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                   ArogyaSetu Enterprise Command Center UI                        │
+│         React 19 • Vite • Tailwind CSS • Lucide Icons • Port 5173                │
+│                                                                                  │
+│  [🗺️ Geospatial Map]  [📦 Stock & Deficits]  [🤖 Rebalancer]  [🚚 Transfer Log]   │
+│  [📷 Ledger OCR]      [🛡️ AI Safety Modal]   [⚡ Crisis Sim]  [🌓 Dark/Light]    │
+└────────────────────────────────────────┬─────────────────────────────────────────┘
+                                         │ HTTP REST & SSE EventSource
+                                         ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                     FastAPI Application Core (Port 8000)                         │
+│                                                                                  │
+│  ┌────────────────────────┐  ┌────────────────────────┐  ┌────────────────────┐  │
+│  │ Real-Time Alert Engine │  │ Burn Rate & Deficits   │  │ Transfer Core      │  │
+│  │ Sub-50ms SSE Stream    │  │ DIR, Surge, Monsoon    │  │ ACID State Machine │  │
+│  └────────────────────────┘  └────────────────────────┘  └────────────────────┘  │
+│                                                                                  │
+│  ┌────────────────────────────────────────────────────────────────────────────┐  │
+│  │                     Google Gemini AI & Safety Core                         │  │
+│  │                                                                            │  │
+│  │   Gemini 2.5 Flash Rebalancing   ◄──►   Gemini 2.5 Flash Vision OCR        │  │
+│  │               │                                      │                     │  │
+│  │               ▼                                      ▼                     │  │
+│  │   ┌────────────────────────────────────────────────────────────────────┐   │  │
+│  │   │        Deterministic AI Safety Guardrail Firewall (AISafetyGuard)  │   │  │
+│  │   │   • Zero Donor Starvation (≥14d buffer)  • Cold-Chain Storage Guard│   │  │
+│  │   │   • FEFO Expiry Integrity                • Physical Stock Bounding │   │  │
+│  │   │   • Rural Blackout Baseline Demand       • Payload Distrust Filter │   │  │
+│  │   └──────────────────────────────────┬─────────────────────────────────┘   │  │
+│  │                                      │                                     │  │
+│  │                                      ▼                                     │  │
+│  │               Thread-Safe Circuit Breaker (Half-Open Probe & Watchdog)     │  │
+│  │               Instant Fallback to Deterministic Multi-Objective Engine     │  │
+│  └────────────────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────┬─────────────────────────────────────────┘
+                                         │ SQLite ACID Write Transactions
+                                         ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                   Persistent Relational Core (healthcare.db)                     │
+│                                                                                  │
+│   • facilities (15 PHCs)                 • medicines (10 Emergency Formulations) │
+│   • stock_batches (183 Batches)          • inventory_transactions (SHA-256)      │
+│   • transfers (State Machine Lifecycle)  • alerts (SSE Event Log)                │
+│   • ai_safety_violations (Audit Log)     • crisis_snapshots (Durable Recovery)   │
+│   • PRAGMA busy_timeout = 30000          • PRAGMA journal_mode = WAL             │
+└──────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛡️ AI Safety Guardrails & The 6 Core Physical Invariants
+
+ArogyaSetu enforces a strict **Zero-Hallucination, Zero-Harm** policy. All recommendations produced by Google Gemini models must pass through the deterministic `AISafetyGuard` firewall:
+
+| # | Physical Invariant | Formulation / Guard Condition | Safety Failure Mitigated |
+| :- | :--- | :--- | :--- |
+| **1** | **Non-Cannibalization / Zero Starvation** | $\text{Retained} \ge \max(\text{min\_stock}, \lceil 14 \times \text{DAC}\rceil)$ ($21\text{d}$ in Monsoon) | Secondary stockout at donor facility |
+| **2** | **Physical Bounding & Non-Negative Stock** | $\text{Allocated} \le \text{Actual Surplus}$ (Clamped to $[0, \text{Surplus}]$) | Over-allocation / phantom stock |
+| **3** | **Cold-Chain Equipment Compatibility** | $\text{Requires ILR} \implies \text{Donor Cold-Chain Status} = \text{VERIFIED}$ | Spoiled biologics / vaccines |
+| **4** | **Transit Feasibility & FEFO Buffer** | $\text{Batch Expiry} \ge \text{Today} + \lceil\text{Transit}/24\rceil + 7\text{ days}$ | In-transit medicine expiration |
+| **5** | **Rural Blackout Demand Floor** | $\text{Historical DAC} = 0 \implies \text{Default DAC} = 1.0\text{ unit/day}$ | Buffer collapse during power cuts |
+| **6** | **Payload Distrust & Input Sanitization** | Regex prompt injection stripping & parameter override immunity | Adversarial manipulation of transfer quotas |
+
+---
+
+## ⚡ Thread-Safe Circuit Breakers & Offline Fallbacks
+
+When rural connectivity fails or cloud endpoints experience high latency:
+- The **`CircuitBreaker`** trips after 3 consecutive failures.
+- Switches seamlessly to a local **Deterministic Multi-Objective Optimization Engine** in **$< 5\text{ ms}$**.
+- Healthcare workers and doctors continue rebalancing operations without downtime.
+- Includes monotonic timeout tracking, hung-worker watchdog probes, and an interactive **`Reset Circuit`** mechanism.
+
+---
+
+## 📋 Project Roadmap Status (Master 20-Day Plan)
+
+| Phase | Days | Focus | Status |
+| :--- | :--- | :--- | :--- |
+| **Phase 1** | Days 01–03 | Relational Schema, Realistic Seed Data & API Skeleton | **100% COMPLETE** |
+| **Phase 2** | Days 04–07 | Transactional Core, Burn Rate & Transfer State Machine | **100% COMPLETE** |
+| **Phase 3** | Days 08–11 | Real-Time SSE Alerts, Gemini Vision OCR, Rebalancer & AI Safety Audit | **100% COMPLETE** |
+| **Phase 4** | Days 12–15 | Geospatial Command Center, Field Staff Portal & Visualizer | **100% COMPLETE** |
+| **Phase 5** | Days 16–18 | Emergency Surge Simulation Engine & End-to-End Hardening | **ACTIVE (Microtask 5.1 Completed & Approved)** |
+| **Phase 6** | Days 19–21 | 1-Click Package, Whitepaper, Pitch Deck & Submission | **PLANNED** |
+
+---
+
+## 🚀 Quickstart Guide
+
+### Prerequisites
+- **Python:** 3.11+ (tested on Python 3.13)
+- **Node.js:** v18+ (npm v9+)
+- **OS:** Windows / Linux / macOS
+
+### 1. Environment Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/build_with_ai.git
+cd build_with_ai
+
+# Setup Python Virtual Environment
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+# source .venv/bin/activate # Linux/macOS
+
+# Install Python Dependencies
+pip install -r requirements.txt
+
+# Install Frontend Dependencies
+npm --prefix frontend install
+```
+
+### 2. Configure API Keys (Optional for Cloud AI)
+Create a `.env` file in the project root:
+```env
+GEMINI_API_KEY=your_google_ai_studio_api_key_here
+```
+*(Note: If no API key is provided, ArogyaSetu seamlessly operates in offline mode using the deterministic rule engine and clinical OCR emulator).*
+
+### 3. Launching the Services
+
+**Terminal 1: FastAPI Backend (Port 8000)**
+```bash
+.venv\Scripts\python.exe -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+```
+- Interactive Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Fallback Web UI: [http://localhost:8000/](http://localhost:8000/)
+
+**Terminal 2: React 19 Frontend (Port 5173)**
+```bash
+npm --prefix frontend run dev
+```
+- Modern Command Center: [http://localhost:5173/](http://localhost:5173/)
+
+---
+
+## 🧪 Test Verification & Quality Gates
+
+ArogyaSetu is validated against 85 automated backend regression tests and strict frontend build checks:
+
+```bash
+# Run full backend test suite (85 tests across 12 modules)
+.venv\Scripts\pytest backend/ -v
+
+# Run frontend production build verification
+npm --prefix frontend run build
+```
+
+**Results:**
+- **Backend Tests:** `85 passed in 25.22s (100%)`
+- **Frontend Build:** `vite build completed in 1.84s with 0 errors`
+- **DSCSA Cryptographic Audit Ledger:** `192 verified blocks, chain valid`
+
+---
+
+## 📂 Repository Layout
+
+```
+build_with_ai/
+├── backend/
+│   ├── ai_safety.py           # AISafetyGuard firewall & thread-safe CircuitBreaker
+│   ├── alerts.py              # Server-Sent Events (SSE) Broadcaster & pub/sub
+│   ├── burn_rate.py           # Consumption calculations, DIR, and surge detection
+│   ├── crisis_simulator.py    # Crisis simulation engine, shock presets & snapshots
+│   ├── database.py            # SQLite async transactions & connection pool
+│   ├── ledger_vision.py       # Gemini 2.5 Flash Vision OCR & RapidFuzz matcher
+│   ├── main.py                # FastAPI entry point & CORS configuration
+│   ├── models.py              # Pydantic data transfer schemas
+│   ├── rebalancer.py          # Gemini AI Rebalancer & multi-objective engine
+│   ├── schema.sql             # Relational DDL with CHECK constraints & indexes
+│   ├── schemas.py             # Domain models & validation schemas
+│   ├── seed_data.py           # 15 Pune/Satara PHCs & 183 realistic medicine batches
+│   ├── transfers_core.py      # Transfer state machine & DSCSA SHA-256 ledger
+│   ├── routes/                # Modular FastAPI router endpoints
+│   ├── static/                # Fallback vanilla web dashboard
+│   ├── static/                # Fallback vanilla web dashboard
+│   └── test_*.py              # 16 comprehensive test suites (107/107 tests passing)
+│
+├── frontend/                  # Modern React 19 + Vite + Tailwind CSS Application
+│   ├── src/
+│   │   ├── components/        # Header, Sidebar, StatusBadge, SafetyModal, Toasts, FacilitySlideOver
+│   │   ├── context/           # AppContext, translations.js (मराठी, हिन्दी, English)
+│   │   ├── hooks/             # useAlertsStream (resilient SSE hook)
+│   │   ├── services/          # api.js (unified backend fetch client)
+│   │   ├── views/             # Overview, Transfers, Inventory, Rebalance, FieldPortal, Crisis
+│   │   ├── App.jsx            # Application shell
+│   │   └── main.jsx           # React DOM root
+│   ├── tailwind.config.js     # Custom clinical color tokens & dark mode
+│   └── vite.config.js         # Port 5173 & API reverse proxy configuration
+│
+├── arogyasetu_ui_design_audit.pdf  # Comprehensive 23-Screen UI/UX Design Audit Vector PDF Dossier (8.30 MB)
+├── arogyasetu_ui_design_audit.html # Interactive Multi-View Audit Dossier & Adversarial AI Evaluation
+├── walkthrough.md             # UI Design Audit walkthrough & Gemini evaluation response scorecard
+├── executive_report.html      # Executive whitepaper, multi-model benchmark report & DSCSA ledger logs
+├── explain_project.md         # Intuitive 10th-grade educational guide to ArogyaSetu
+├── implementation.md          # Locked 20-day master microtask roadmap
+├── progress.md                # Daily progress log & 4-stage gate approval history
+├── reviewrules.md             # 4-stage review gate protocol & audit criteria
+├── roadmap.md                 # Master phase roadmap & milestone tracker
+└── requirements.txt           # Python dependencies
+```
+
+---
+
+## 👥 Contributors & Acknowledgements
+
+Developed for **Build with AI: Code for Communities (Second Edition)** organized by **Hack2Skill** in partnership with **Google**.
