@@ -133,7 +133,7 @@ export function FieldStaffPortalView() {
   const [scanResult, setScanResult] = useState(null);
   const [editableItems, setEditableItems] = useState([]);
   const [challanRef, setChallanRef] = useState('');
-  const [ocrNotes, setOcrNotes] = useState('Paper challan digitized via Gemini 2.5 Flash Vision');
+  const [ocrNotes, setOcrNotes] = useState('Paper challan digitized via Gemini 3.6 Flash Vision');
   const [submittingCommit, setSubmittingCommit] = useState(false);
   const [commitResult, setCommitResult] = useState(null);
 
@@ -541,7 +541,7 @@ export function FieldStaffPortalView() {
             Field Staff Inventory Portal
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
-            Mobile-first rapid dispensing for clinical nurses and multimodal Gemini 2.5 Flash Vision OCR ingestion for handwritten paper registers and delivery chalans.
+            Mobile-first rapid dispensing for clinical nurses and multimodal Gemini 3.6 Flash Vision OCR ingestion for handwritten paper registers and delivery chalans.
           </p>
         </div>
 
@@ -1102,7 +1102,7 @@ export function FieldStaffPortalView() {
                   <span>Upload Physical Paper Register / Delivery Challan</span>
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Upload a photo of handwritten stock logs or delivery vouchers for Gemini 2.5 Flash Vision OCR transcription.
+                  Upload a photo of handwritten stock logs or delivery vouchers for Gemini 3.6 Flash Vision OCR transcription.
                 </p>
               </div>
 
