@@ -69,9 +69,14 @@ def get_db_context(db_path: Path = None, immediate: bool = True):
         conn.execute("BEGIN;")
     try:
         yield conn
-        conn.execute("COMMIT;")
+        if conn.in_transaction:
+            conn.execute("COMMIT;")
     except Exception:
-        conn.execute("ROLLBACK;")
+        if conn.in_transaction:
+            try:
+                conn.execute("ROLLBACK;")
+            except Exception:
+                pass
         raise
     finally:
         conn.close()
@@ -298,10 +303,15 @@ def execute_write_transaction_sync(db_path: Path, fn: Callable, *args, **kwargs)
         conn.execute("BEGIN IMMEDIATE;")
         try:
             result = fn(conn, *args, **kwargs)
-            conn.execute("COMMIT;")
+            if conn.in_transaction:
+                conn.execute("COMMIT;")
             return result
         except Exception:
-            conn.execute("ROLLBACK;")
+            if conn.in_transaction:
+                try:
+                    conn.execute("ROLLBACK;")
+                except Exception:
+                    pass
             raise
     finally:
         conn.close()
@@ -325,8 +335,11 @@ def init_db(db_path: Path = None, schema_path: Path = None) -> None:
     with open(target_schema, "r", encoding="utf-8") as f:
         schema_sql = f.read()
 
-    with get_db_context(target_db) as conn:
+    conn = get_connection(target_db)
+    try:
         conn.executescript(schema_sql)
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":
