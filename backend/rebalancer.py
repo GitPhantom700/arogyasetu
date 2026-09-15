@@ -360,7 +360,7 @@ class AutonomousRebalancingService:
 
     def __init__(self):
         self.api_key = os.getenv("GEMINI_API_KEY")
-        self.model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
         self._client = None
 
     def _get_client(self):
@@ -673,6 +673,10 @@ class AutonomousRebalancingService:
             rec_post_stock = recipient_info["current_stock"] + safe_qty
             rec_post_dir = round(rec_post_stock / recipient_info["dac"], 1) if recipient_info["dac"] > 0 else None
 
+            final_rationale = gemini_payload.clinical_rationale
+            if apply_monsoon and ("monsoon" not in final_rationale.lower()):
+                final_rationale = f"{final_rationale} (1.5x Monsoon Buffer Applied)"
+
             # Final response object
             response_obj = RebalanceRecommendationResponse(
                 recommendation_id=rec_id,
@@ -695,7 +699,7 @@ class AutonomousRebalancingService:
                 estimated_transit_hours=selected_donor.estimated_transit_hours,
                 donor_post_transfer_dir=donor_post_dir,
                 recipient_post_transfer_dir=rec_post_dir,
-                clinical_rationale=gemini_payload.clinical_rationale,
+                clinical_rationale=final_rationale,
                 tradeoff_analysis=gemini_payload.tradeoff_analysis,
                 risk_assessment=gemini_payload.risk_assessment,
                 suggested_route_summary=gemini_payload.suggested_route_summary,

@@ -491,7 +491,7 @@ export function RebalanceView() {
                 </div>
 
                 <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-md bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 shrink-0">
-                  {recommendation.model_used || 'Gemini 2.5 Flash'}
+                  {recommendation.model_used || 'Gemini 3.6 Flash'}
                 </span>
               </div>
 

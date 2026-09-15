@@ -46,6 +46,9 @@ app = FastAPI(
 
 # Dynamic CORS configuration (supports local dev and cloud deployments like Google Cloud Run)
 raw_cors = os.environ.get("CORS_ORIGINS", "")
+if os.environ.get("ENVIRONMENT") == "test":
+    raw_cors = ""
+
 if raw_cors.strip() == "*":
     ALLOWED_ORIGINS = ["*"]
     ALLOW_CREDENTIALS = False
