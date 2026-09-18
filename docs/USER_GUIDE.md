@@ -8,15 +8,15 @@ ArogyaSetu provides role-differentiated interfaces designed for District Medical
 
 The navigation sidebar reflects the exact modules active in the application:
 
-| Sidebar View | Badge | Target User | Key Capabilities |
-| :--- | :--- | :--- | :--- |
-| **Command Center** | — | District Medical Officer | Real-time network telemetry across 15 PHCs, critical stockout cards, active emergency alerts, executive metrics. |
-| **Geospatial Map** | `DAY 13` | Emergency Logistics Officer | Interactive Leaflet GIS map with dual-channel color/shape markers, mountain transit corridors, and facility slide-over drawers. |
-| **Facility Stocks** | Status | District Pharmacist | Consolidated inventory grid across 180 stock batches, FEFO expiry countdowns, and cold-chain temperature telemetry. |
-| **AI Rebalancer** | `GEMINI` | Civil Surgeon / DMO | Autonomous peer-to-peer redistribution recommendations, mountain transit physics, medical SOAP explainability, and Human-in-the-Loop authorization. |
-| **Transfers & Ledger** | Status | Regulatory / Logistics Officer | End-to-end transfer tracking across the 5-stage state machine, 180-block DSCSA Cryptographic Ledger Explorer, and 1-click ledger integrity verification. |
-| **Field Portal & OCR** | `DAY 14` | Rural PHC Nurse / ANM | Dual-mode frontline interface: Rapid touch dispensing logger with Marathi/Hindi speech dictation AND Multimodal Gemini 3.6 Flash Vision OCR for handwritten paper registers. |
-| **Crisis Simulator** | `ACTIVE` | Disaster Response Team | Realistic epidemiological shock injection (Monsoon floods, snakebite spikes), automated swarm dispatch, and baseline state recovery. |
+| Sidebar View | Target User | Key Capabilities |
+| :--- | :--- | :--- |
+| **Command Center** | District Medical Officer | Real-time network telemetry across 15 PHCs, critical stockout cards, active emergency alerts, executive metrics. |
+| **Geospatial Map** | Emergency Logistics Officer | Interactive Leaflet GIS map with dual-channel color/shape markers, mountain transit corridors, and facility slide-over drawers. |
+| **Facility Stocks** | District Pharmacist | Consolidated inventory grid across 180 stock batches, FEFO expiry countdowns, and cold-chain temperature telemetry. |
+| **AI Rebalancer** | Civil Surgeon / DMO | Autonomous peer-to-peer redistribution recommendations, mountain transit physics, medical SOAP explainability, and Human-in-the-Loop authorization. |
+| **Transfers & Ledger** | Regulatory / Logistics Officer | End-to-end transfer tracking across the 5-stage state machine, 180-block DSCSA Cryptographic Ledger Explorer, and 1-click ledger integrity verification. |
+| **Field Portal & OCR** | Rural PHC Nurse / ANM | Dual-mode frontline interface: Rapid touch dispensing logger with Marathi/Hindi speech dictation AND Multimodal Gemini 3.6 Flash Vision OCR for handwritten paper registers. |
+| **Crisis Simulator** | Disaster Response Team | Realistic epidemiological shock injection (Monsoon floods, snakebite spikes), automated swarm dispatch, and baseline state recovery. |
 
 ---
 
