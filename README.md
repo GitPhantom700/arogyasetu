@@ -227,7 +227,6 @@ arogyasetu/
 ├── explain_project.md         # Intuitive 10th-grade educational guide to ArogyaSetu
 ├── implementation.md          # Locked 20-day master microtask roadmap
 ├── progress.md                # Daily progress log & 4-stage gate approval history
-├── reviewrules.md             # 4-stage review gate protocol & audit criteria
 ├── roadmap.md                 # Master phase roadmap & milestone tracker
 └── requirements.txt           # Python dependencies
 ```
