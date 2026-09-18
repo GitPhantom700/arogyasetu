@@ -128,8 +128,8 @@ ArogyaSetu is engineered as a full-stack, closed-loop public health logistics pl
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/build_with_ai.git
-cd build_with_ai
+git clone https://github.com/GitPhantom700/arogyasetu.git
+cd arogyasetu
 
 # Setup Python Virtual Environment
 python -m venv .venv
@@ -189,7 +189,7 @@ npm --prefix frontend run build
 ## 📂 Repository Layout
 
 ```
-build_with_ai/
+arogyasetu/
 ├── backend/
 │   ├── ai_safety.py           # AISafetyGuard firewall & thread-safe CircuitBreaker
 │   ├── alerts.py              # Server-Sent Events (SSE) Broadcaster & pub/sub

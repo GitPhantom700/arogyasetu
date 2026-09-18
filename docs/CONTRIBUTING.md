@@ -14,8 +14,8 @@ Thank you for your interest in contributing to **ArogyaSetu**! This project was 
 ### Setup Steps
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/build_with_ai.git
-cd build_with_ai
+git clone https://github.com/GitPhantom700/arogyasetu.git
+cd arogyasetu
 
 # 2. Set up Python virtual environment
 python -m venv .venv
