@@ -4,7 +4,7 @@
 
 **ArogyaSetu** is officially released for the **Build with AI: Code for Communities (Second Edition)** hackathon organized by **Hack2Skill** in partnership with **Google**.
 
-This release marks the completion of the 25-Day master roadmap across all 7 development phases, comprehensive double-audits, rural usability hardening, and full-stack containerization for Google Cloud Run.
+This initial production release delivers autonomous emergency medicine rebalancing, clinical AI safety guardrails, offline-first frontline dispensing, and containerized deployment for rural public health networks.
 
 ---
 
