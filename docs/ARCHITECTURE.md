@@ -8,32 +8,32 @@ ArogyaSetu is a federated public health emergency logistics and inter-facility s
 
 ```mermaid
 graph TD
-    subgraph Client Layer
-        A1[District Command Center<br/>React 19 + Leaflet GIS]
-        A2[Field Staff Mobile Portal<br/>ANM / Pharmacist PWA]
-        A3[Speech & Vision Ingestion<br/>Web Speech + Camera OCR]
+    subgraph ClientLayer ["Client Layer"]
+        A1["District Command Center<br/>React 19 + Leaflet GIS"]
+        A2["Field Staff Mobile Portal<br/>ANM / Pharmacist PWA"]
+        A3["Speech & Vision Ingestion<br/>Web Speech + Camera OCR"]
     end
 
-    subgraph Application Server (Google Cloud Run / Port 8080)
-        B1[FastAPI REST API Gateway]
-        B2[Server-Sent Events Alert Broadcaster]
-        B3[Dynamic Burn Rate Engine]
-        B4[Crisis & Outbreak Simulator]
-        B5[ABDM Sovereign Gateway M1-M3]
-        B6[BRICS+ Federated Learning Node M4]
+    subgraph AppServer ["Application Server (Google Cloud Run / Port 8080)"]
+        B1["FastAPI REST API Gateway"]
+        B2["Server-Sent Events Alert Broadcaster"]
+        B3["Dynamic Burn Rate Engine"]
+        B4["Crisis & Outbreak Simulator"]
+        B5["ABDM Sovereign Gateway M1-M3"]
+        B6["BRICS+ Federated Learning Node M4"]
     end
 
-    subgraph Intelligence & Safety Firewall
-        C1[Google Gemini 3.6 Flash Vision OCR]
-        C2[Gemini Autonomous Rebalancer Agent]
-        C3[Deterministic AISafetyGuard Firewall]
-        C4[Thread-Safe Monotonic Circuit Breaker]
+    subgraph SafetyFirewall ["Intelligence & Safety Firewall"]
+        C1["Google Gemini 3.6 Flash Vision OCR"]
+        C2["Gemini Autonomous Rebalancer Agent"]
+        C3["Deterministic AISafetyGuard Firewall"]
+        C4["Thread-Safe Monotonic Circuit Breaker"]
     end
 
-    subgraph Data & Cryptographic Audit
-        D1[(SQLite WAL Mode Database)]
-        D2[DSCSA SHA-256 Merkle Ledger]
-        D3[IndexedDB Offline Client Queue]
+    subgraph DataAudit ["Data & Cryptographic Audit"]
+        D1[("SQLite WAL Mode Database")]
+        D2["DSCSA SHA-256 Merkle Ledger"]
+        D3["IndexedDB Offline Client Queue"]
     end
 
     A1 -->|REST / SSE Telemetry| B1
