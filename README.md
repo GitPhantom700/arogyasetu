@@ -99,16 +99,21 @@ When rural connectivity fails or cloud endpoints experience high latency:
 
 ---
 
-## 📋 Project Roadmap Status (Master 20-Day Plan)
+## ⚙️ Core System Capabilities & Production Modules
 
-| Phase | Days | Focus | Status |
-| :--- | :--- | :--- | :--- |
-| **Phase 1** | Days 01–03 | Relational Schema, Realistic Seed Data & API Skeleton | **100% COMPLETE** |
-| **Phase 2** | Days 04–07 | Transactional Core, Burn Rate & Transfer State Machine | **100% COMPLETE** |
-| **Phase 3** | Days 08–11 | Real-Time SSE Alerts, Gemini Vision OCR, Rebalancer & AI Safety Audit | **100% COMPLETE** |
-| **Phase 4** | Days 12–15 | Geospatial Command Center, Field Staff Portal & Visualizer | **100% COMPLETE** |
-| **Phase 5** | Days 16–18 | Emergency Surge Simulation Engine & End-to-End Hardening | **ACTIVE (Microtask 5.1 Completed & Approved)** |
-| **Phase 6** | Days 19–21 | 1-Click Package, Whitepaper, Pitch Deck & Submission | **PLANNED** |
+ArogyaSetu is engineered as a full-stack, closed-loop public health logistics platform providing role-tailored capabilities across the primary health network:
+
+| Module / Capability | Primary Stakeholder | Operational Reality & Features |
+| :--- | :--- | :--- |
+| **Geospatial Command Map** | Emergency Logistics Officer | Canvas-accelerated Leaflet GIS tracking 15 PHCs, Western Ghats mountain transit corridors, live buffer days, and cold-chain status. |
+| **Autonomous AI Rebalancer** | Civil Surgeon / DMO | Multi-facility inventory redistribution powered by Google Gemini 3.6 Flash, calculating ghat pass transit hours and generating medical SOAP reasoning notes. |
+| **Deterministic Safety Firewall** | Clinical Governance Board | Hardcoded `AISafetyGuard` enforcing 6 physical invariants: zero donor starvation ($\ge 14\text{d}$ buffer, $\ge 21\text{d}$ in monsoon), mass conservation, and cold-chain validation. |
+| **Multimodal Vision OCR** | Rural PHC Pharmacist | Camera intake transcribing handwritten paper stock registers (*दैनिक औषध नोंदवही*) and state DHS delivery challans via Gemini 3.6 Flash Vision with RapidFuzz catalog matching. |
+| **Inter-PHC Transfers & DSCSA Ledger** | Drug Inspector / Auditor | End-to-end 5-stage state machine tracking transfers with an immutable 180-block SHA-256 Merkle audit trail and 1-click ledger integrity verification. |
+| **Frontline Dispensing Portal** | Rural Staff Nurse / ANM | High-contrast touch interface with $48\times 48\text{px}$ PPE glove steppers, multilingual voice dictation (मराठी, हिन्दी, English), and 2G/3G offline queueing. |
+| **Epidemiological Crisis Simulator** | Disaster Preparedness Team | Emergency shock injection engine (Monsoon flooding, 400% snakebite clusters) with automated multi-facility swarm dispatch and baseline state recovery. |
+
+> For the historical development roadmap and daily microtask logs, refer to [`roadmap.md`](roadmap.md).
 
 ---
 
