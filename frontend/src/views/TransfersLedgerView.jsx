@@ -37,7 +37,7 @@ const STATUS_STEPS = [
 ];
 
 export function TransfersLedgerView() {
-  const { t } = useUI();
+  const { t, transferSearchTerm, setTransferSearchTerm } = useUI();
   const { showToast } = useAlerts();
   const addToast = showToast;
 
@@ -114,6 +114,13 @@ export function TransfersLedgerView() {
     fetchLedgerBlocks();
     verifyLedger(false);
   }, []);
+
+  useEffect(() => {
+    if (transferSearchTerm) {
+      setSearchTerm(transferSearchTerm);
+      setActiveViewTab('transfers');
+    }
+  }, [transferSearchTerm]);
 
   const handleCopy = (text) => {
     if (navigator.clipboard) {

@@ -89,6 +89,18 @@ export function RebalanceView() {
     fetchDeficits();
   }, [maxRadiusKm, minDonorBufferDays]);
 
+  useEffect(() => {
+    if (selectedDeficitId && deficits.length > 0) {
+      const matchIdx = deficits.findIndex(d => d.facility_id === selectedDeficitId);
+      if (matchIdx !== -1) {
+        setSelectedDeficitIndex(matchIdx);
+        setSelectedFacilityId(deficits[matchIdx].facility_id);
+        setSelectedMedicineId(deficits[matchIdx].medicine_id);
+        setRecommendation(null);
+      }
+    }
+  }, [selectedDeficitId, deficits]);
+
   // Sync selected deficit into form
   const handleSelectDeficit = (def, idx) => {
     setSelectedDeficitIndex(idx);

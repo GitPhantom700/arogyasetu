@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { StatusBadge } from '../components/StatusBadge';
 import {
@@ -11,11 +11,120 @@ import {
   TrendingDown,
   Clock,
   Sparkles,
-  Layers
+  Layers,
+  Check,
+  CheckCircle2,
+  ThermometerSnowflake,
+  Filter
 } from 'lucide-react';
+import clsx from 'clsx';
 
 export function OverviewView() {
-  const { stats, facilities, alerts, setActiveTab, setIsSafetyModalOpen, t } = useApp();
+  const {
+    stats,
+    facilities,
+    alerts,
+    setActiveTab,
+    setIsSafetyModalOpen,
+    setSelectedFacilityId,
+    setSelectedDeficitId,
+    setTransferSearchTerm,
+    acknowledgeAlert,
+    t
+  } = useApp();
+
+  const [alertFilter, setAlertFilter] = useState('ALL');
+
+  // Filtered alerts based on selected category pill
+  const filteredAlerts = useMemo(() => {
+    return alerts.filter(alert => {
+      const cat = alert.category || '';
+      const text = (alert.title || '') + ' ' + (alert.message || '');
+      if (alertFilter === 'DEFICIT') {
+        return cat === 'STOCKOUT' || cat === 'CRITICAL_DEPLETION' || cat === 'SURGE_SPIKE';
+      }
+      if (alertFilter === 'TRANSFER') {
+        return cat === 'TRANSFER_UPDATE' || text.includes('TRF-');
+      }
+      if (alertFilter === 'COLD_CHAIN') {
+        return cat === 'COLD_CHAIN_BREACH';
+      }
+      return true;
+    });
+  }, [alerts, alertFilter]);
+
+  // Context-aware action resolver for each alert
+  const getAlertAction = (alert) => {
+    const cat = alert.category || '';
+    const text = (alert.title || '') + ' ' + (alert.message || '');
+    const trfMatch = text.match(/TRF-[A-Z0-9-]+/i);
+    const transferCode = trfMatch ? trfMatch[0] : null;
+
+    if (cat === 'TRANSFER_UPDATE' || transferCode) {
+      return {
+        label: t('btn_view_transfer', 'View Transfer'),
+        icon: Truck,
+        badge: 'Transfer',
+        badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+        btnClass: 'bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/60 dark:text-blue-300 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/40',
+        onClick: () => {
+          if (transferCode) {
+            setTransferSearchTerm(transferCode);
+          }
+          setActiveTab('transfers');
+        }
+      };
+    }
+
+    if (cat === 'STOCKOUT' || cat === 'CRITICAL_DEPLETION' || cat === 'SURGE_SPIKE') {
+      return {
+        label: t('btn_rebalance_deficit', 'Rebalance Deficit'),
+        icon: Sparkles,
+        badge: cat === 'STOCKOUT' ? 'Stockout' : cat === 'SURGE_SPIKE' ? 'Surge' : 'Deficit',
+        badgeClass: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
+        btnClass: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/40',
+        onClick: () => {
+          if (alert.facility_id) {
+            setSelectedDeficitId(alert.facility_id);
+            setSelectedFacilityId(alert.facility_id);
+          }
+          setActiveTab('rebalance');
+        }
+      };
+    }
+
+    if (cat === 'COLD_CHAIN_BREACH') {
+      return {
+        label: t('btn_inspect_facility', 'Inspect Facility'),
+        icon: ThermometerSnowflake,
+        badge: 'Cold Chain',
+        badgeClass: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
+        btnClass: 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100 dark:bg-cyan-950/60 dark:text-cyan-300 dark:hover:bg-cyan-900/60 border border-cyan-200/60 dark:border-cyan-800/40',
+        onClick: () => {
+          if (alert.facility_id) {
+            setSelectedFacilityId(alert.facility_id);
+          } else {
+            setActiveTab('inventory');
+          }
+        }
+      };
+    }
+
+    return {
+      label: alert.facility_id ? t('btn_view_facility', 'View Facility') : 'Acknowledge',
+      icon: alert.facility_id ? Building2 : CheckCircle2,
+      badge: 'System',
+      badgeClass: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
+      btnClass: 'bg-slate-50 text-slate-700 hover:bg-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60',
+      onClick: () => {
+        if (alert.facility_id) {
+          setSelectedFacilityId(alert.facility_id);
+        } else {
+          acknowledgeAlert(alert.id);
+        }
+      }
+    };
+  };
 
   const criticalAlerts = alerts.filter(a => a.severity === 'CRITICAL');
   const warningAlerts = alerts.filter(a => a.severity === 'WARNING');
@@ -146,53 +255,143 @@ export function OverviewView() {
         
         {/* Left 2 Cols: Real-Time Deficits & Alerts Feed */}
         <div className="lg:col-span-2 card-clinical p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-brand-dark-border pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-brand-dark-border pb-3 gap-2">
             <div>
-              <h3 className="font-display font-bold text-sm text-slate-900 dark:text-white">
-                Live Deficit & Emergency Alert Feed
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Broadcasting in real-time via Server-Sent Events (/api/alerts/stream)
+              <div className="flex items-center gap-2">
+                <h3 className="font-display font-bold text-sm text-slate-900 dark:text-white">
+                  {t('live_alerts_feed_title', 'Live Supply Chain & Emergency Alert Feed')}
+                </h3>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  {alerts.length}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {t('live_alerts_feed_subtitle', 'Real-time telemetry via SSE. Action items route directly to Transfers, Rebalancing, or Facility Stocks.')}
               </p>
             </div>
             <button
               onClick={() => setActiveTab('rebalance')}
-              className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+              className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
               Analyze Rebalancing <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="divide-y divide-slate-100 dark:divide-slate-800/80 max-h-[380px] overflow-y-auto">
-            {alerts.length === 0 ? (
+          {/* Quick Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+            {[
+              { id: 'ALL', label: t('filter_all_alerts', 'All Events'), count: alerts.length },
+              { id: 'TRANSFER', label: t('filter_transfer_alerts', 'Transfers & Shipments'), count: alerts.filter(a => (a.category === 'TRANSFER_UPDATE') || ((a.title || '') + ' ' + (a.message || '')).includes('TRF-')).length },
+              { id: 'DEFICIT', label: t('filter_deficit_alerts', 'Stockouts & Deficits'), count: alerts.filter(a => a.category === 'STOCKOUT' || a.category === 'CRITICAL_DEPLETION' || a.category === 'SURGE_SPIKE').length },
+              { id: 'COLD_CHAIN', label: t('filter_cold_chain_alerts', 'Cold Chain'), count: alerts.filter(a => a.category === 'COLD_CHAIN_BREACH').length },
+            ].map(f => (
+              <button
+                key={f.id}
+                onClick={() => setAlertFilter(f.id)}
+                className={clsx(
+                  "px-2.5 py-1 rounded-lg font-medium transition cursor-pointer flex items-center gap-1.5 text-[11px]",
+                  alertFilter === f.id
+                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm"
+                    : "bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800/80 dark:hover:bg-slate-700 dark:text-slate-300"
+                )}
+              >
+                <span>{f.label}</span>
+                <span className={clsx(
+                  "px-1 py-0.2 text-[9px] rounded-full font-bold",
+                  alertFilter === f.id
+                    ? "bg-white/20 text-white dark:bg-slate-900/20 dark:text-slate-900"
+                    : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                )}>
+                  {f.count}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="divide-y divide-slate-100 dark:divide-slate-800/80 max-h-[380px] overflow-y-auto pr-1">
+            {filteredAlerts.length === 0 ? (
               <div className="py-8 text-center text-xs text-slate-400">
-                No active stockout alerts. Network inventories are balanced.
+                No active alerts in this category. Network inventories are balanced.
               </div>
             ) : (
-              alerts.slice(0, 8).map((alert, idx) => (
-                <div key={idx} className="py-3 flex items-start justify-between gap-3 text-xs">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <StatusBadge status={alert.severity} size="xs" />
-                      <span className="font-semibold text-slate-800 dark:text-slate-200">
-                        {alert.facility_name || 'Regional Facility'}
-                      </span>
+              filteredAlerts.slice(0, 10).map((alert, idx) => {
+                const action = getAlertAction(alert);
+                const ActionIcon = action.icon;
+                const isAck = alert.is_acknowledged || alert.acknowledged === 1;
+
+                return (
+                  <div key={idx} className={clsx(
+                    "py-3 flex items-start justify-between gap-3 text-xs transition",
+                    isAck ? "opacity-60" : "opacity-100"
+                  )}>
+                    <div className="space-y-1.5 flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <StatusBadge status={alert.severity} size="xs" />
+                        <span className={clsx(
+                          "px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide uppercase",
+                          action.badgeClass
+                        )}>
+                          {action.badge}
+                        </span>
+                        <button
+                          onClick={() => alert.facility_id && setSelectedFacilityId(alert.facility_id)}
+                          className={clsx(
+                            "font-semibold text-slate-800 dark:text-slate-200 text-left",
+                            alert.facility_id ? "hover:underline cursor-pointer" : ""
+                          )}
+                          title={alert.facility_id ? "Click to open facility inventory" : undefined}
+                        >
+                          {alert.facility_name || 'Regional Facility'}
+                        </button>
+                        {isAck && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                            <Check className="w-3 h-3" /> Acknowledged
+                          </span>
+                        )}
+                      </div>
+
+                      {alert.title && (
+                        <div className="font-semibold text-slate-900 dark:text-slate-100 text-[11px] leading-tight truncate">
+                          {alert.title}
+                        </div>
+                      )}
+
+                      <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
+                        {alert.message}
+                      </p>
+
+                      <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
+                        <Clock className="w-3 h-3" />
+                        <span>{alert.created_at?.replace('T', ' ').slice(0, 19) || 'Just now'}</span>
+                      </div>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-400">
-                      {alert.message}
-                    </p>
-                    <span className="text-[10px] text-slate-400 block font-mono">
-                      {alert.created_at?.replace('T', ' ').slice(0, 19) || 'Just now'}
-                    </span>
+
+                    {/* Contextual Action Button & Acknowledge */}
+                    <div className="shrink-0 flex items-center gap-1.5 pt-1">
+                      <button
+                        onClick={action.onClick}
+                        className={clsx(
+                          "px-2.5 py-1 text-[11px] font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm cursor-pointer",
+                          action.btnClass
+                        )}
+                      >
+                        <ActionIcon className="w-3 h-3" />
+                        <span>{action.label}</span>
+                      </button>
+
+                      {!isAck && (
+                        <button
+                          onClick={() => acknowledgeAlert(alert.id)}
+                          className="p-1 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:text-emerald-400 dark:hover:bg-emerald-950/60 transition cursor-pointer"
+                          title="Acknowledge Alert"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <button
-                    onClick={() => setActiveTab('rebalance')}
-                    className="shrink-0 px-2.5 py-1 text-[11px] font-medium rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 dark:text-emerald-300 transition"
-                  >
-                    Solve
-                  </button>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>

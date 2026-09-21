@@ -81,6 +81,7 @@ export function UIProvider({ children }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [recommendationToAuth, setRecommendationToAuth] = useState(null);
   const [selectedDeficitId, setSelectedDeficitId] = useState(null);
+  const [transferSearchTerm, setTransferSearchTerm] = useState('');
 
   // Crisis & Outbreak Simulation Engine (Microtask 5.1)
   const [crisisStatus, setCrisisStatus] = useState({ is_active: false });
@@ -220,6 +221,8 @@ export function UIProvider({ children }) {
     closeAuthModal,
     selectedDeficitId,
     setSelectedDeficitId,
+    transferSearchTerm,
+    setTransferSearchTerm,
     crisisStatus,
     setCrisisStatus,
     addToast: (msg, type = 'info', title = null) => {
