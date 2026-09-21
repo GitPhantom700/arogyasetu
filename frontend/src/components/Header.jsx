@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
+import { StatusBadge } from './StatusBadge';
 import {
   ShieldCheck,
   Bell,
@@ -8,13 +9,17 @@ import {
   RotateCw,
   Radio,
   CheckCircle2,
+  Check,
   Building2,
   Pill,
   Layers,
   AlertTriangle,
-  FileText,
   Wifi,
-  WifiOff
+  WifiOff,
+  X,
+  Truck,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -27,13 +32,21 @@ export function Header() {
     t,
     stats,
     isSSEConnected,
+    alerts,
     unreadAlertsCount,
+    acknowledgeAlert,
     setIsSafetyModalOpen,
     refreshData,
     loading,
     crisisStatus,
-    setActiveTab
+    setActiveTab,
+    setSelectedFacilityId,
+    setSelectedDeficitId,
+    setTransferSearchTerm
   } = useApp();
+
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const notificationsRef = useRef(null);
 
   const [isSimulatedOffline, setIsSimulatedOffline] = useState(() => {
     return typeof window !== 'undefined' ? Boolean(window.__AROGYA_OFFLINE_SIMULATED__) : false;
@@ -42,6 +55,33 @@ export function Header() {
     return typeof navigator !== 'undefined' ? navigator.onLine : true;
   });
   const [offlineQueueCount, setOfflineQueueCount] = useState(0);
+
+  // Close notifications dropdown on click outside or Escape key
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        setIsNotificationsOpen(false);
+      }
+    }
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setIsNotificationsOpen(false);
+      }
+    }
+    if (isNotificationsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isNotificationsOpen]);
+
+  const handleMarkAllAsRead = () => {
+    const unread = (alerts || []).filter(a => !a.is_acknowledged && a.acknowledged !== 1);
+    unread.forEach(a => acknowledgeAlert(a.id));
+  };
 
   // Monitor offline queue and network state
   useEffect(() => {
@@ -248,23 +288,18 @@ export function Header() {
             </span>
           </button>
 
-          {/* Executive Report Link */}
-          <a
-            href="/executive_report.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100/90 hover:bg-blue-200 text-blue-950 dark:bg-blue-950/70 dark:hover:bg-blue-900/70 dark:text-blue-300 border border-blue-300 dark:border-blue-800/80 shadow-sm transition"
-            title="Open Comprehensive Executive Audit Report (HTML Dossier)"
-          >
-            <FileText className="w-4 h-4 text-blue-700 dark:text-blue-400" />
-            <span className="hidden sm:inline">{t('executive_report', 'Executive Report')}</span>
-          </a>
-
-          {/* SSE Alert Bell Indicator */}
-          <div className="relative">
+          {/* Interactive Notifications Bell & Popover */}
+          <div className="relative" ref={notificationsRef}>
             <button
-              className="p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              onClick={() => setIsNotificationsOpen(prev => !prev)}
+              className={clsx(
+                "p-2 rounded-lg transition relative cursor-pointer",
+                isNotificationsOpen
+                  ? "bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400"
+                  : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
+              )}
               title={`${unreadAlertsCount} active alerts`}
+              aria-label="Toggle notifications dropdown"
             >
               <Bell className="w-4 h-4" />
               {unreadAlertsCount > 0 && (
@@ -273,6 +308,166 @@ export function Header() {
                 </span>
               )}
             </button>
+
+            {/* Notifications Dropdown Panel */}
+            {isNotificationsOpen && (
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border shadow-2xl z-50 overflow-hidden animate-fade-in">
+                {/* Panel Header */}
+                <div className="p-3.5 border-b border-slate-100 dark:border-brand-dark-border flex items-center justify-between bg-slate-50/70 dark:bg-slate-800/40">
+                  <div className="flex items-center gap-2">
+                    <Bell className="w-4 h-4 text-slate-700 dark:text-slate-300" />
+                    <h4 className="font-display font-bold text-xs text-slate-900 dark:text-white">
+                      Notifications
+                    </h4>
+                    {unreadAlertsCount > 0 && (
+                      <span className="px-1.5 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200/60 dark:border-red-800/40">
+                        {unreadAlertsCount} unread
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {unreadAlertsCount > 0 && (
+                      <button
+                        onClick={handleMarkAllAsRead}
+                        className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline font-semibold cursor-pointer"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setIsNotificationsOpen(false)}
+                      className="p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                      aria-label="Close notifications"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Panel Body / Alert List */}
+                <div className="max-h-[380px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60">
+                  {(!alerts || alerts.length === 0) ? (
+                    <div className="p-8 text-center text-xs text-slate-400 space-y-1">
+                      <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-2 opacity-80" />
+                      <p className="font-semibold text-slate-700 dark:text-slate-300">No active alerts</p>
+                      <p>Network inventories are currently balanced.</p>
+                    </div>
+                  ) : (
+                    alerts.slice(0, 12).map((alert, idx) => {
+                      const isAck = alert.is_acknowledged || alert.acknowledged === 1;
+                      const cat = alert.category || '';
+                      const text = (alert.title || '') + ' ' + (alert.message || '');
+                      const trfMatch = text.match(/TRF-[A-Z0-9-]+/i);
+                      const transferCode = trfMatch ? trfMatch[0] : null;
+
+                      return (
+                        <div
+                          key={alert.id || idx}
+                          className={clsx(
+                            "p-3 text-xs transition space-y-1.5",
+                            isAck
+                              ? "opacity-60 bg-slate-50/40 dark:bg-slate-900/20"
+                              : "bg-white dark:bg-brand-dark-card hover:bg-slate-50 dark:hover:bg-slate-800/40"
+                          )}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <StatusBadge status={alert.severity} size="xs" />
+                              <span className="font-semibold text-slate-900 dark:text-white text-[11px]">
+                                {alert.facility_name || 'Regional Public Health Network'}
+                              </span>
+                            </div>
+                            {!isAck && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  acknowledgeAlert(alert.id);
+                                }}
+                                className="p-1 rounded text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 transition cursor-pointer"
+                                title="Acknowledge Alert"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+
+                          {alert.title && (
+                            <div className="font-semibold text-slate-800 dark:text-slate-200 text-[11px] leading-tight">
+                              {alert.title}
+                            </div>
+                          )}
+
+                          <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
+                            {alert.message}
+                          </p>
+
+                          <div className="flex items-center justify-between pt-1">
+                            <span className="text-[10px] text-slate-400 font-mono">
+                              {alert.created_at?.replace('T', ' ').slice(0, 16) || 'Just now'}
+                            </span>
+
+                            {/* Quick Action Routing */}
+                            {(cat === 'TRANSFER_UPDATE' || transferCode) ? (
+                              <button
+                                onClick={() => {
+                                  if (transferCode) setTransferSearchTerm(transferCode);
+                                  setActiveTab('transfers');
+                                  setIsNotificationsOpen(false);
+                                }}
+                                className="px-2 py-0.5 text-[10px] font-semibold rounded bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/60 dark:text-blue-300 transition flex items-center gap-1 cursor-pointer"
+                              >
+                                <Truck className="w-2.5 h-2.5" />
+                                <span>View Transfer</span>
+                              </button>
+                            ) : (cat === 'STOCKOUT' || cat === 'CRITICAL_DEPLETION' || cat === 'SURGE_SPIKE') ? (
+                              <button
+                                onClick={() => {
+                                  if (alert.facility_id) {
+                                    setSelectedDeficitId(alert.facility_id);
+                                    setSelectedFacilityId(alert.facility_id);
+                                  }
+                                  setActiveTab('rebalance');
+                                  setIsNotificationsOpen(false);
+                                }}
+                                className="px-2 py-0.5 text-[10px] font-semibold rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 transition flex items-center gap-1 cursor-pointer"
+                              >
+                                <Sparkles className="w-2.5 h-2.5" />
+                                <span>Rebalance</span>
+                              </button>
+                            ) : alert.facility_id ? (
+                              <button
+                                onClick={() => {
+                                  setSelectedFacilityId(alert.facility_id);
+                                  setIsNotificationsOpen(false);
+                                }}
+                                className="px-2 py-0.5 text-[10px] font-semibold rounded bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition flex items-center gap-1 cursor-pointer"
+                              >
+                                <Building2 className="w-2.5 h-2.5" />
+                                <span>Inspect</span>
+                              </button>
+                            ) : null}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Panel Footer */}
+                <div className="p-2.5 border-t border-slate-100 dark:border-brand-dark-border bg-slate-50/50 dark:bg-slate-800/30 text-center">
+                  <button
+                    onClick={() => {
+                      setActiveTab('overview');
+                      setIsNotificationsOpen(false);
+                    }}
+                    className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center justify-center gap-1 w-full cursor-pointer py-0.5"
+                  >
+                    <span>View Live Feed in Command Center</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Manual Refresh */}
