@@ -101,6 +101,25 @@ if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
+@app.get("/logo.jpg", include_in_schema=False)
+def get_logo():
+    logo_file = FRONTEND_DIST / "logo.jpg"
+    if logo_file.exists():
+        return FileResponse(logo_file, media_type="image/jpeg")
+    static_logo = STATIC_DIR / "logo.jpg"
+    if static_logo.exists():
+        return FileResponse(static_logo, media_type="image/jpeg")
+    return Response(status_code=404)
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def get_favicon():
+    logo_file = STATIC_DIR / "logo.jpg"
+    if logo_file.exists():
+        return FileResponse(logo_file, media_type="image/jpeg")
+    return Response(status_code=404)
+
+
 @app.get("/", include_in_schema=False)
 def root():
     dist_index = FRONTEND_DIST / "index.html"

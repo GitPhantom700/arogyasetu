@@ -101,9 +101,14 @@ export function Header() {
               alt="ArogyaSetu Logo"
               className="w-full h-full object-cover"
               onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.parentElement.classList.add('bg-gradient-to-tr', 'from-emerald-600', 'to-teal-500', 'text-white');
-                e.currentTarget.parentElement.innerHTML = '<span class="font-display font-black text-xl tracking-tight">AS</span>';
+                if (!e.currentTarget.dataset.retried) {
+                  e.currentTarget.dataset.retried = 'true';
+                  e.currentTarget.src = '/static/logo.jpg';
+                } else {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.parentElement.classList.add('bg-gradient-to-tr', 'from-emerald-600', 'to-teal-500', 'text-white');
+                  e.currentTarget.parentElement.innerHTML = '<span class="font-display font-black text-xl tracking-tight">AS</span>';
+                }
               }}
             />
           </div>
