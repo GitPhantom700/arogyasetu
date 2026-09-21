@@ -95,8 +95,17 @@ export function Header() {
         
         {/* Brand & Network Title */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
-            <span className="font-display font-black text-xl tracking-tight">AS</span>
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-emerald-500/20 border border-teal-500/30 bg-white flex items-center justify-center flex-shrink-0">
+            <img
+              src="/logo.jpg"
+              alt="ArogyaSetu Logo"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement.classList.add('bg-gradient-to-tr', 'from-emerald-600', 'to-teal-500', 'text-white');
+                e.currentTarget.parentElement.innerHTML = '<span class="font-display font-black text-xl tracking-tight">AS</span>';
+              }}
+            />
           </div>
           <div>
             <div className="flex items-center gap-2">
