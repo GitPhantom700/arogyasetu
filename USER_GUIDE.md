@@ -41,7 +41,7 @@ The navigation sidebar reflects the exact modules active in the application:
 ### 2. Geospatial GIS Command Map
 - **Navigating:** Click **Geospatial Map** in the sidebar.
 - **Interpreting Markers:**
-  - 🟢 **Green Pin (Circle):** Normal operating inventory ($\\ge 14$ days buffer).
+  - 🟢 **Green Pin (Circle):** Normal operating inventory ($\ge 14$ days buffer).
   - 🟡 **Yellow Pin (Triangle):** Low inventory warning ($< 7$ days buffer).
   - 🔴 **Red Pin (Octagon 🚨):** Acute stockout risk ($< 48$ hours buffer).
 - **Mountain Transit Corridors:**
@@ -78,7 +78,7 @@ The navigation sidebar reflects the exact modules active in the application:
 - **Evaluating Deficits & Donors:**
   - Select a facility experiencing a medicine deficit.
   - The engine scans donor candidates within a 50 km radius, accounting for steep Sahyadri mountain ghat transit hours, cold-chain Ice-Lined Refrigerator (ILR) readiness, and FEFO shelf life.
-  - The deterministic `AISafetyGuard` firewall verifies that the donor retains $\\ge 14$ days of reserve stock ($\\ge 21$ days during monsoon) to prevent secondary starvation.
+  - The deterministic `AISafetyGuard` firewall verifies that the donor retains $\ge 14$ days of reserve stock ($\ge 21$ days during monsoon) to prevent secondary starvation.
 
 ![AI Rebalancing Cockpit](docs/ui_audit_assets/08_ai_rebalancer.png)
 
