@@ -18,7 +18,7 @@ def get_health():
         cursor.execute("SELECT COUNT(*) FROM medicines;")
         med_count = cursor.fetchone()[0]
 
-        cursor.execute("SELECT COUNT(*) FROM stock_batches;")
+        cursor.execute("SELECT COUNT(*) FROM stock_batches WHERE status = 'ACTIVE';")
         batch_count = cursor.fetchone()[0]
 
         return HealthCheckResponse(
