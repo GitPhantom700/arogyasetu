@@ -207,7 +207,7 @@ export function CrisisSimulatorView() {
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/80">
-              Phase 5 • Day 16 (Microtask 5.1)
+              Epidemiological Stress Testing Engine
             </span>
             <span className={clsx(
               "px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex items-center gap-1",

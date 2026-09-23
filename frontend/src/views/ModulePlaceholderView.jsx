@@ -8,7 +8,7 @@ export function ModulePlaceholderView({ tabId }) {
   const moduleConfig = {
     map: {
       title: 'Interactive Geospatial Command Map',
-      badge: 'Microtask 4.2 (Day 13)',
+      badge: 'GIS Mapping System',
       icon: Map,
       description: 'Dynamic Leaflet map rendering all 15 rural healthcare facilities across Pune and Satara districts. Features color-coded inventory markers (Green: Adequate, Yellow: Low, Red: Critical Stockout), mountain road terrain impedance layers, and interactive facility slide-over drawers.',
       deliverables: [
@@ -17,11 +17,11 @@ export function ModulePlaceholderView({ tabId }) {
         'Facility stock inspection modal & deficit radar overlays',
         'Western Ghats terrain overlay & road route drawing'
       ],
-      nextAction: 'Ready to build in Day 13',
+      nextAction: 'Interactive Geospatial Command Map',
     },
     inventory: {
       title: 'Facility Stocks & Deficit Monitor',
-      badge: 'Phase 4 Inventory Hub',
+      badge: 'Real-Time Inventory Hub',
       icon: Package,
       description: 'Comprehensive inventory ledger and depletion velocity analyzer across all 15 facilities and 10 essential medicines. Provides real-time Daily Average Consumption (DAC) and Days of Inventory Remaining (DIR).',
       deliverables: [
@@ -30,11 +30,11 @@ export function ModulePlaceholderView({ tabId }) {
         'Cold-chain temperature requirement filters (+2°C to +8°C)',
         'Batch-level FEFO expiry timeline monitoring'
       ],
-      nextAction: 'Available in Phase 4',
+      nextAction: 'Facility Stocks & Deficit Monitor',
     },
     rebalance: {
       title: 'Gemini Autonomous Rebalancer & Route Dispatcher',
-      badge: 'Microtask 4.4 (Day 15)',
+      badge: 'Autonomous Rebalancer',
       icon: Cpu,
       description: 'Full-screen clinical rebalancing cockpit. Discovers candidate donor facilities within 50 km, enforces non-cannibalization safety buffers (14d/21d monsoon), generates explainable medical SOAP rationales with Gemini, and dispatches transfers with 1-click authorization.',
       deliverables: [
@@ -43,11 +43,11 @@ export function ModulePlaceholderView({ tabId }) {
         'Interactive transfer authorization modal with route dispatch',
         '100% enforced AI Safety Guardrail badges and clamping transparency'
       ],
-      nextAction: 'Ready to integrate in Day 15',
+      nextAction: 'Gemini Autonomous Rebalancer',
     },
     transfers: {
       title: 'Active Transfers & DSCSA Cryptographic Ledger',
-      badge: 'Transfer State Machine',
+      badge: 'DSCSA Ledger',
       icon: Truck,
       description: 'End-to-end tracking of all inter-facility medicine transfers through the complete state machine lifecycle (DRAFT ➔ APPROVED ➔ DISPATCHED ➔ IN_TRANSIT ➔ RECEIVED) with unbroken SHA-256 cryptographic proof blocks.',
       deliverables: [
@@ -56,11 +56,11 @@ export function ModulePlaceholderView({ tabId }) {
         'Interactive DSCSA blockchain audit ledger modal with hash verification',
         'Digital delivery receipt generation'
       ],
-      nextAction: 'Available in Phase 4',
+      nextAction: 'Active Transfers & DSCSA Cryptographic Ledger',
     },
     scan: {
       title: 'Field Staff Register OCR Vision',
-      badge: 'Microtask 4.3 (Day 14)',
+      badge: 'Multimodal Vision OCR',
       icon: ScanLine,
       description: 'Mobile-first paper register digitization portal powered by Google Gemini 2.5 Flash / 3.7 Flash Vision. Transcribes physical stock arrival challans, delivery vouchers, and handwritten logs into verified digital stock records.',
       deliverables: [
@@ -69,11 +69,11 @@ export function ModulePlaceholderView({ tabId }) {
         'RapidFuzz state medicine catalog matching & pharmacist review queue',
         'Single-click atomic commit with DSCSA receipt generation'
       ],
-      nextAction: 'Ready to build in Day 14',
+      nextAction: 'Field Staff Register OCR Vision',
     },
     crisis: {
       title: 'Monsoon Outbreak & Crisis Simulator',
-      badge: 'Phase 5 (Days 16–18)',
+      badge: 'Disaster Simulator',
       icon: Flame,
       description: 'Interactive crisis simulation control panel designed to stress-test regional healthcare supply chains during disaster surges (e.g. 400% spike in snakebites during Sahyadri monsoon flooding).',
       deliverables: [
@@ -82,17 +82,17 @@ export function ModulePlaceholderView({ tabId }) {
         'Multi-facility cascading stockout stress test',
         'Emergency automated redistribution swarm execution'
       ],
-      nextAction: 'Scheduled for Phase 5',
+      nextAction: 'Monsoon Outbreak & Crisis Simulator',
     }
   };
 
   const config = moduleConfig[tabId] || {
     title: 'Module Overview',
-    badge: 'Under Development',
+    badge: 'Operational Module',
     icon: Sparkles,
-    description: 'This module is actively being developed as part of Phase 4.',
+    description: 'Real-time public health logistics and inventory management system.',
     deliverables: [],
-    nextAction: 'Upcoming',
+    nextAction: 'Command Center Active',
   };
 
   const Icon = config.icon;
