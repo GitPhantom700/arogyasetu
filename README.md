@@ -1,8 +1,8 @@
 # ArogyaSetu (आरोग्यसेतु) — Public Health Logistics Command Center
 
-> **Track 01:** Healthcare Supply Chain & Emergency Logistics  
-> **Event:** Build with AI: Code for Communities (Second Edition) — Hack2Skill & Google  
-> **Geographic Focus:** 15 Rural Primary Health Centres (PHCs) across Pune & Satara Districts, Western Ghats, Maharashtra  
+> **Track 03:** Smart Health & Supply Chain Resilience (Theme: Resilience)  
+> **Event:** Build with AI: Code for Communities (Second Edition) — Hack2Skill & Google Cloud  
+> **Geographic Focus:** 15 Healthcare Facilities across Pune & Satara Districts, Western Ghats, Maharashtra  
 
 ---
 

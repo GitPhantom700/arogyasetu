@@ -660,6 +660,8 @@ class AutonomousRebalancingService:
             is_clamped = clamped_rec.get("clamped_by_safety_guard", False) if clamped_rec else True
             clamped_reason = clamped_rec.get("clamped_reason") if clamped_rec else "Proposal rejected by AI Safety Guard"
             is_feasible = clamped_rec.get("is_feasible", False) if clamped_rec else False
+            if safe_qty <= 0:
+                is_feasible = False
             safety_verified = clamped_rec.get("safety_verified", False) if clamped_rec else False
 
             fallback_donor = next((c for c in viable_donors if c.facility_id == gemini_payload.fallback_donor_facility_id), None)

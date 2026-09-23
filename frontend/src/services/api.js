@@ -56,6 +56,7 @@ export const api = {
 
   // Facilities & Medicines
   getFacilities: (limit = 50) => request(`/facilities?limit=${limit}`),
+  getFacilityDetail: (facilityId) => request(`/facilities/${facilityId}`),
   getMedicines: () => request('/medicines'),
 
   // Inventory & Stock
@@ -181,4 +182,9 @@ export const api = {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(plans),
   }),
+
+  // BRICS+ Federated Learning
+  getBricsModelWeights: (category = 'Antidote') =>
+    request(`/brics/model/weights?medicine_category=${encodeURIComponent(category)}`),
 };
+

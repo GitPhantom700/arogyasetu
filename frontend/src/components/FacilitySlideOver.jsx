@@ -12,12 +12,20 @@ import {
   Calendar,
   Pill,
   ShieldCheck,
-  RotateCw
+  RotateCw,
+  ScanLine,
+  Hash,
+  Phone,
+  UserCheck,
+  Zap,
+  Truck,
+  HeartPulse
 } from 'lucide-react';
 import clsx from 'clsx';
 
 export function FacilitySlideOver({ facilityId, facility, status, onClose, onNavigateRebalance }) {
   const [inventory, setInventory] = useState(null);
+  const [facilityDetail, setFacilityDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -46,9 +54,13 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
       setLoading(true);
       setError(null);
       try {
-        const data = await api.getFacilityInventory(facilityId);
+        const [data, detail] = await Promise.all([
+          api.getFacilityInventory(facilityId),
+          api.getFacilityDetail(facilityId).catch(() => null)
+        ]);
         if (!ignore) {
           setInventory(data);
+          if (detail) setFacilityDetail(detail);
           setLoading(false);
         }
       } catch (err) {
@@ -78,7 +90,7 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
 
   if (!facilityId) return null;
 
-  const fac = facility || inventory?.facility || {};
+  const fac = { ...(facility || {}), ...(facilityDetail || {}), ...(inventory?.facility || {}) };
   // Handle backend schema: data.inventory contains the array of medicine stock items
   const items = inventory?.inventory || inventory?.items || [];
   const criticalItems = items.filter(item => {
@@ -137,9 +149,9 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
               <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-center gap-2">
                 <Bed className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                 <div>
-                  <span className="text-[10px] text-slate-400 block leading-tight">Bed Capacity</span>
+                  <span className="text-[10px] text-slate-400 block leading-tight">Total Beds</span>
                   <span className="font-bold text-slate-800 dark:text-slate-200">
-                    {fac.total_beds ?? 20} Beds
+                    {fac.tier === 'SC' ? '0 Beds' : `${fac.total_beds ?? 20} Beds`}
                   </span>
                 </div>
               </div>
@@ -151,6 +163,90 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
                   <span className="font-bold text-slate-800 dark:text-slate-200">
                     {totalBatchesCount}
                   </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Live Bed Breakdown Telemetry */}
+            <div className="mt-3 p-3 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 space-y-2">
+              <div className="flex items-center justify-between text-xs border-b border-slate-100 dark:border-slate-700/50 pb-1.5">
+                <span className="font-bold uppercase tracking-wider text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <Bed className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Bed Capacity & Telemetry</span>
+                </span>
+                {fac.tier === 'SC' || fac.total_beds === 0 ? (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                    0 Inpatient Beds (Day Triage Only)
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                    Active Inpatient Ward
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800">
+                  <span className="text-[10px] text-slate-400 block font-medium">Total Beds</span>
+                  <span className="font-black text-slate-900 dark:text-white font-mono text-sm">
+                    {fac.tier === 'SC' ? 0 : (fac.total_beds ?? 20)}
+                  </span>
+                </div>
+                <div className="p-1.5 rounded-lg bg-blue-50/60 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
+                  <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold block">ICU Beds</span>
+                  <span className="font-black text-blue-700 dark:text-blue-300 font-mono text-sm">
+                    {fac.icu_beds ?? (fac.tier === 'DH' ? 30 : fac.tier === 'SDH' ? 10 : 0)}
+                  </span>
+                </div>
+                <div className="p-1.5 rounded-lg bg-teal-50/60 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/40">
+                  <span className="text-[10px] text-teal-600 dark:text-teal-400 font-semibold block">Oxygen Beds</span>
+                  <span className="font-black text-teal-700 dark:text-teal-300 font-mono text-sm">
+                    {fac.oxygen_beds ?? (fac.tier === 'DH' ? 40 : fac.tier === 'SDH' ? 20 : 2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Facility Info & Utility Resilience Section */}
+            <div className="mt-3 p-3 rounded-xl bg-slate-100/70 dark:bg-brand-dark-surface/80 border border-slate-200/80 dark:border-slate-700/80 text-xs space-y-2">
+              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Facility Staffing & Utility Resilience</span>
+                </span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400">ABDM Registry HFR</span>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-[11px]">
+                <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300 min-w-[240px] flex-1">
+                  <UserCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span className="leading-snug break-words">
+                    <strong className="text-slate-900 dark:text-white">Nodal Officer:</strong>{' '}
+                    <span className="font-medium text-slate-800 dark:text-slate-200">
+                      {fac.contact_person || 'Dr. Sunita Kadam (Medical Superintendent)'}
+                    </span>
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 shrink-0">
+                  <Phone className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                  <span className="font-mono text-[11px] whitespace-nowrap">
+                    <strong className="text-slate-900 dark:text-white">Hotline:</strong>{' '}
+                    {fac.contact_phone || '+91-20-2727-4000'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-1.5 pt-1.5 border-t border-slate-200/80 dark:border-slate-800 text-[10px]">
+                <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                  <Zap className="w-3 h-3 text-amber-500 shrink-0" />
+                  <span>{fac.power_backup_hours ?? 24}h Generator</span>
+                </div>
+                <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                  <ThermometerSnowflake className="w-3 h-3 text-teal-500 shrink-0" />
+                  <span>{fac.has_cold_chain ? 'Active ILR Fridge' : 'Ambient Storage'}</span>
+                </div>
+                <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
+                  <Truck className="w-3 h-3 text-indigo-500 shrink-0" />
+                  <span>{fac.has_dedicated_vehicle ? 'Dedicated Transit Vehicle' : 'Regional Dispatch'}</span>
                 </div>
               </div>
             </div>
@@ -235,9 +331,16 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
                               </span>
                             ) : null}
                           </div>
-                          <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                            {item.category} • Safety Floor: {item.min_safety_stock} {item.unit}
-                          </span>
+                          <div className="flex items-center gap-2 flex-wrap text-[11px] text-slate-500 dark:text-slate-400">
+                            <span>{item.category}</span>
+                            <span>•</span>
+                            <span>Floor: {item.min_safety_stock} {item.unit}</span>
+                            <span>•</span>
+                            <span className="inline-flex items-center gap-1 font-mono text-[10px] bg-slate-200/70 dark:bg-slate-800 px-1.5 py-0.5 rounded font-semibold text-slate-700 dark:text-slate-200">
+                              <ScanLine className="w-3 h-3 text-slate-400" />
+                              <span>GTIN: {item.batches?.[0]?.gtin || '08901234567890'}</span>
+                            </span>
+                          </div>
                         </div>
 
                         <div className="text-right shrink-0">
@@ -259,12 +362,13 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
                           {item.batches.map((b, bIdx) => (
                             <div key={bIdx} className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-300 bg-white/70 dark:bg-slate-900/60 px-2.5 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
                               <div className="flex items-center gap-2">
-                                <span className="font-mono font-semibold text-slate-700 dark:text-slate-200">
-                                  {b.batch_number}
+                                <span className="inline-flex items-center gap-1 font-mono font-bold text-slate-800 dark:text-slate-100 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40 px-1.5 py-0.5 rounded text-[10px]">
+                                  <Hash className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                  <span>{b.batch_number}</span>
                                 </span>
                                 <span className="text-slate-400">•</span>
-                                <span className="flex items-center gap-1 text-[10px] text-slate-400">
-                                  <Calendar className="w-3 h-3" />
+                                <span className="flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400">
+                                  <Calendar className="w-3 h-3 text-slate-400" />
                                   Exp: {b.expiry_date}
                                 </span>
                               </div>

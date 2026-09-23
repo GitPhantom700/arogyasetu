@@ -130,7 +130,7 @@ class TestAISafetyAndGuardrails(unittest.TestCase):
 
         # Check actual surplus in DB
         cur.execute("""
-            SELECT COALESCE(SUM(quantity_available - quantity_reserved), 0) as active_stock
+            SELECT COALESCE(SUM(quantity_available), 0) as active_stock
             FROM stock_batches
             WHERE facility_id = ? AND medicine_id = 1 AND status = 'ACTIVE' AND expiry_date >= date('now');
         """, (fac_donor,))

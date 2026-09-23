@@ -21,14 +21,15 @@ import {
 import clsx from 'clsx';
 
 export function FacilityStocksView() {
-  const { setSelectedFacilityId, setActiveTab, t } = useUI();
+  const { setSelectedFacilityId, setActiveTab, t, facilityStatusMap, depletionData: contextDepletionData } = useUI();
   const { showToast } = useAlerts();
   const addToast = showToast;
   const [facilities, setFacilities] = useState([]);
-  const [depletionData, setDepletionData] = useState([]);
+  const [depletionData, setDepletionData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedDistrict, setSelectedDistrict] = useState('ALL');
   const [selectedTier, setSelectedTier] = useState('ALL');
+  const [selectedTriage, setSelectedTriage] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
 
   const loadData = async () => {
@@ -36,10 +37,16 @@ export function FacilityStocksView() {
       setLoading(true);
       const [facData, depData] = await Promise.all([
         api.getFacilities(50),
-        api.getDepletionAnalysis().catch(() => ({ facilities: [] }))
+        api.getDepletionAnalysis().catch(err => {
+          console.error('Failed to load depletion analysis:', err);
+          return null;
+        })
       ]);
-      setFacilities(facData.facilities || facData || []);
-      setDepletionData(depData.facilities || depData || []);
+      const list = Array.isArray(facData) ? facData : (facData?.facilities || []);
+      setFacilities(list);
+      if (depData) {
+        setDepletionData(depData);
+      }
     } catch (err) {
       console.error('Failed to load facility stocks:', err);
       addToast('Failed to load facility stocks data', 'error');
@@ -52,6 +59,34 @@ export function FacilityStocksView() {
     loadData();
   }, []);
 
+  // Set of facility IDs that have active critical stockouts according to depletion metrics
+  const criticalFacilityIds = React.useMemo(() => {
+    const ids = new Set();
+    const activeDep = depletionData?.items ? depletionData : contextDepletionData;
+    const items = Array.isArray(activeDep?.items)
+      ? activeDep.items
+      : (Array.isArray(activeDep?.facilities) ? activeDep.facilities : (Array.isArray(activeDep) ? activeDep : []));
+    items.forEach(item => {
+      if (item.status === 'CRITICAL' || (item.critical_count || 0) > 0) {
+        if (item.facility_id) {
+          ids.add(Number(item.facility_id));
+          ids.add(String(item.facility_id));
+        }
+      }
+    });
+    return ids;
+  }, [depletionData, contextDepletionData]);
+
+  const isFacilityCritical = React.useCallback((fac) => {
+    if (!fac?.id) return false;
+    const numId = Number(fac.id);
+    const strId = String(fac.id);
+    if (criticalFacilityIds.has(numId) || criticalFacilityIds.has(strId)) return true;
+    if (facilityStatusMap?.[numId] === 'CRITICAL' || facilityStatusMap?.[strId] === 'CRITICAL') return true;
+    if ((fac.critical_medicines_count || 0) > 0 || fac.status === 'CRITICAL') return true;
+    return false;
+  }, [criticalFacilityIds, facilityStatusMap]);
+
   // Filter facilities
   const filteredFacilities = facilities.filter(fac => {
     if (selectedDistrict !== 'ALL' && fac.district !== selectedDistrict) return false;
@@ -60,6 +95,11 @@ export function FacilityStocksView() {
       if (selectedTier === 'PHC' && !type.includes('PHC')) return false;
       if (selectedTier === 'SUB_CENTRE' && !type.includes('SUB') && !type.includes('SC')) return false;
       if (selectedTier === 'HOSPITAL' && !type.includes('HOSPITAL') && !type.includes('SDH') && !type.includes('RH')) return false;
+    }
+    if (selectedTriage !== 'ALL') {
+      const isCrit = isFacilityCritical(fac);
+      if (selectedTriage === 'CRITICAL' && !isCrit) return false;
+      if (selectedTriage === 'ADEQUATE' && isCrit) return false;
     }
     if (searchTerm) {
       const q = searchTerm.toLowerCase();
@@ -71,7 +111,7 @@ export function FacilityStocksView() {
     return true;
   });
 
-  const criticalCount = facilities.filter(f => (f.critical_medicines_count || 0) > 0 || (f.status === 'CRITICAL')).length;
+  const criticalCount = facilities.filter(f => isFacilityCritical(f)).length;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -178,6 +218,35 @@ export function FacilityStocksView() {
               </button>
             ))}
           </div>
+
+          {/* Stock Triage Filter */}
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            {[
+              { id: 'ALL', label: 'All Status' },
+              { id: 'CRITICAL', label: 'Critical' },
+              { id: 'ADEQUATE', label: 'Adequate' }
+            ].map(tri => (
+              <button
+                key={tri.id}
+                type="button"
+                onClick={() => setSelectedTriage(tri.id)}
+                className={clsx(
+                  "px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5",
+                  selectedTriage === tri.id
+                    ? (tri.id === 'CRITICAL'
+                        ? "bg-rose-600 text-white shadow-xs"
+                        : tri.id === 'ADEQUATE'
+                        ? "bg-emerald-600 text-white shadow-xs"
+                        : "bg-white dark:bg-brand-dark-surface text-slate-900 dark:text-white shadow-xs")
+                    : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                )}
+              >
+                {tri.id === 'CRITICAL' && <span className="w-1.5 h-1.5 rounded-full bg-rose-300 animate-pulse" />}
+                {tri.id === 'ADEQUATE' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
+                <span>{tri.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Search */}
@@ -200,14 +269,33 @@ export function FacilityStocksView() {
           <p className="text-xs">Loading facility stocks & inventories...</p>
         </div>
       ) : filteredFacilities.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border text-slate-400">
-          <Building2 className="w-8 h-8 mx-auto text-slate-300 dark:text-slate-600 mb-2" />
-          <p className="font-semibold text-sm text-slate-700 dark:text-slate-300">No facilities match your search</p>
+        <div className="p-12 text-center rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border text-slate-400 space-y-3">
+          <Building2 className="w-8 h-8 mx-auto text-slate-300 dark:text-slate-600" />
+          <div>
+            <p className="font-semibold text-sm text-slate-700 dark:text-slate-300">No facilities match the selected filters</p>
+            {selectedTriage === 'CRITICAL' && selectedDistrict === 'Pune' && (
+              <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">
+                Active critical stockouts are located in <strong>Satara District</strong> (Community Health Centre Wai & PHC Khandala).
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedDistrict('ALL');
+              setSelectedTier('ALL');
+              setSelectedTriage('ALL');
+              setSearchTerm('');
+            }}
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition cursor-pointer"
+          >
+            Reset Filters (View All 15 Facilities)
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredFacilities.map(fac => {
-            const hasCritical = (fac.critical_medicines_count || 0) > 0 || fac.status === 'CRITICAL';
+            const hasCritical = isFacilityCritical(fac);
             const marathiName = fac.name_mr || (
               fac.name.includes('Paud') ? 'प्राथमिक आरोग्य केंद्र पौड' :
               fac.name.includes('Velhe') ? 'उपकेंद्र वेल्हे' :

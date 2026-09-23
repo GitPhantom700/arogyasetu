@@ -36,7 +36,7 @@ export function Sidebar() {
       id: 'map',
       label: t('nav_map', 'Geospatial Map'),
       icon: Map,
-      badge: 'Day 13',
+      badge: 'Live GIS',
       badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300',
     },
     {
@@ -64,14 +64,14 @@ export function Sidebar() {
       id: 'scan',
       label: t('nav_scan', 'Field Portal & OCR'),
       icon: ScanLine,
-      badge: 'Day 14',
+      badge: 'ABDM OCR',
       badgeColor: 'bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300',
     },
     {
       id: 'crisis',
       label: t('nav_crisis', 'Crisis Simulator'),
       icon: Flame,
-      badge: crisisStatus?.is_active ? 'ACTIVE' : 'Phase 5',
+      badge: crisisStatus?.is_active ? 'ACTIVE' : null,
       badgeColor: crisisStatus?.is_active
         ? 'bg-red-600 text-white animate-pulse'
         : 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300',

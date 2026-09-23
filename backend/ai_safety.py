@@ -325,8 +325,9 @@ class AISafetyGuard:
             return None, violations
 
         # 3. Real-Time Donor Stock & Invariant Re-Check
+        # quantity_available is already net unreserved stock (reserved stock is already deducted upon transfer allocation).
         stock_row = conn.execute("""
-            SELECT COALESCE(SUM(quantity_available - quantity_reserved), 0) as active_stock
+            SELECT COALESCE(SUM(quantity_available), 0) as active_stock
             FROM stock_batches
             WHERE facility_id = ? AND medicine_id = ? AND status = 'ACTIVE' AND expiry_date >= date('now')
         """, (donor_id, med_id)).fetchone()
@@ -457,6 +458,8 @@ class AISafetyGuard:
             rec["quantity"] = safe_max_quantity
             rec["clamped_by_safety_guard"] = True
             rec["clamped_reason"] = f"Quantity clamped from {recommended_qty} to verified donor surplus limit of {safe_max_quantity} units."
+            if safe_max_quantity <= 0:
+                rec["is_feasible"] = False
         else:
             rec["recommended_quantity"] = recommended_qty
             rec["quantity"] = recommended_qty

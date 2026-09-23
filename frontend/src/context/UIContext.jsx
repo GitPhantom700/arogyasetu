@@ -159,22 +159,34 @@ export function UIProvider({ children }) {
   const facilityStatusMap = useMemo(() => {
     const map = {};
 
-    // First, seed from depletion analysis
-    if (depletionData && Array.isArray(depletionData.facilities)) {
-      depletionData.facilities.forEach(f => {
-        let derived = 'ADEQUATE';
-        if (f.critical_count > 0 || f.status === 'CRITICAL') {
-          derived = 'CRITICAL';
-        } else if (f.warning_count > 0 || f.status === 'WARNING') {
-          derived = 'WARNING';
-        }
-        map[f.facility_id] = derived;
-      });
-    }
+    // First, seed from depletion analysis (handles both depletionData.items and depletionData.facilities)
+    const depList = Array.isArray(depletionData?.items)
+      ? depletionData.items
+      : (Array.isArray(depletionData?.facilities) ? depletionData.facilities : []);
+
+    depList.forEach(item => {
+      const facId = item.facility_id;
+      if (!facId) return;
+      const numId = Number(facId);
+      const strId = String(facId);
+      const current = map[numId] || map[strId];
+      if (item.status === 'CRITICAL' || (item.critical_count || 0) > 0) {
+        map[numId] = 'CRITICAL';
+        map[strId] = 'CRITICAL';
+      } else if ((item.status === 'WARNING' || (item.warning_count || 0) > 0) && current !== 'CRITICAL') {
+        map[numId] = 'WARNING';
+        map[strId] = 'WARNING';
+      } else if (!current) {
+        map[numId] = 'ADEQUATE';
+        map[strId] = 'ADEQUATE';
+      }
+    });
 
     // Overlay any live SSE alert overrides
     Object.keys(statusOverrides).forEach(facId => {
       map[facId] = statusOverrides[facId];
+      map[Number(facId)] = statusOverrides[facId];
+      map[String(facId)] = statusOverrides[facId];
     });
 
     return map;
@@ -207,6 +219,7 @@ export function UIProvider({ children }) {
     facilities,
     facilityMap,
     facilityStatusMap,
+    depletionData,
     updateFacilityStatus,
     medicines,
     safetyStatus,

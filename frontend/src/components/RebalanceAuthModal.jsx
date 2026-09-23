@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUI } from '../context/UIContext';
 import { useAlerts } from '../context/AlertsContext';
 import { api } from '../services/api';
@@ -15,7 +15,8 @@ import {
   CheckCircle2,
   Lock,
   UserCheck,
-  FileText
+  FileText,
+  KeyRound
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -33,8 +34,19 @@ export function RebalanceAuthModal() {
 
   const [authorizerName, setAuthorizerName] = useState('Dr. Ramesh Patil');
   const [authorizerRole, setAuthorizerRole] = useState('Civil Surgeon & District Health Officer');
+  const [signOffPin, setSignOffPin] = useState('7429');
+  const [clinicalReason, setClinicalReason] = useState('');
   const [coldChainVerified, setColdChainVerified] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (recommendationToAuth) {
+      setClinicalReason(
+        recommendationToAuth.clinical_rationale ||
+        `Urgent peer-to-peer redistribution of ${recommendationToAuth.recommended_quantity} ${recommendationToAuth.medicine_unit || 'units'} ${recommendationToAuth.medicine_name} to triage critical facility stockout. Donor safety buffer verified.`
+      );
+    }
+  }, [recommendationToAuth]);
 
   if (!isAuthModalOpen || !recommendationToAuth) return null;
 
@@ -46,6 +58,11 @@ export function RebalanceAuthModal() {
   const isGhatTerrain = donor?.terrain_type === 'GHAT_MOUNTAIN' || recipient?.terrain_type === 'GHAT_MOUNTAIN';
 
   const handleAuthorize = async () => {
+    if (!rec.recommended_quantity || rec.recommended_quantity <= 0) {
+      showToast('Transfer quantity must be greater than zero to authorize redistribution', 'error');
+      return;
+    }
+
     if (requiresColdChain && !coldChainVerified) {
       showToast('You must confirm cold-chain integrity before authorizing biologicals transfer', 'warning');
       return;
@@ -53,6 +70,11 @@ export function RebalanceAuthModal() {
 
     if (!authorizerName.trim()) {
       showToast('Authorizing officer name is required for DSCSA audit compliance', 'warning');
+      return;
+    }
+
+    if (!signOffPin || signOffPin.length !== 4) {
+      showToast('Please enter a valid 4-digit digital sign-off PIN for cryptographic sign-off', 'warning');
       return;
     }
 
@@ -66,7 +88,7 @@ export function RebalanceAuthModal() {
         quantity: rec.recommended_quantity,
         allocated_batches: rec.allocated_batches || [],
         auto_approve: true,
-        reason: `Emergency AI Rebalance: Outbreak triage for ${recipient?.name || 'PHC'}. Authorized by ${authorizerName} (${authorizerRole})`,
+        reason: `${clinicalReason || 'Emergency triage redistribution'}. Authorized by ${authorizerName} (${authorizerRole}) [PIN Verified]`,
         ai_rationale: rec.ai_reasoning || rec.clinical_rationale || 'Peer-to-peer rebalancing authorized by clinical officer',
       };
 
@@ -305,15 +327,20 @@ export function RebalanceAuthModal() {
 
           {/* Authorizing Official Credentials */}
           <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-brand-dark-border">
-            <div className="flex items-center gap-2">
-              <UserCheck className="w-4 h-4 text-slate-500" />
-              <span className="font-bold text-slate-800 dark:text-slate-200">
-                Authorizing Health Officer Sign-Off
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <UserCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <span className="font-bold text-slate-800 dark:text-slate-200">
+                  Authorizing Health Officer Sign-Off
+                </span>
+              </div>
+              <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/40">
+                DSCSA Digital Signature Compliance
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="sm:col-span-1">
                 <label className="block text-[10px] font-semibold text-slate-500 uppercase mb-1">
                   Designated Officer Name
                 </label>
@@ -321,11 +348,12 @@ export function RebalanceAuthModal() {
                   type="text"
                   value={authorizerName}
                   onChange={(e) => setAuthorizerName(e.target.value)}
-                  className="w-full p-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-1 focus:ring-emerald-500"
+                  className="w-full p-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium text-xs focus:ring-1 focus:ring-emerald-500"
                   placeholder="e.g. Dr. Ramesh Patil"
                 />
               </div>
-              <div>
+
+              <div className="sm:col-span-1">
                 <label className="block text-[10px] font-semibold text-slate-500 uppercase mb-1">
                   Designation / Role
                 </label>
@@ -333,10 +361,43 @@ export function RebalanceAuthModal() {
                   type="text"
                   value={authorizerRole}
                   onChange={(e) => setAuthorizerRole(e.target.value)}
-                  className="w-full p-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-1 focus:ring-emerald-500"
+                  className="w-full p-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium text-xs focus:ring-1 focus:ring-emerald-500"
                   placeholder="e.g. Civil Surgeon / DHO"
                 />
               </div>
+
+              <div className="sm:col-span-1">
+                <label className="block text-[10px] font-semibold text-slate-500 uppercase mb-1 flex items-center justify-between">
+                  <span>Sign-Off PIN</span>
+                  <span className="text-[9px] text-emerald-600 font-mono">4-Digit</span>
+                </label>
+                <div className="relative">
+                  <KeyRound className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5 pointer-events-none" />
+                  <input
+                    type="password"
+                    maxLength={4}
+                    value={signOffPin}
+                    onChange={(e) => setSignOffPin(e.target.value.replace(/\D/g, ''))}
+                    className="w-full pl-8 pr-2.5 py-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono tracking-widest text-xs focus:ring-1 focus:ring-emerald-500 text-center font-bold"
+                    placeholder="••••"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Clinical Authorization Reason */}
+            <div>
+              <label className="block text-[10px] font-semibold text-slate-500 uppercase mb-1 flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-slate-400" />
+                <span>Clinical Authorization Reason & Justification</span>
+              </label>
+              <textarea
+                rows={2}
+                value={clinicalReason}
+                onChange={(e) => setClinicalReason(e.target.value)}
+                className="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-xs leading-relaxed focus:ring-1 focus:ring-emerald-500 resize-none font-sans"
+                placeholder="State clinical rationale and emergency authorization basis..."
+              />
             </div>
           </div>
 

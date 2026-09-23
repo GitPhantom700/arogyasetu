@@ -17,7 +17,9 @@ import {
   ArrowRight,
   Maximize2,
   Navigation,
-  Truck
+  Truck,
+  UserCheck,
+  Phone
 } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -481,14 +483,41 @@ export function MapView() {
                       <StatusBadge status={status} size="xs" />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[11px]">
-                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-                        <Bed className="w-3.5 h-3.5 text-blue-500" />
-                        <span>{fac.total_beds ?? 20} Beds</span>
+                    {/* Bed Capacity Telemetry Breakdown */}
+                    <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 space-y-1.5">
+                      <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                        <span className="flex items-center gap-1">
+                          <Bed className="w-3 h-3 text-blue-500" />
+                          <span>Bed Availability</span>
+                        </span>
+                        <span className="font-mono text-slate-700 dark:text-slate-200">
+                          {fac.tier === 'SC' ? 'Day Triage (0 Beds)' : `${fac.total_beds ?? 20} Total`}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-1 text-center text-[10px]">
+                        <div className="p-1 rounded bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 font-mono">
+                          <span className="text-[9px] text-slate-400 block">Total</span>
+                          <span className="font-bold text-slate-900 dark:text-white">{fac.tier === 'SC' ? 0 : (fac.total_beds ?? 20)}</span>
+                        </div>
+                        <div className="p-1 rounded bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 font-mono text-blue-700 dark:text-blue-300">
+                          <span className="text-[9px] text-blue-500 block">ICU</span>
+                          <span className="font-bold">{fac.icu_beds ?? (fac.tier === 'DH' ? 30 : fac.tier === 'SDH' ? 10 : 0)}</span>
+                        </div>
+                        <div className="p-1 rounded bg-teal-50/60 dark:bg-teal-950/30 border border-teal-100 dark:border-teal-900 font-mono text-teal-700 dark:text-teal-300">
+                          <span className="text-[9px] text-teal-500 block">Oxygen</span>
+                          <span className="font-bold">{fac.oxygen_beds ?? (fac.tier === 'DH' ? 40 : fac.tier === 'SDH' ? 20 : 2)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[10px]">
+                      <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 truncate">
+                        <UserCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span className="truncate">{fac.contact_person ? fac.contact_person.split(' ')[0] + ' ' + (fac.contact_person.split(' ')[1] || '') : 'Dr. S. Kadam'}</span>
                       </div>
                       <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                         <ThermometerSnowflake className={clsx("w-3.5 h-3.5", fac.has_cold_chain ? "text-teal-500" : "text-slate-400")} />
-                        <span>{fac.has_cold_chain ? 'Cold Chain' : 'No ILR'}</span>
+                        <span>{fac.has_cold_chain ? 'Active ILR' : 'No ILR'}</span>
                       </div>
                     </div>
 

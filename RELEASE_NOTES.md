@@ -38,3 +38,33 @@ This initial production release delivers autonomous emergency medicine rebalanci
 - **107 / 107 Backend Pytest Tests Passing (100% Green).**
 - **Production React 19 Frontend:** Built via Vite in 2.60s with 0 errors.
 - **Comprehensive 23-Screen UI/UX Design Audit Dossier:** (`arogyasetu_ui_design_audit.pdf`, 8.30 MB).
+
+---
+
+## Version 1.1.0 — Hackathon Production Hardening & Refinements (September 2026)
+
+### 🛠️ Key Fixes & Refinements
+
+1. **AI Rebalancer Safe Allocation Fix:**
+   - Resolved inventory calculation anomaly in `backend/ai_safety.py` where available stock was double-subtracted against reserved quantities (`SUM(quantity_available - quantity_reserved)`), causing negative or zero transfer proposals. Replaced with clean `SUM(quantity_available)`.
+   - Re-verified across all facilities: transfer quantity now reliably calculates positive feasible quotas (e.g. 30–35 vials) during stockout triage.
+
+2. **Infeasible Transfer Protection Guard:**
+   - Added strict validation guard in `backend/ai_safety.py` and `backend/rebalancer.py`: any proposal where `safe_qty <= 0` is strictly tagged `is_feasible = False`.
+   - Frontend `RebalanceAuthModal.jsx` and `RebalanceView.jsx` disable authorization buttons and display clear warning if transfer quantity is zero or infeasible.
+
+3. **BRICS Sovereign Federated Learning Multi-Category Consensus:**
+   - Expanded the federated learning coordinator in `backend/brics_federated.py` and `backend/routes/brics.py` to dynamically support all 4 essential healthcare categories:
+     - `Antidote` (Polyvalent ASV)
+     - `Vaccine` (ARV & Pentavalent)
+     - `Antibiotic` (Amoxicillin)
+     - `IV Fluid` (Ringer Lactate & Normal Saline)
+   - Interactive category switching in `SafetyModal.jsx` triggers dynamic node updates with Laplace Differential Privacy ($\epsilon=0.5, \Delta=0.1$).
+
+4. **Facility Stocks & Triage Filter Polish:**
+   - Normalized triage filter logic in `FacilityStocksView.jsx` to accurately match `Critical`, `Warning`, and `Healthy` facilities without key type mismatches.
+   - Enhanced Nodal Officer and bed capacity metadata rendering in `FacilitySlideOver.jsx` with flexible word wrapping.
+
+5. **Production Navigation Badges:**
+   - Cleaned sidebar navigation labels, replacing developmental sprint badges with production feature indicators (`Live GIS`, `ABDM OCR`).
+

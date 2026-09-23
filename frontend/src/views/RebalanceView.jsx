@@ -496,7 +496,7 @@ export function RebalanceView() {
                     </h4>
                     <p className="text-[11px] opacity-90 mt-0.5">
                       {recommendation.is_feasible
-                        ? `Optimal donor ${recommendation.recommended_donor?.facility_name} has safe surplus of ${recommendation.recommended_quantity} ${recommendation.medicine_unit}`
+                        ? `Optimal donor ${recommendation.recommended_donor?.facility_name} has safe surplus of ${recommendation.recommended_donor?.surplus_available ?? recommendation.recommended_quantity} ${recommendation.medicine_unit} (${recommendation.recommended_quantity} ${recommendation.medicine_unit} recommended for transfer)`
                         : 'No candidate donor within radius possesses surplus exceeding minimum 14-day safety threshold.'}
                     </p>
                   </div>

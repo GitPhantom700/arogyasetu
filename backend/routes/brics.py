@@ -26,8 +26,12 @@ class GradientSubmitRequest(BaseModel):
     metrics_summary: MetricsSummary
 
 @router.get("/model/weights")
-async def get_model_weights(category: MedicineCategory = MedicineCategory.EMERGENCY):
-    weights = await brics_fl_service.get_global_anomaly_weights(category.value)
+async def get_model_weights(
+    category: Optional[str] = None,
+    medicine_category: Optional[str] = None
+):
+    selected = category or medicine_category or "Antidote"
+    weights = await brics_fl_service.get_global_anomaly_weights(selected)
     return weights
 
 @router.post("/model/gradients")
