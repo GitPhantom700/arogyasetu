@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useUI } from '../context/UIContext';
+import { getFacilityDetails } from '../utils/facilityI18n';
 import { api } from '../services/api';
 import { StatusBadge } from './StatusBadge';
 import {
@@ -91,6 +93,10 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
   if (!facilityId) return null;
 
   const fac = { ...(facility || {}), ...(facilityDetail || {}), ...(inventory?.facility || {}) };
+  const { language } = useUI();
+  const { marathiName, hindiName } = getFacilityDetails(fac, language);
+  const localizedSubtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : marathiName);
+
   // Handle backend schema: data.inventory contains the array of medicine stock items
   const items = inventory?.inventory || inventory?.items || [];
   const criticalItems = items.filter(item => {
@@ -120,6 +126,11 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
                   </h3>
                   <StatusBadge status={status || 'ADEQUATE'} size="xs" />
                 </div>
+                {localizedSubtitle && (
+                  <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold font-serif">
+                    {localizedSubtitle}
+                  </p>
+                )}
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                   {fac.facility_code || inventory?.facility_code} • {fac.tier_type || fac.tier || 'Primary Health Centre'} • {fac.district || 'Pune'} District
                 </p>

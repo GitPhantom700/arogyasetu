@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { useUI } from '../context/UIContext';
 import { StatusBadge } from '../components/StatusBadge';
 import { RouteDispatchVisualizer } from '../components/RouteDispatchVisualizer';
+import { getFacilityDetails } from '../utils/facilityI18n';
 import {
   Building2,
   AlertTriangle,
@@ -166,7 +167,8 @@ export function MapView() {
     setActiveTab,
     activeTransferRoute,
     theme,
-    crisisStatus
+    crisisStatus,
+    language
   } = useUI();
 
   const [districtFilter, setDistrictFilter] = useState('ALL');
@@ -448,6 +450,8 @@ export function MapView() {
             const status = facilityStatusMap[fac.id] || 'ADEQUATE';
             const icon = getClinicalPinIcon(status, fac.tier_type || fac.tier);
             const position = [fac.latitude, fac.longitude];
+            const { marathiName, hindiName } = getFacilityDetails(fac, language);
+            const localizedSubtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : marathiName);
 
             return (
               <Marker
@@ -464,6 +468,11 @@ export function MapView() {
                 <Tooltip direction="top" offset={[0, -20]} opacity={0.95}>
                   <div className="text-xs p-1">
                     <strong className="block">{fac.name}</strong>
+                    {localizedSubtitle && (
+                      <span className="block text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold font-serif">
+                        {localizedSubtitle}
+                      </span>
+                    )}
                     <span className="text-[10px] text-slate-500">{fac.tier_type || fac.tier} • {fac.district}</span>
                   </div>
                 </Tooltip>
@@ -476,6 +485,11 @@ export function MapView() {
                         <h4 className="font-bold text-xs text-slate-900 dark:text-white leading-tight">
                           {fac.name}
                         </h4>
+                        {localizedSubtitle && (
+                          <p className="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold font-serif leading-tight mt-0.5">
+                            {localizedSubtitle}
+                          </p>
+                        )}
                         <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                           {fac.facility_code} • {fac.district}
                         </span>
