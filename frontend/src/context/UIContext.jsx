@@ -43,12 +43,12 @@ function sanitizeFacilities(rawList) {
 export function UIProvider({ children }) {
   // Language state (en, mr, hi)
   const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('arogya_lang') || 'en';
+    return localStorage.getItem('pranavahini_lang') || localStorage.getItem('arogya_lang') || 'en';
   });
 
   const setLanguage = useCallback((lang) => {
     setLanguageState(lang);
-    localStorage.setItem('arogya_lang', lang);
+    localStorage.setItem('pranavahini_lang', lang);
   }, []);
 
   const t = useCallback((key, fallback) => {
@@ -58,7 +58,7 @@ export function UIProvider({ children }) {
 
   // Theme state (persisted in localStorage)
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('arogya_theme') || 'light';
+    return localStorage.getItem('pranavahini_theme') || localStorage.getItem('arogya_theme') || 'light';
   });
 
   // Navigation & Layout
@@ -103,7 +103,7 @@ export function UIProvider({ children }) {
     } else {
       document.documentElement.classList.remove('dark');
     }
-    localStorage.setItem('arogya_theme', theme);
+    localStorage.setItem('pranavahini_theme', theme);
   }, [theme]);
 
   const toggleTheme = useCallback(() => {

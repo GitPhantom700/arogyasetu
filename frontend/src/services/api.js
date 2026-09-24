@@ -1,5 +1,5 @@
 /**
- * ArogyaSetu API Client Service
+ * PranaVahini API Client Service
  * Connects React frontend to FastAPI backend.
  */
 
@@ -7,7 +7,7 @@ const API_BASE = '/api';
 
 async function request(endpoint, options = {}) {
   // Offline Simulation Mode for Rural Stress-Testing
-  if (typeof window !== 'undefined' && window.__AROGYA_OFFLINE_SIMULATED__) {
+  if (typeof window !== 'undefined' && (window.__PRANAVAHINI_OFFLINE_SIMULATED__ || window.__AROGYA_OFFLINE_SIMULATED__)) {
     const offlineErr = new Error('NetworkError: Offline simulation mode active (Intermittent 2G/3G Disconnect)');
     offlineErr.status = 0;
     throw offlineErr;

@@ -30,7 +30,7 @@ from rebalancer import autonomous_rebalancing_service
 from routes.stats import invalidate_stats_cache
 from alerts import broadcast_transfer_event
 
-logger = logging.getLogger("arogyasetu.routes.crisis")
+logger = logging.getLogger("pranavahini.routes.crisis")
 router = APIRouter(prefix="/api/crisis", tags=["Crisis Simulation Engine"])
 
 

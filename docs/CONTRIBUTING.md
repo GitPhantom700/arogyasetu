@@ -1,6 +1,6 @@
-# Contributing to ArogyaSetu
+# Contributing to PranaVahini
 
-Thank you for your interest in contributing to **ArogyaSetu**! This project was developed for the **Build with AI: Code for Communities (Second Edition)** hackathon organized by **Hack2Skill** in partnership with **Google**.
+Thank you for your interest in contributing to **PranaVahini**! This project was developed for the **Build with AI: Code for Communities (Second Edition)** hackathon organized by **Hack2Skill** in partnership with **Google**.
 
 ---
 

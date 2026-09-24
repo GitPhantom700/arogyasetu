@@ -36,7 +36,7 @@ from alerts import AlertBroadcaster
 from rebalancer import autonomous_rebalancing_service
 from routes.stats import invalidate_stats_cache
 
-logger = logging.getLogger("arogyasetu.crisis")
+logger = logging.getLogger("pranavahini.crisis")
 
 
 @dataclass

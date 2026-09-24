@@ -1,5 +1,5 @@
 /**
- * ArogyaSetu Localization Dictionary
+ * PranaVahini Localization Dictionary
  * Supported Languages:
  * - 'en': English (Default)
  * - 'mr': मराठी (Marathi - Maharashtra State Official Language for PHC & ANM staff)

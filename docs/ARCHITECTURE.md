@@ -1,6 +1,6 @@
-# ArogyaSetu — System Architecture & Technical Design
+# PranaVahini — System Architecture & Technical Design
 
-ArogyaSetu is a federated public health emergency logistics and inter-facility stock rebalancing platform designed for rural India. It transforms isolated Primary Health Centres (PHCs) into an interconnected, real-time supply network capable of preventing stockouts of critical life-saving medicines (such as Anti-Snake Venom, Rabies Vaccines, Insulin, and Emergency Antibiotics) across complex mountain terrain.
+PranaVahini is a federated public health emergency logistics and inter-facility stock rebalancing platform designed for rural India. It transforms isolated Primary Health Centres (PHCs) into an interconnected, real-time supply network capable of preventing stockouts of critical life-saving medicines (such as Anti-Snake Venom, Rabies Vaccines, Insulin, and Emergency Antibiotics) across complex mountain terrain.
 
 ---
 

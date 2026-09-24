@@ -1,5 +1,5 @@
 # ==============================================================================
-# ArogyaSetu — Production Multi-Stage Container for Google Cloud Run
+# PranaVahini — Production Multi-Stage Container for Google Cloud Run
 # Architecture:
 #   Stage 1: Build React 19 Frontend with Vite (Node 20 slim)
 #   Stage 2: Serve unified FastAPI backend + compiled frontend (Python 3.11 slim)
@@ -49,7 +49,7 @@ COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 # Copy SQLite database seed and documentation assets
 COPY healthcare.db .
 COPY executive_report.html .
-COPY arogyasetu_ui_design_audit.pdf .
+COPY pranavahini_ui_design_audit.pdf .
 
 # Create non-root system user for container security hardening
 RUN adduser --disabled-password --gecos "" appuser && \

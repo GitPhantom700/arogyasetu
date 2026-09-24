@@ -1,5 +1,5 @@
 /**
- * ArogyaSetu — Modern Public Health Logistics Command Center
+ * PranaVahini — Modern Public Health Logistics Command Center
  * Pure Vanilla JavaScript Client Application
  */
 

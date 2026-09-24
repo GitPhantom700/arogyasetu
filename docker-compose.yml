@@ -1,9 +1,9 @@
 services:
-  arogyasetu:
+  pranavahini:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: arogyasetu-app
+    container_name: pranavahini-app
     ports:
       - "8080:8080"
     environment:

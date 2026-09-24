@@ -1,6 +1,6 @@
-# ArogyaSetu — Security, Cryptography & Safety Posture
+# PranaVahini — Security, Cryptography & Safety Posture
 
-ArogyaSetu is engineered around a zero-trust, safety-critical architecture designed to protect rural healthcare supply chains from inventory pilferage, AI hallucination, concurrency corruption, and communication blackouts.
+PranaVahini is engineered around a zero-trust, safety-critical architecture designed to protect rural healthcare supply chains from inventory pilferage, AI hallucination, concurrency corruption, and communication blackouts.
 
 ---
 

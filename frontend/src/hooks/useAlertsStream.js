@@ -4,7 +4,7 @@ const MAX_SEEN_IDS = 100;
 
 /**
  * Custom hook for resilient Server-Sent Events (SSE) connection
- * to ArogyaSetu's real-time alert broadcaster (/api/alerts/stream).
+ * to PranaVahini's real-time alert broadcaster (/api/alerts/stream).
  * 
  * Features:
  * - Ref-stabilized callback to eliminate stale closure reconnections.

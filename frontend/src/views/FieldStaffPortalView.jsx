@@ -106,7 +106,7 @@ export function FieldStaffPortalView() {
   // Offline queue for intermittent rural 2G/3G connectivity
   const [offlineQueue, setOfflineQueue] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem('arogyasetu_offline_dispense_queue') || '[]');
+      return JSON.parse(localStorage.getItem('pranavahini_offline_dispense_queue') || localStorage.getItem('arogyasetu_offline_dispense_queue') || '[]');
     } catch {
       return [];
     }
@@ -200,7 +200,7 @@ export function FieldStaffPortalView() {
 
     setOfflineQueue(remaining);
     try {
-      localStorage.setItem('arogyasetu_offline_dispense_queue', JSON.stringify(remaining));
+      localStorage.setItem('pranavahini_offline_dispense_queue', JSON.stringify(remaining));
     } catch (err) {
       console.error('[OfflineQueue] Storage update error:', err);
     }
@@ -225,9 +225,11 @@ export function FieldStaffPortalView() {
       flushOfflineQueue();
     };
     window.addEventListener('online', handleOnline);
+    window.addEventListener('pranavahini:flush_offline_queue', handleOnline);
     window.addEventListener('arogyasetu:flush_offline_queue', handleOnline);
     return () => {
       window.removeEventListener('online', handleOnline);
+      window.removeEventListener('pranavahini:flush_offline_queue', handleOnline);
       window.removeEventListener('arogyasetu:flush_offline_queue', handleOnline);
     };
   }, [flushOfflineQueue]);
@@ -340,7 +342,7 @@ export function FieldStaffPortalView() {
         const updated = [offlineItem, ...offlineQueue];
         setOfflineQueue(updated);
         try {
-          localStorage.setItem('arogyasetu_offline_dispense_queue', JSON.stringify(updated));
+          localStorage.setItem('pranavahini_offline_dispense_queue', JSON.stringify(updated));
         } catch (storageErr) {
           console.error('[FieldPortal] Failed to save offline queue:', storageErr);
         }

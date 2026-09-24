@@ -1,8 +1,8 @@
-# ArogyaSetu — Release Notes
+# PranaVahini — Release Notes
 
 ## Version 1.0.0 — Production Release (September 2026)
 
-**ArogyaSetu** is officially released for the **Build with AI: Code for Communities (Second Edition)** hackathon organized by **Hack2Skill** in partnership with **Google**.
+**PranaVahini** is officially released for the **Build with AI: Code for Communities (Second Edition)** hackathon organized by **Hack2Skill** in partnership with **Google**.
 
 This initial production release delivers autonomous emergency medicine rebalancing, clinical AI safety guardrails, offline-first frontline dispensing, and containerized deployment for rural public health networks.
 
@@ -37,7 +37,7 @@ This initial production release delivers autonomous emergency medicine rebalanci
 #### 5. Verification & Test Coverage
 - **107 / 107 Backend Pytest Tests Passing (100% Green).**
 - **Production React 19 Frontend:** Built via Vite in 2.60s with 0 errors.
-- **Comprehensive 23-Screen UI/UX Design Audit Dossier:** (`arogyasetu_ui_design_audit.pdf`, 8.30 MB).
+- **Comprehensive 23-Screen UI/UX Design Audit Dossier:** (`pranavahini_ui_design_audit.pdf`, 8.30 MB).
 
 ---
 

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: arogyasetu
+    name: pranavahini
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: free

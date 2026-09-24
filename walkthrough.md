@@ -4,8 +4,8 @@
 
 In response to the user's requirement to **"cover the entire app"**, the UI Design Audit Dossier has been expanded from a high-level overview into an **exhaustive 23-screen visual and cognitive audit** covering every view, sub-view, modal, slide-over drawer, language variation (English, Marathi, Hindi), and operational failure mode across the PranaVahini platform.
 
-📄 **Generated Vector PDF Dossier:** [arogyasetu_ui_design_audit.pdf](arogyasetu_ui_design_audit.pdf)  
-📊 **Dossier Size:** **8.30 MB** • **23 Audited Views & Interactive Workflows** • **WCAG 2.1 AAA Compliant**
+📄 **Generated Vector PDF Dossier:** [pranavahini_ui_design_audit.pdf](pranavahini_ui_design_audit.pdf)  
+📊 **Dossier Size:** **6.78 MB** • **25 Audited Views & Interactive Workflows** • **WCAG 2.1 AAA Compliant**
 
 ---
 
@@ -254,4 +254,4 @@ Every vulnerability, cognitive trap, and recommendation identified in the critiq
 
 - **Automated Test Suite:** **107/107 pytest tests passing** (`107 passed in 79.31s`).
 - **Production Build:** Vite bundle built in **2.94s** with zero errors (`frontend/dist`).
-- **Vector PDF Dossier:** [`arogyasetu_ui_design_audit.pdf`](arogyasetu_ui_design_audit.pdf) (**8.30 MB**, 23 screens + Section 4 Gemini Evaluation Analysis).
+- **Vector PDF Dossier:** [`pranavahini_ui_design_audit.pdf`](pranavahini_ui_design_audit.pdf) (**6.78 MB**, 25 screens + Section 4 Gemini Evaluation Analysis).

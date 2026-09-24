@@ -1,6 +1,6 @@
-# ArogyaSetu — Operator & Evaluator User Guide
+# PranaVahini — Operator & Evaluator User Guide
 
-ArogyaSetu provides role-differentiated interfaces designed for District Medical Officers (DMOs), Civil Surgeons, and rural Primary Health Centre (PHC) staff across Maharashtra's Western Ghats.
+PranaVahini provides role-differentiated interfaces designed for District Medical Officers (DMOs), Civil Surgeons, and rural Primary Health Centre (PHC) staff across Maharashtra's Western Ghats.
 
 ---
 
@@ -29,12 +29,12 @@ The navigation sidebar reflects the exact modules active in the application:
   - Quick-action buttons to jump directly into the Geospatial Map, initiate peer-to-peer AI Rebalancing, or drill down into facility inventories.
   - Multi-lingual localization toggle (English, मराठी, हिन्दी) directly accessible in the top header.
 
-![ArogyaSetu Command Center Overview (English)](ui_audit_assets/01_overview_en.png)
+![PranaVahini Command Center Overview (English)](ui_audit_assets/01_overview_en.png)
 
 - **Multilingual Support (मराठी DHS Standard):**
   - Instant localization adopting official Maharashtra Directorate of Health Services (DHS) administrative terminology.
 
-![ArogyaSetu Command Center Overview (मराठी)](ui_audit_assets/02_overview_mr.png)
+![PranaVahini Command Center Overview (मराठी)](ui_audit_assets/02_overview_mr.png)
 
 ---
 

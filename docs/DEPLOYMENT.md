@@ -1,6 +1,6 @@
-# ArogyaSetu — Cloud Deployment Guide
+# PranaVahini — Cloud Deployment Guide
 
-This guide details the step-by-step procedure to deploy **ArogyaSetu** to **Google Cloud Run** for the **Build with AI: Code for Communities (Second Edition)** hackathon.
+This guide details the step-by-step procedure to deploy **PranaVahini** to **Google Cloud Run** for the **Build with AI: Code for Communities (Second Edition)** hackathon.
 
 ---
 
@@ -17,7 +17,7 @@ This guide details the step-by-step procedure to deploy **ArogyaSetu** to **Goog
 ## 📋 Prerequisites
 
 1. A **Google Cloud Platform (GCP)** account with billing enabled.
-2. The **ArogyaSetu** source code pushed to your GitHub repository.
+2. The **PranaVahini** source code pushed to your GitHub repository.
 3. *(Optional)* `gcloud` CLI installed locally, or access to [Google Cloud Shell](https://shell.cloud.google.com/).
 
 ---
@@ -31,7 +31,7 @@ This is the fastest and most reliable deployment method for hackathon evaluation
 3. Select **Continuously deploy from a repository**.
 4. Click **Set up with Cloud Build**:
    - Provider: **GitHub**
-   - Repository: Select your ArogyaSetu repository (`arogyasetu`).
+   - Repository: Select your PranaVahini repository (`arogyasetu`).
    - Branch: `^main$`
    - Build Type: **Dockerfile** (Source location: `/Dockerfile`).
 5. Configure Service Settings:
@@ -95,7 +95,7 @@ Once deployed, verify the following endpoints on your public URL:
 1. **Frontend Command Center:** Visit `https://<YOUR-APP-URL>/` — confirm Leaflet GIS map loads with 15 green/yellow/red facility markers.
 2. **REST API Health Check:** Visit `https://<YOUR-APP-URL>/api/health` — must return:
    ```json
-   {"status": "healthy", "service": "ArogyaSetu Emergency Logistics API"}
+   {"status": "healthy", "service": "PranaVahini Emergency Logistics API"}
    ```
 3. **Interactive Swagger Docs:** Visit `https://<YOUR-APP-URL>/docs` — confirm all 13 modular routers are accessible.
 4. **Executive Research Report:** Visit `https://<YOUR-APP-URL>/report` — confirm the full due diligence report renders cleanly.
