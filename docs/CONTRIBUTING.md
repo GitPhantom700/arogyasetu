@@ -14,8 +14,8 @@ Thank you for your interest in contributing to **PranaVahini**! This project was
 ### Setup Steps
 ```bash
 # 1. Clone the repository
-git clone https://github.com/GitPhantom700/arogyasetu.git
-cd arogyasetu
+git clone https://github.com/GitPhantom700/pranavahini.git
+cd pranavahini
 
 # 2. Set up Python virtual environment
 python -m venv .venv

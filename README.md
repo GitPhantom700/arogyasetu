@@ -131,8 +131,8 @@ PranaVahini is engineered as a full-stack, closed-loop public health logistics p
 
 ```bash
 # Clone the repository
-git clone https://github.com/GitPhantom700/arogyasetu.git
-cd arogyasetu
+git clone https://github.com/GitPhantom700/pranavahini.git
+cd pranavahini
 
 # Setup Python Virtual Environment
 python -m venv .venv
@@ -192,7 +192,7 @@ npm --prefix frontend run build
 ## 📂 Repository Layout
 
 ```
-arogyasetu/
+pranavahini/
 ├── backend/
 │   ├── ai_safety.py           # AISafetyGuard firewall & thread-safe CircuitBreaker
 │   ├── alerts.py              # Server-Sent Events (SSE) Broadcaster & pub/sub

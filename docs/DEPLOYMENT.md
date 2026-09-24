@@ -31,7 +31,7 @@ This is the fastest and most reliable deployment method for hackathon evaluation
 3. Select **Continuously deploy from a repository**.
 4. Click **Set up with Cloud Build**:
    - Provider: **GitHub**
-   - Repository: Select your PranaVahini repository (`arogyasetu`).
+   - Repository: Select your PranaVahini repository (`pranavahini`).
    - Branch: `^main$`
    - Build Type: **Dockerfile** (Source location: `/Dockerfile`).
 5. Configure Service Settings:
