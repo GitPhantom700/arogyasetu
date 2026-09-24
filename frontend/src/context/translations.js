@@ -16,6 +16,15 @@ export const translations = {
     nav_transfers: 'Transfers & Ledger',
     nav_scan: 'Field Portal & OCR',
     nav_crisis: 'Crisis Simulator',
+    badge_gemini: 'GEMINI',
+    badge_abdm_ocr: 'ABDM OCR',
+    badge_live_gis: 'LIVE GIS',
+    badge_active_caps: 'ACTIVE',
+    badge_crit_suffix: 'Crit',
+    badge_transit_suffix: 'Transit',
+    expand_sidebar: 'Expand Sidebar',
+    collapse_sidebar: 'Collapse Sidebar',
+    footer_build_info: 'v1.0.0 • React + Vite',
 
     // Header & Global
     brand_name: 'PranaVahini',
@@ -192,6 +201,15 @@ export const translations = {
     nav_transfers: 'हस्तांतरण व लेजर',
     nav_scan: 'फील्ड पोर्टल व ओसीआर',
     nav_crisis: 'आपत्कालीन सिम्युलेटर',
+    badge_gemini: 'जेमिनी',
+    badge_abdm_ocr: 'ओसीआर',
+    badge_live_gis: 'थेट नकाशा',
+    badge_active_caps: 'सक्रिय',
+    badge_crit_suffix: 'तूट',
+    badge_transit_suffix: 'मार्गावर',
+    expand_sidebar: 'साइडबार उघडा',
+    collapse_sidebar: 'साइडबार बंद करा',
+    footer_build_info: 'v1.0.0 • प्राणवाहिनी नेटवर्क',
 
     // Header & Global
     brand_name: 'प्राणवाहिनी',
@@ -368,6 +386,15 @@ export const translations = {
     nav_transfers: 'स्थानांतरण और बहीखाता',
     nav_scan: 'फील्ड पोर्टल एवं ओसीआर',
     nav_crisis: 'संकट सिम्युलेटर',
+    badge_gemini: 'जेमिनी',
+    badge_abdm_ocr: 'ओसीआर',
+    badge_live_gis: 'लाइव मानचित्र',
+    badge_active_caps: 'सक्रिय',
+    badge_crit_suffix: 'कमी',
+    badge_transit_suffix: 'मार्ग में',
+    expand_sidebar: 'साइडबार खोलें',
+    collapse_sidebar: 'साइडबार बंद करें',
+    footer_build_info: 'v1.0.0 • प्राणवाहिनी नेटवर्क',
 
     // Header & Global
     brand_name: 'प्राणवाहिनी',

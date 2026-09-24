@@ -22,6 +22,7 @@ export function Sidebar() {
     setSidebarCollapsed,
     stats,
     crisisStatus,
+    language,
     t
   } = useUI();
 
@@ -36,42 +37,46 @@ export function Sidebar() {
       id: 'map',
       label: t('nav_map', 'Geospatial Map'),
       icon: Map,
-      badge: 'Live GIS',
+      badge: t('badge_live_gis', 'LIVE GIS'),
       badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300',
     },
     {
       id: 'inventory',
       label: t('nav_inventory', 'Facility Stocks'),
       icon: Package,
-      badge: stats?.critical_stockouts > 0 ? `${stats.critical_stockouts} Crit` : null,
+      badge: stats?.critical_stockouts > 0
+        ? `${language === 'mr' ? stats.critical_stockouts.toLocaleString('mr-IN') : stats.critical_stockouts} ${t('badge_crit_suffix', 'Crit')}`
+        : null,
       badgeColor: 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300',
     },
     {
       id: 'rebalance',
       label: t('nav_rebalance', 'AI Rebalancer'),
       icon: Cpu,
-      badge: 'Gemini',
+      badge: t('badge_gemini', 'GEMINI'),
       badgeColor: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300',
     },
     {
       id: 'transfers',
       label: t('nav_transfers', 'Transfers & Ledger'),
       icon: Truck,
-      badge: stats?.in_transit_transfers > 0 ? `${stats.in_transit_transfers} Transit` : null,
+      badge: stats?.in_transit_transfers > 0
+        ? `${language === 'mr' ? stats.in_transit_transfers.toLocaleString('mr-IN') : stats.in_transit_transfers} ${t('badge_transit_suffix', 'Transit')}`
+        : null,
       badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300',
     },
     {
       id: 'scan',
       label: t('nav_scan', 'Field Portal & OCR'),
       icon: ScanLine,
-      badge: 'ABDM OCR',
+      badge: t('badge_abdm_ocr', 'ABDM OCR'),
       badgeColor: 'bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300',
     },
     {
       id: 'crisis',
       label: t('nav_crisis', 'Crisis Simulator'),
       icon: Flame,
-      badge: crisisStatus?.is_active ? 'ACTIVE' : null,
+      badge: crisisStatus?.is_active ? t('badge_active_caps', 'ACTIVE') : null,
       badgeColor: crisisStatus?.is_active
         ? 'bg-red-600 text-white animate-pulse'
         : 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300',
@@ -82,7 +87,7 @@ export function Sidebar() {
     <aside
       className={clsx(
         'relative flex flex-col bg-white dark:bg-brand-dark-card border-r border-slate-200/80 dark:border-brand-dark-border transition-all duration-300 select-none z-20',
-        sidebarCollapsed ? 'w-20' : 'w-64'
+        sidebarCollapsed ? 'w-20' : 'w-72'
       )}
     >
       {/* Navigation Links */}
@@ -109,11 +114,11 @@ export function Sidebar() {
               )} />
 
               {!sidebarCollapsed && (
-                <div className="flex-1 flex items-center justify-between truncate">
+                <div className="flex-1 flex items-center justify-between gap-1.5 min-w-0">
                   <span className="truncate">{item.label}</span>
                   {item.badge && (
                     <span className={clsx(
-                      'px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider',
+                      'px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0',
                       item.badgeColor || 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
                     )}>
                       {item.badge}
@@ -135,7 +140,7 @@ export function Sidebar() {
       <div className="p-3 border-t border-slate-200/80 dark:border-brand-dark-border flex items-center justify-between">
         {!sidebarCollapsed && (
           <div className="text-[11px] text-slate-400 dark:text-slate-500 font-mono">
-            v1.0.0 • React + Vite
+            {t('footer_build_info', 'v1.0.0 • React + Vite')}
           </div>
         )}
         <button
@@ -144,7 +149,7 @@ export function Sidebar() {
             'p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition',
             sidebarCollapsed && 'mx-auto'
           )}
-          title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          title={sidebarCollapsed ? t('expand_sidebar', 'Expand Sidebar') : t('collapse_sidebar', 'Collapse Sidebar')}
         >
           {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
