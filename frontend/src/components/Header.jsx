@@ -261,16 +261,24 @@ export function Header() {
           {crisisStatus?.is_active && (
             <button
               onClick={() => setActiveTab('crisis')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-950/80 dark:hover:bg-red-900/80 dark:text-red-300 border border-red-300 dark:border-red-800 shadow-sm transition animate-pulse"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-950/80 dark:hover:bg-red-900/80 dark:text-red-300 border border-red-300 dark:border-red-800 shadow-sm transition animate-pulse cursor-pointer"
               title="Click to view Active Crisis Simulation & Swarm Dispatch"
             >
               <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0" />
-              <span className="hidden sm:inline">CRISIS SIM:</span>
+              <span className="hidden sm:inline">{t('pill_crisis_sim', 'CRISIS SIM:')}</span>
               <span className="truncate max-w-[120px] md:max-w-[180px]">
-                {crisisStatus.scenario_name || 'Active Outbreak'}
+                {crisisStatus.active_scenario_id === 'MONSOON_FLOOD_SOUTH_SATARA'
+                  ? (t('scenario_monsoon_title') || crisisStatus.active_scenario_title)
+                  : crisisStatus.active_scenario_id === 'LEPTOSPIROSIS_PUNE_GHATS'
+                    ? (t('scenario_lepto_title') || crisisStatus.active_scenario_title)
+                    : crisisStatus.active_scenario_id === 'HEATWAVE_PLAINS_SHIRUR'
+                      ? (t('scenario_heatwave_title') || crisisStatus.active_scenario_title)
+                      : crisisStatus.active_scenario_id === 'RABIES_CANINE_CLUSTER'
+                        ? (t('scenario_rabies_title') || crisisStatus.active_scenario_title)
+                        : (crisisStatus.scenario_name || crisisStatus.active_scenario_title || t('active_outbreak_label', 'Active Outbreak'))}
               </span>
               <span className="px-1.5 py-0.2 rounded-full bg-red-600 text-white text-[10px] font-extrabold">
-                {crisisStatus.intensity_multiplier}x
+                {crisisStatus.intensity_multiplier || crisisStatus.intensity || 1}x
               </span>
             </button>
           )}
@@ -317,11 +325,11 @@ export function Header() {
                   <div className="flex items-center gap-2">
                     <Bell className="w-4 h-4 text-slate-700 dark:text-slate-300" />
                     <h4 className="font-display font-bold text-xs text-slate-900 dark:text-white">
-                      Notifications
+                      {t('notifications_title', 'Notifications')}
                     </h4>
                     {unreadAlertsCount > 0 && (
                       <span className="px-1.5 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 border border-red-200/60 dark:border-red-800/40">
-                        {unreadAlertsCount} unread
+                        {unreadAlertsCount} {t('unread_suffix', 'unread')}
                       </span>
                     )}
                   </div>
@@ -331,7 +339,7 @@ export function Header() {
                         onClick={handleMarkAllAsRead}
                         className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline font-semibold cursor-pointer"
                       >
-                        Mark all read
+                        {t('mark_all_read', 'Mark all read')}
                       </button>
                     )}
                     <button
@@ -349,8 +357,8 @@ export function Header() {
                   {(!alerts || alerts.length === 0) ? (
                     <div className="p-8 text-center text-xs text-slate-400 space-y-1">
                       <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-2 opacity-80" />
-                      <p className="font-semibold text-slate-700 dark:text-slate-300">No active alerts</p>
-                      <p>Network inventories are currently balanced.</p>
+                      <p className="font-semibold text-slate-700 dark:text-slate-300">{t('no_active_alerts', 'No active alerts')}</p>
+                      <p>{t('network_inventories_balanced', 'Network inventories are currently balanced.')}</p>
                     </div>
                   ) : (
                     alerts.slice(0, 12).map((alert, idx) => {

@@ -72,7 +72,63 @@ export function CrisisSimulatorView() {
     fetchScenarios();
   }, []);
 
+  // Helpers to localize backend scenario data
+  const getLocalizedScenario = (sc) => {
+    if (!sc) return null;
+    const id = sc.scenario_id;
+    let title = sc.title;
+    let desc = sc.description;
+    let casualties = sc.estimated_casualties;
+
+    if (id === 'MONSOON_FLOOD_SOUTH_SATARA') {
+      title = t('scenario_monsoon_title') || sc.title;
+      desc = t('scenario_monsoon_desc') || sc.description;
+      casualties = t('scenario_monsoon_casualties') || sc.estimated_casualties;
+    } else if (id === 'LEPTOSPIROSIS_PUNE_GHATS') {
+      title = t('scenario_lepto_title') || sc.title;
+      desc = t('scenario_lepto_desc') || sc.description;
+      casualties = t('scenario_lepto_casualties') || sc.estimated_casualties;
+    } else if (id === 'HEATWAVE_PLAINS_SHIRUR') {
+      title = t('scenario_heatwave_title') || sc.title;
+      desc = t('scenario_heatwave_desc') || sc.description;
+      casualties = t('scenario_heatwave_casualties') || sc.estimated_casualties;
+    } else if (id === 'RABIES_CANINE_CLUSTER') {
+      title = t('scenario_rabies_title') || sc.title;
+      desc = t('scenario_rabies_desc') || sc.description;
+      casualties = t('scenario_rabies_casualties') || sc.estimated_casualties;
+    }
+
+    const localizedDistrict = sc.affected_district === 'Pune'
+      ? (t('district_pune') || 'Pune')
+      : sc.affected_district === 'Satara'
+        ? (t('district_satara') || 'Satara')
+        : sc.affected_district;
+
+    const localizedSeverity = sc.severity === 'EMERGENCY'
+      ? (t('severity_emergency') || 'EMERGENCY')
+      : (t('severity_critical') || 'CRITICAL');
+
+    return {
+      ...sc,
+      localizedTitle: title,
+      localizedDescription: desc,
+      localizedCasualties: casualties,
+      localizedDistrict,
+      localizedSeverity
+    };
+  };
+
+  const getActiveScenarioTitle = () => {
+    const id = crisisStatus?.active_scenario_id;
+    if (id === 'MONSOON_FLOOD_SOUTH_SATARA') return t('scenario_monsoon_title') || crisisStatus.active_scenario_title;
+    if (id === 'LEPTOSPIROSIS_PUNE_GHATS') return t('scenario_lepto_title') || crisisStatus.active_scenario_title;
+    if (id === 'HEATWAVE_PLAINS_SHIRUR') return t('scenario_heatwave_title') || crisisStatus.active_scenario_title;
+    if (id === 'RABIES_CANINE_CLUSTER') return t('scenario_rabies_title') || crisisStatus.active_scenario_title;
+    return crisisStatus?.active_scenario_title || t('badge_crisis_active');
+  };
+
   const currentScenario = scenarios.find(s => s.scenario_id === selectedScenarioId) || scenarios[0];
+  const localizedCurrent = getLocalizedScenario(currentScenario);
 
   // Trigger Crisis
   const handleTriggerCrisis = async () => {
@@ -89,10 +145,11 @@ export function CrisisSimulatorView() {
       setLastTriggerResult(res);
       await refreshData();
 
+      const activeTitle = localizedCurrent?.localizedTitle || res.scenario_title;
       showToast(
-        `🚨 Crisis Activated: ${res.scenario_title}! ${res.critically_depleted_items_count} facilities depleted.`,
+        `${t('toast_crisis_activated') || '🚨 Crisis Activated'}: ${activeTitle}! ${res.critically_depleted_items_count} ${t('toast_depleted_suffix') || 'facilities depleted.'}`,
         'warning',
-        'Crisis Simulation Active'
+        t('badge_crisis_active') || 'Crisis Simulation Active'
       );
     } catch (err) {
       console.error('Trigger crisis failed:', err);
@@ -263,29 +320,29 @@ export function CrisisSimulatorView() {
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-rose-300 block">
-                  Active Regional Disaster Emergency
+                  {t('badge_active_regional_disaster') || 'Active Regional Disaster Emergency'}
                 </span>
                 <h3 className="font-display font-bold text-sm sm:text-base text-white">
-                  {crisisStatus.active_scenario_title || 'Emergency Outbreak Scenario Active'}
+                  {getActiveScenarioTitle()}
                 </h3>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-[11px] font-mono text-rose-200">
-                Intensity: <strong>{crisisStatus.intensity || 1.0}x</strong>
+                {t('intensity_prefix') || 'Intensity:'} <strong>{crisisStatus.intensity || 1.0}x</strong>
               </span>
               {crisisStatus.monsoon_mode && (
                 <span className="px-2.5 py-1 rounded-lg bg-sky-500/20 border border-sky-500/40 text-[11px] font-semibold text-sky-200 flex items-center gap-1">
                   <CloudRain className="w-3 h-3" />
-                  <span>Sahyadri Monsoon (1.5x Multiplier)</span>
+                  <span>{t('sahyadri_monsoon_multiplier') || 'Sahyadri Monsoon (1.5x Multiplier)'}</span>
                 </span>
               )}
             </div>
           </div>
 
           <p className="text-xs text-rose-200/90 leading-relaxed pt-1 border-t border-rose-500/20">
-            Multiple facilities in the designated disaster cluster have suffered acute inventory depletions. Real-time SSE alerts have fired, and candidate donors outside the disaster zone are evaluating emergency redistribution corridors.
+            {t('crisis_emergency_banner_desc') || 'Multiple facilities in the designated disaster cluster have suffered acute inventory depletions. Real-time SSE alerts have fired, and candidate donors outside the disaster zone are evaluating emergency redistribution corridors.'}
           </p>
         </div>
       ) : (
@@ -327,11 +384,12 @@ export function CrisisSimulatorView() {
             {loadingScenarios ? (
               <div className="p-8 text-center space-y-2">
                 <RefreshCw className="w-6 h-6 animate-spin text-purple-500 mx-auto" />
-                <p className="text-xs text-slate-400">Loading regional disaster models...</p>
+                <p className="text-xs text-slate-400">{t('loading_scenarios') || 'Loading regional disaster models...'}</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {scenarios.map(sc => {
+                  const locSc = getLocalizedScenario(sc);
                   const isSelected = selectedScenarioId === sc.scenario_id;
                   const isMonsoon = sc.monsoon_mode;
 
@@ -356,10 +414,10 @@ export function CrisisSimulatorView() {
                           </div>
                           <div>
                             <h4 className="font-bold text-slate-900 dark:text-white leading-tight">
-                              {sc.title}
+                              {locSc.localizedTitle}
                             </h4>
                             <span className="text-[10px] text-slate-400 block mt-0.5">
-                              {sc.affected_district} District • {sc.affected_facility_codes.length} Facilities Targeted
+                              {locSc.localizedDistrict} {t('district_word') || 'District'} • {sc.affected_facility_codes.length} {t('facilities_targeted_suffix') || 'Facilities Targeted'}
                             </span>
                           </div>
                         </div>
@@ -370,12 +428,12 @@ export function CrisisSimulatorView() {
                             ? "bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300"
                             : "bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300"
                         )}>
-                          {sc.severity}
+                          {locSc.localizedSeverity}
                         </span>
                       </div>
 
                       <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">
-                        {sc.description}
+                        {locSc.localizedDescription}
                       </p>
 
                       {/* Medicine Spikes Pills */}
@@ -395,7 +453,7 @@ export function CrisisSimulatorView() {
                           {isMonsoon && (
                             <span className="px-2 py-0.5 rounded-md bg-sky-50 dark:bg-sky-950/40 text-[10px] font-semibold text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60 flex items-center gap-1">
                               <CloudRain className="w-2.5 h-2.5" />
-                              <span>1.5x Monsoon</span>
+                              <span>{t('monsoon_multiplier_tag') || '1.5x Monsoon'}</span>
                             </span>
                           )}
                         </div>
@@ -421,7 +479,7 @@ export function CrisisSimulatorView() {
                 </h3>
               </div>
               <span className="text-[10px] font-mono text-purple-600 dark:text-purple-400 font-bold">
-                Target: {currentScenario?.title || 'None'}
+                {t('target_scenario_prefix') || 'Target:'} {localizedCurrent?.localizedTitle || currentScenario?.title || 'None'}
               </span>
             </div>
 
@@ -430,14 +488,14 @@ export function CrisisSimulatorView() {
                 {/* Scenario Description Callout */}
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800 space-y-1">
                   <span className="font-bold text-slate-800 dark:text-slate-200 block text-xs">
-                    {t('clinical_briefing_label') || 'Clinical Briefing:'} {currentScenario.title}
+                    {t('clinical_briefing_label') || 'Clinical Briefing:'} {localizedCurrent?.localizedTitle || currentScenario.title}
                   </span>
                   <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {currentScenario.description}
+                    {localizedCurrent?.localizedDescription || currentScenario.description}
                   </p>
                   <div className="pt-1 text-[10px] text-slate-400 flex items-center gap-3">
-                    <span>{t('expected_casualty_vel') || 'Expected Casualty Velocity:'} <strong>{currentScenario.estimated_casualties}</strong></span>
-                    <span>{t('district_label') || 'District:'} <strong>{currentScenario.affected_district}</strong></span>
+                    <span>{t('expected_casualty_vel') || 'Expected Casualty Velocity:'} <strong>{localizedCurrent?.localizedCasualties || currentScenario.estimated_casualties}</strong></span>
+                    <span>{t('district_label') || 'District:'} <strong>{localizedCurrent?.localizedDistrict || currentScenario.affected_district}</strong></span>
                   </div>
                 </div>
 
@@ -520,38 +578,38 @@ export function CrisisSimulatorView() {
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   <h3 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
-                    Emergency Impact & Autonomous Rebalance Plans
+                    {t('emergency_impact_title') || 'Emergency Impact & Autonomous Rebalance Plans'}
                   </h3>
                 </div>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                  {lastTriggerResult.recommended_rebalance_plans?.length || 0} Corridors Identified
+                  {lastTriggerResult.recommended_rebalance_plans?.length || 0} {t('corridors_identified_suffix') || 'Corridors Identified'}
                 </span>
               </div>
 
               {/* Execution Summary Statistics */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                 <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">Nodes In Crisis</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('nodes_in_crisis_kpi') || 'Nodes In Crisis'}</span>
                   <span className="font-bold text-rose-600 dark:text-rose-400 text-sm font-mono block">
-                    {lastTriggerResult.affected_facilities_count} Facilities
+                    {lastTriggerResult.affected_facilities_count} {t('facilities_kpi_suffix') || 'Facilities'}
                   </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">Deficit Nodes</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('deficit_nodes_kpi') || 'Deficit Nodes'}</span>
                   <span className="font-bold text-amber-600 dark:text-amber-400 text-sm font-mono block">
-                    {lastTriggerResult.critically_depleted_items_count} Items
+                    {lastTriggerResult.critically_depleted_items_count} {t('items_kpi_suffix') || 'Items'}
                   </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">Units Consumed</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('units_consumed_kpi') || 'Units Consumed'}</span>
                   <span className="font-bold text-slate-900 dark:text-white text-sm font-mono block">
-                    {lastTriggerResult.total_units_consumed} Units
+                    {lastTriggerResult.total_units_consumed} {t('units_kpi_suffix') || 'Units'}
                   </span>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">SSE Alerts Sent</span>
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('sse_alerts_kpi') || 'SSE Alerts Sent'}</span>
                   <span className="font-bold text-purple-600 dark:text-purple-400 text-sm font-mono block">
-                    {lastTriggerResult.alerts_broadcast} Events
+                    {lastTriggerResult.alerts_broadcast} {t('events_kpi_suffix') || 'Events'}
                   </span>
                 </div>
               </div>
@@ -561,15 +619,15 @@ export function CrisisSimulatorView() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                      Auto-Generated Rebalancing Corridors:
+                      {t('auto_generated_corridors') || 'Auto-Generated Rebalancing Corridors:'}
                     </span>
                     <button
                       onClick={handleSwarmDispatch}
                       disabled={swarming}
-                      className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shadow-sm transition flex items-center gap-1.5"
+                      className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] shadow-sm transition flex items-center gap-1.5 cursor-pointer"
                     >
                       <Zap className={clsx("w-3 h-3", swarming && "animate-spin")} />
-                      <span>{swarming ? 'Authorizing Swarm...' : 'Authorize All (Swarm Dispatch)'}</span>
+                      <span>{swarming ? (t('btn_authorizing_swarm') || 'Authorizing Swarm...') : (t('btn_authorize_swarm') || 'Authorize All (Swarm Dispatch)')}</span>
                     </button>
                   </div>
 
@@ -596,12 +654,12 @@ export function CrisisSimulatorView() {
                         </div>
 
                         <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800/60">
-                          <span>{plan.medicine_name} • {plan.distance_km?.toFixed(0)} km ({plan.estimated_transit_hours?.toFixed(1)} hrs)</span>
+                          <span>{plan.medicine_name} • {plan.distance_km?.toFixed(0)} km ({plan.estimated_transit_hours?.toFixed(1)} {t('hours_short_suffix') || 'hrs'})</span>
                           <button
                             onClick={() => handleInspectPlanOnMap(plan)}
-                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1"
+                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1 cursor-pointer"
                           >
-                            <span>Inspect Route</span>
+                            <span>{t('inspect_route_link') || 'Inspect Route'}</span>
                             <ExternalLink className="w-3 h-3" />
                           </button>
                         </div>
@@ -611,7 +669,7 @@ export function CrisisSimulatorView() {
                 </div>
               ) : (
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/40 text-center text-xs text-slate-500">
-                  No candidate donor within safe non-cannibalization buffer for the current deficit set.
+                  {t('no_donors_safe_buffer') || 'No candidate donor within safe non-cannibalization buffer for the current deficit set.'}
                 </div>
               )}
 
@@ -619,16 +677,16 @@ export function CrisisSimulatorView() {
               <div className="pt-2 border-t border-slate-100 dark:border-brand-dark-border flex items-center justify-between text-xs">
                 <button
                   onClick={() => setActiveTab('map')}
-                  className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1"
+                  className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <MapPin className="w-3.5 h-3.5" />
-                  <span>View Affected Nodes on Geospatial Map</span>
+                  <span>{t('view_affected_map') || 'View Affected Nodes on Geospatial Map'}</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('rebalance')}
-                  className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline flex items-center gap-1"
+                  className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline flex items-center gap-1 cursor-pointer"
                 >
-                  <span>Open Full Rebalancing Cockpit</span>
+                  <span>{t('open_full_rebalance_cockpit') || 'Open Full Rebalancing Cockpit'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
