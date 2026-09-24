@@ -106,7 +106,7 @@ export function FieldStaffPortalView() {
   // Offline queue for intermittent rural 2G/3G connectivity
   const [offlineQueue, setOfflineQueue] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem('pranavahini_offline_dispense_queue') || localStorage.getItem('arogyasetu_offline_dispense_queue') || '[]');
+      return JSON.parse(localStorage.getItem('pranavahini_offline_dispense_queue') || '[]');
     } catch {
       return [];
     }
@@ -226,11 +226,9 @@ export function FieldStaffPortalView() {
     };
     window.addEventListener('online', handleOnline);
     window.addEventListener('pranavahini:flush_offline_queue', handleOnline);
-    window.addEventListener('arogyasetu:flush_offline_queue', handleOnline);
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('pranavahini:flush_offline_queue', handleOnline);
-      window.removeEventListener('arogyasetu:flush_offline_queue', handleOnline);
     };
   }, [flushOfflineQueue]);
 

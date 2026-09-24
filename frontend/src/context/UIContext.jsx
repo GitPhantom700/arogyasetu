@@ -43,7 +43,7 @@ function sanitizeFacilities(rawList) {
 export function UIProvider({ children }) {
   // Language state (en, mr, hi)
   const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('pranavahini_lang') || localStorage.getItem('arogya_lang') || 'en';
+    return localStorage.getItem('pranavahini_lang') || 'en';
   });
 
   const setLanguage = useCallback((lang) => {
@@ -58,7 +58,7 @@ export function UIProvider({ children }) {
 
   // Theme state (persisted in localStorage)
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('pranavahini_theme') || localStorage.getItem('arogya_theme') || 'light';
+    return localStorage.getItem('pranavahini_theme') || 'light';
   });
 
   // Navigation & Layout

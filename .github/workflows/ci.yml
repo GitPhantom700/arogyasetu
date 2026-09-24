@@ -1,4 +1,4 @@
-name: ArogyaSetu CI & Quality Assurance
+name: PranaVahini CI & Quality Assurance
 
 on:
   push:
@@ -75,4 +75,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: false
-          tags: arogyasetu:ci-test
+          tags: pranavahini:ci-test

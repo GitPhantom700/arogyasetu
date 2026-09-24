@@ -225,8 +225,6 @@ pranavahini/
 │
 ├── pranavahini_ui_design_audit.pdf # Comprehensive 25-Screen UI/UX Design Audit Vector PDF Dossier (6.78 MB)
 ├── pranavahini_ui_design_audit.html # Interactive Multi-View Audit Dossier & Adversarial AI Evaluation
-├── arogyasetu_ui_design_audit.pdf  # Backward-compatible alias vector PDF dossier
-├── arogyasetu_ui_design_audit.html # Backward-compatible alias audit HTML
 ├── walkthrough.md             # UI Design Audit walkthrough & Gemini evaluation response scorecard
 ├── executive_report.html      # Executive whitepaper, multi-model benchmark report & DSCSA ledger logs
 ├── explain_project.md         # Intuitive 10th-grade educational guide to PranaVahini

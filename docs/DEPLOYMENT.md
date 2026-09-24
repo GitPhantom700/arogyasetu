@@ -35,7 +35,7 @@ This is the fastest and most reliable deployment method for hackathon evaluation
    - Branch: `^main$`
    - Build Type: **Dockerfile** (Source location: `/Dockerfile`).
 5. Configure Service Settings:
-   - **Service Name:** `arogyasetu`
+   - **Service Name:** `pranavahini`
    - **Region:** `asia-south1` (Mumbai) or `us-central1`.
    - **Authentication:** Check **Allow unauthenticated invocations** (so hackathon judges can access the live link).
    - **Port:** `8080`.
@@ -47,7 +47,7 @@ This is the fastest and most reliable deployment method for hackathon evaluation
 7. Click **Create**.
 8. Cloud Build will automatically build the container image and deploy it. In 2–3 minutes, you will receive your public HTTPS URL:
    ```
-   https://arogyasetu-xxxxxxxx-xx.a.run.app
+   https://pranavahini-xxxxxxxx-xx.a.run.app
    ```
 
 ---
@@ -65,7 +65,7 @@ gcloud config set project YOUR_PROJECT_ID
 gcloud services enable run.googleapis.com cloudbuild.googleapis.com
 
 # 3. Build and deploy directly from source
-gcloud run deploy arogyasetu \
+gcloud run deploy pranavahini \
     --source . \
     --platform managed \
     --region asia-south1 \
@@ -84,7 +84,7 @@ If your Google Cloud account is pending verification or billing activation, you 
 2. Connect your GitHub repository.
 3. Select **Docker** as the runtime (Render will automatically detect the root `Dockerfile`).
 4. Choose the Free instance type and add your `GEMINI_API_KEY` under Environment Variables.
-5. Click **Deploy Web Service** to obtain a public URL (e.g. `https://arogyasetu.onrender.com`).
+5. Click **Deploy Web Service** to obtain a public URL (e.g. `https://pranavahini.onrender.com`).
 
 ---
 

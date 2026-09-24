@@ -49,7 +49,7 @@ export function Header() {
   const notificationsRef = useRef(null);
 
   const [isSimulatedOffline, setIsSimulatedOffline] = useState(() => {
-    return typeof window !== 'undefined' ? Boolean(window.__PRANAVAHINI_OFFLINE_SIMULATED__ || window.__AROGYA_OFFLINE_SIMULATED__) : false;
+    return typeof window !== 'undefined' ? Boolean(window.__PRANAVAHINI_OFFLINE_SIMULATED__) : false;
   });
   const [isOnline, setIsOnline] = useState(() => {
     return typeof navigator !== 'undefined' ? navigator.onLine : true;
@@ -87,7 +87,7 @@ export function Header() {
   useEffect(() => {
     const updateQueueCount = () => {
       try {
-        const queue = JSON.parse(localStorage.getItem('pranavahini_offline_dispense_queue') || localStorage.getItem('arogyasetu_offline_dispense_queue') || '[]');
+        const queue = JSON.parse(localStorage.getItem('pranavahini_offline_dispense_queue') || '[]');
         setOfflineQueueCount(queue.length);
       } catch {
         setOfflineQueueCount(0);
@@ -117,19 +117,16 @@ export function Header() {
     const next = !isSimulatedOffline;
     if (typeof window !== 'undefined') {
       window.__PRANAVAHINI_OFFLINE_SIMULATED__ = next;
-      window.__AROGYA_OFFLINE_SIMULATED__ = next;
     }
     setIsSimulatedOffline(next);
     if (!next) {
       window.dispatchEvent(new Event('online'));
       window.dispatchEvent(new Event('pranavahini:flush_offline_queue'));
-      window.dispatchEvent(new Event('arogyasetu:flush_offline_queue'));
     }
   };
 
   const triggerSyncNow = () => {
     window.dispatchEvent(new Event('pranavahini:flush_offline_queue'));
-    window.dispatchEvent(new Event('arogyasetu:flush_offline_queue'));
   };
 
   return (

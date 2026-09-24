@@ -564,11 +564,11 @@
   * **Full Codebase Refactoring:**
     - Frontend: Updated title, Header logo text, fallback monogram `PV`, translations (`en`, `mr`, `hi`), local storage keys (`pranavahini_lang`, `pranavahini_theme`, `pranavahini_offline_dispense_queue`), and custom events (`pranavahini:flush_offline_queue`).
     - Backend: Updated FastAPI metadata, static HTML fallback banners, and OpenAPI title to PranaVahini.
-    - Documentation: Synchronized `README.md`, `USER_GUIDE.md`, `explain_project.md`, `walkthrough.md`, `executive_report.html`, `arogyasetu_ui_design_audit.html`, and `docs/`.
+    - Documentation: Synchronized `README.md`, `USER_GUIDE.md`, `explain_project.md`, `walkthrough.md`, `executive_report.html`, `pranavahini_ui_design_audit.html`, and `docs/`.
   * **All 25 UI Audit Screenshots 100% Recaptured:**
     - Rerun headless Edge automation against the live application suite to refresh all 25 UI audit screenshots in `docs/ui_audit_assets/` bearing the new PranaVahini identity, badges, and Marathi/Hindi typography.
   * **Recompiled Vector PDF Dossier:**
-    - Generated fresh vector PDF dossier `pranavahini_ui_design_audit.pdf` (6.78 MB) and synchronized `arogyasetu_ui_design_audit.pdf`.
+    - Generated fresh vector PDF dossier `pranavahini_ui_design_audit.pdf` (6.78 MB).
 * **Deterministic Verification:**
   - Frontend compiled in 1.92s with 0 errors (`dist/index.html`).
   - Active batches verified at 182 across UI and backend (`/api/health`).
