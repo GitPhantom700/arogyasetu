@@ -31,8 +31,8 @@ PranaVahini connects these fragmented rural clinics into an intelligent, coopera
 │                   PranaVahini Enterprise Command Center UI                       │
 │         React 19 • Vite • Tailwind CSS • Lucide Icons • Port 5173                │
 │                                                                                  │
-│  [🗺️ Geospatial Map]  [📦 Facility Stocks]   [🤖 AI Rebalancer] [🚚 Transfers & Ledger] │
-│  [📷 Field Portal & OCR] [🛡️ AI Safety Modal] [⚡ Crisis Sim]    [🌓 Dark/Light]       │
+│   [Geospatial Map]   [Facility Stocks]   [AI Rebalancer]   [Transfers & Ledger]  │
+│   [Field Portal & OCR]   [AI Safety Modal]  [Crisis Simulator]   [Theme Toggle]  │
 └────────────────────────────────────────┬─────────────────────────────────────────┘
                                          │ HTTP REST & SSE EventSource
                                          ▼
@@ -67,11 +67,11 @@ PranaVahini connects these fragmented rural clinics into an intelligent, coopera
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │                   Persistent Relational Core (healthcare.db)                     │
 │                                                                                  │
-│   • facilities (15 PHCs)                 • medicines (10 Emergency Formulations) │
-│   • stock_batches (182 Active Batches / 183 Total) • inventory_transactions (192 SHA-256 Blocks) │
-│   • transfers (State Machine Lifecycle)  • alerts (SSE Event Log)                │
-│   • ai_safety_violations (Audit Log)     • crisis_snapshots (Durable Recovery)   │
-│   • PRAGMA busy_timeout = 30000          • PRAGMA journal_mode = WAL             │
+│   • facilities (15 Rural PHCs)          • medicines (10 Emergency Formulations)  │
+│   • stock_batches (182 Active / 183)    • inventory_transactions (192 Blocks)    │
+│   • transfers (State Machine Lifecycle) • alerts (Real-Time SSE Event Stream)    │
+│   • ai_safety_violations (Audit Log)    • crisis_snapshots (Durable Recovery)    │
+│   • PRAGMA busy_timeout = 30000         • PRAGMA journal_mode = WAL              │
 └──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
