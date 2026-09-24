@@ -67,7 +67,7 @@ The navigation sidebar reflects the exact modules active in the application:
 ![Consolidated Facility Inventory Grid](docs/ui_audit_assets/05_facility_stocks_en.png)
 
 - **Localized Inventory Management (मराठी):**
-  - Regionalized inventory table with authentic gazetteer phrasing (*साठा संपण्याचा वेग*, *शिल्लक साठा (दिवस)*).
+  - Regionalized facility stock inventory grid with authentic Maharashtra DHS gazetteer phrasing (*आरोग्य केंद्रांमधील औषध साठा व साठा संपण्याचा वेग*, *सुरक्षित साठा*, *पुनर्संतुलन करा*), seamlessly linking to batch-level depletion velocity (*साठा संपण्याचा वेग*) and days of inventory remaining (*शिल्लक साठा (दिवस)*).
 
 ![Facility Stocks (मराठी)](docs/ui_audit_assets/19_facility_stocks_mr.png)
 

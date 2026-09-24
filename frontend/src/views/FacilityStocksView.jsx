@@ -20,8 +20,145 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 
+const FACILITY_DIRECTORY = {
+  'DH-PUN-01': {
+    name_mr: 'जिल्हा रुग्णालय औंध',
+    name_hi: 'जिला अस्पताल औंध',
+    block_en: 'Aundh (Haveli)',
+    block_mr: 'औंध (हवेली)',
+    block_hi: 'औंध (हवेली)'
+  },
+  'SDH-PUN-01': {
+    name_mr: 'उपजिल्हा रुग्णालय शिरूर',
+    name_hi: 'उप-जिला अस्पताल शिरूर',
+    block_en: 'Shirur',
+    block_mr: 'शिरूर',
+    block_hi: 'शिरूर'
+  },
+  'CHC-PUN-01': {
+    name_mr: 'समुदाय आरोग्य केंद्र खेड',
+    name_hi: 'सामुदायिक स्वास्थ्य केंद्र खेड',
+    block_en: 'Khed (Rajgurunagar)',
+    block_mr: 'खेड (राजगुरुनगर)',
+    block_hi: 'खेड (राजगुरुनगर)'
+  },
+  'CHC-PUN-02': {
+    name_mr: 'समुदाय आरोग्य केंद्र जुन्नर',
+    name_hi: 'सामुदायिक स्वास्थ्य केंद्र जुन्नर',
+    block_en: 'Junnar',
+    block_mr: 'जुन्नर',
+    block_hi: 'जुन्नर'
+  },
+  'PHC-PUN-01': {
+    name_mr: 'प्राथमिक आरोग्य केंद्र कल्याणपूर',
+    name_hi: 'प्राथमिक स्वास्थ्य केंद्र कल्याणपुर',
+    block_en: 'Haveli',
+    block_mr: 'हवेली',
+    block_hi: 'हवेली'
+  },
+  'PHC-PUN-02': {
+    name_mr: 'प्राथमिक आरोग्य केंद्र पौड',
+    name_hi: 'प्राथमिक स्वास्थ्य केंद्र पौड',
+    block_en: 'Mulshi (Paud)',
+    block_mr: 'मुळशी (पौड)',
+    block_hi: 'मुळशी (पौड)'
+  },
+  'PHC-PUN-03': {
+    name_mr: 'प्राथमिक आरोग्य केंद्र नारायणगाव',
+    name_hi: 'प्राथमिक स्वास्थ्य केंद्र नारायणगांव',
+    block_en: 'Junnar (Narayangaon)',
+    block_mr: 'जुन्नर (नारायणगाव)',
+    block_hi: 'जुन्नर (नारायणगांव)'
+  },
+  'PHC-PUN-04': {
+    name_mr: 'प्राथमिक आरोग्य केंद्र सासवड',
+    name_hi: 'प्राथमिक स्वास्थ्य केंद्र सासवड',
+    block_en: 'Purandar (Saswad)',
+    block_mr: 'पुरंदर (सासवड)',
+    block_hi: 'पुरंदर (सासवड)'
+  },
+  'SC-PUN-01': {
+    name_mr: 'उपकेंद्र वेल्हे (घाट परिसर)',
+    name_hi: 'उप-केंद्र वेल्हे (घाट क्षेत्र)',
+    block_en: 'Velhe (Ghat)',
+    block_mr: 'वेल्हे (घाट)',
+    block_hi: 'वेल्हे (घाट)'
+  },
+  'DH-SAT-01': {
+    name_mr: 'क्रांतीसिंह नाना पाटील जिल्हा रुग्णालय (सातारा)',
+    name_hi: 'क्रांतिसिंह नाना पाटिल जिला अस्पताल (सतारा)',
+    block_en: 'Satara City',
+    block_mr: 'सातारा शहर',
+    block_hi: 'सातारा शहर'
+  },
+  'SDH-SAT-01': {
+    name_mr: 'उपजिल्हा रुग्णालय कराड',
+    name_hi: 'उप-जिला अस्पताल कराड',
+    block_en: 'Karad',
+    block_mr: 'कराड',
+    block_hi: 'कराड'
+  },
+  'CHC-SAT-01': {
+    name_mr: 'समुदाय आरोग्य केंद्र वाई',
+    name_hi: 'सामुदायिक स्वास्थ्य केंद्र वाई',
+    block_en: 'Wai',
+    block_mr: 'वाई',
+    block_hi: 'वाई'
+  },
+  'PHC-SAT-01': {
+    name_mr: 'प्राथमिक आरोग्य केंद्र मेढा (जावळी)',
+    name_hi: 'प्राथमिक स्वास्थ्य केंद्र मेढा (जावली)',
+    block_en: 'Jawali (Medha)',
+    block_mr: 'जावळी (मेढा)',
+    block_hi: 'जावली (मेढा)'
+  },
+  'PHC-SAT-02': {
+    name_mr: 'प्राथमिक आरोग्य केंद्र खंडाळा',
+    name_hi: 'प्राथमिक स्वास्थ्य केंद्र खंडाला',
+    block_en: 'Khandala',
+    block_mr: 'खंडाळा',
+    block_hi: 'खंडाला'
+  },
+  'SC-SAT-01': {
+    name_mr: 'उपकेंद्र महाबळेश्वर (वन सीमा)',
+    name_hi: 'उप-केंद्र महाबलेश्वर (वन क्षेत्र)',
+    block_en: 'Mahabaleshwar',
+    block_mr: 'महाबळेश्वर',
+    block_hi: 'महाबलेश्वर'
+  }
+};
+
+function getFacilityDetails(fac, lang) {
+  const code = fac.facility_code;
+  let match = FACILITY_DIRECTORY[code];
+  if (!match) {
+    const n = fac.name || '';
+    if (n.includes('Aundh')) match = FACILITY_DIRECTORY['DH-PUN-01'];
+    else if (n.includes('Shirur')) match = FACILITY_DIRECTORY['SDH-PUN-01'];
+    else if (n.includes('Khed')) match = FACILITY_DIRECTORY['CHC-PUN-01'];
+    else if (n.includes('Junnar')) match = FACILITY_DIRECTORY['CHC-PUN-02'];
+    else if (n.includes('Kalyanpur')) match = FACILITY_DIRECTORY['PHC-PUN-01'];
+    else if (n.includes('Paud')) match = FACILITY_DIRECTORY['PHC-PUN-02'];
+    else if (n.includes('Narayangaon')) match = FACILITY_DIRECTORY['PHC-PUN-03'];
+    else if (n.includes('Saswad')) match = FACILITY_DIRECTORY['PHC-PUN-04'];
+    else if (n.includes('Velhe')) match = FACILITY_DIRECTORY['SC-PUN-01'];
+    else if (n.includes('Nana Patil') || n.includes('Kranti')) match = FACILITY_DIRECTORY['DH-SAT-01'];
+    else if (n.includes('Karad')) match = FACILITY_DIRECTORY['SDH-SAT-01'];
+    else if (n.includes('Wai')) match = FACILITY_DIRECTORY['CHC-SAT-01'];
+    else if (n.includes('Medha') || n.includes('Jawali')) match = FACILITY_DIRECTORY['PHC-SAT-01'];
+    else if (n.includes('Khandala')) match = FACILITY_DIRECTORY['PHC-SAT-02'];
+    else if (n.includes('Mahabaleshwar')) match = FACILITY_DIRECTORY['SC-SAT-01'];
+  }
+
+  const marathiName = match?.name_mr || fac.name_mr || null;
+  const hindiName = match?.name_hi || fac.name_hi || null;
+  const block = fac.block || (lang === 'mr' ? match?.block_mr : lang === 'hi' ? match?.block_hi : match?.block_en);
+
+  return { marathiName, hindiName, block };
+}
+
 export function FacilityStocksView() {
-  const { setSelectedFacilityId, setActiveTab, t, facilityStatusMap, depletionData: contextDepletionData } = useUI();
+  const { setSelectedFacilityId, setActiveTab, t, language, facilityStatusMap, depletionData: contextDepletionData } = useUI();
   const { showToast } = useAlerts();
   const addToast = showToast;
   const [facilities, setFacilities] = useState([]);
@@ -91,10 +228,10 @@ export function FacilityStocksView() {
   const filteredFacilities = facilities.filter(fac => {
     if (selectedDistrict !== 'ALL' && fac.district !== selectedDistrict) return false;
     if (selectedTier !== 'ALL') {
-      const type = (fac.facility_type || '').toUpperCase();
+      const type = (fac.tier || fac.facility_type || '').toUpperCase();
       if (selectedTier === 'PHC' && !type.includes('PHC')) return false;
       if (selectedTier === 'SUB_CENTRE' && !type.includes('SUB') && !type.includes('SC')) return false;
-      if (selectedTier === 'HOSPITAL' && !type.includes('HOSPITAL') && !type.includes('SDH') && !type.includes('RH')) return false;
+      if (selectedTier === 'HOSPITAL' && !type.includes('HOSPITAL') && !type.includes('SDH') && !type.includes('RH') && !type.includes('DH')) return false;
     }
     if (selectedTriage !== 'ALL') {
       const isCrit = isFacilityCritical(fac);
@@ -106,7 +243,10 @@ export function FacilityStocksView() {
       const matchName = (fac.name || '').toLowerCase().includes(q);
       const matchBlock = (fac.block || '').toLowerCase().includes(q);
       const matchDist = (fac.district || '').toLowerCase().includes(q);
-      return matchName || matchBlock || matchDist;
+      const { marathiName, hindiName } = getFacilityDetails(fac, language);
+      const matchMarathi = (marathiName || '').toLowerCase().includes(q);
+      const matchHindi = (hindiName || '').toLowerCase().includes(q);
+      return matchName || matchBlock || matchDist || matchMarathi || matchHindi;
     }
     return true;
   });
@@ -114,8 +254,8 @@ export function FacilityStocksView() {
   const criticalCount = facilities.filter(f => isFacilityCritical(f)).length;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header */}
+    <div className="space-y-4 animate-fade-in pb-12">
+      {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
@@ -131,44 +271,68 @@ export function FacilityStocksView() {
           type="button"
           onClick={loadData}
           disabled={loading}
-          className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition self-start md:self-auto"
+          className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition self-start md:self-auto cursor-pointer"
         >
           <RotateCw className={clsx("w-3.5 h-3.5", loading && "animate-spin")} />
-          <span>Refresh Stocks</span>
+          <span>{t('btn_refresh_stocks', 'Refresh Stocks')}</span>
         </button>
       </div>
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3.5 rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border shadow-xs space-y-1">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Facilities</span>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            {t('total_facilities_kpi', 'Total Facilities')}
+          </span>
           <div className="flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">{facilities.length}</span>
-            <span className="text-[10px] text-emerald-600 font-bold">100% Monitored</span>
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              {language === 'mr' ? facilities.length.toLocaleString('mr-IN') : facilities.length}
+            </span>
+            <span className="text-[10px] text-emerald-600 font-bold">
+              {t('monitored_100_kpi', '100% Monitored')}
+            </span>
           </div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border shadow-xs space-y-1">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Critical Stockouts</span>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            {t('critical_stockouts_kpi', 'Critical Stockouts')}
+          </span>
           <div className="flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400">{criticalCount}</span>
-            <span className="text-[10px] text-rose-500 font-semibold">&lt; 48h Supply</span>
+            <span className="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-400">
+              {language === 'mr' ? criticalCount.toLocaleString('mr-IN') : criticalCount}
+            </span>
+            <span className="text-[10px] text-rose-500 font-semibold">
+              {t('supply_sub_48h', '< 48h Supply')}
+            </span>
           </div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border shadow-xs space-y-1">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Cold-Chain Storage</span>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            {t('cold_chain_kpi', 'Cold-Chain Storage')}
+          </span>
           <div className="flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">+2° to +8°C</span>
-            <span className="text-[10px] text-slate-400">ILR Active</span>
+            <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">
+              {language === 'mr' ? '+२° ते +८°C' : '+2° to +8°C'}
+            </span>
+            <span className="text-[10px] text-slate-400">
+              {t('ilr_active_kpi', 'ILR Active')}
+            </span>
           </div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border shadow-xs space-y-1">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Districts</span>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            {t('districts_kpi', 'Districts')}
+          </span>
           <div className="flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">2</span>
-            <span className="text-[10px] text-slate-400">Pune & Satara</span>
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              {language === 'mr' ? (2).toLocaleString('mr-IN') : 2}
+            </span>
+            <span className="text-[10px] text-slate-400">
+              {t('pune_satara_districts', 'Pune & Satara')}
+            </span>
           </div>
         </div>
       </div>
@@ -184,7 +348,7 @@ export function FacilityStocksView() {
                 type="button"
                 onClick={() => setSelectedDistrict(dist)}
                 className={clsx(
-                  "px-3 py-1 rounded-lg text-xs font-bold transition",
+                  "px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer",
                   selectedDistrict === dist
                     ? "bg-white dark:bg-brand-dark-surface text-slate-900 dark:text-white shadow-xs"
                     : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
@@ -208,7 +372,7 @@ export function FacilityStocksView() {
                 type="button"
                 onClick={() => setSelectedTier(tier.id)}
                 className={clsx(
-                  "px-2.5 py-1 rounded-lg text-xs font-bold transition",
+                  "px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer",
                   selectedTier === tier.id
                     ? "bg-white dark:bg-brand-dark-surface text-slate-900 dark:text-white shadow-xs"
                     : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
@@ -222,16 +386,16 @@ export function FacilityStocksView() {
           {/* Stock Triage Filter */}
           <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             {[
-              { id: 'ALL', label: 'All Status' },
-              { id: 'CRITICAL', label: 'Critical' },
-              { id: 'ADEQUATE', label: 'Adequate' }
+              { id: 'ALL', label: t('all_status_filter', 'All Status') },
+              { id: 'CRITICAL', label: t('status_critical_filter', 'Critical') },
+              { id: 'ADEQUATE', label: t('status_adequate_filter', 'Adequate') }
             ].map(tri => (
               <button
                 key={tri.id}
                 type="button"
                 onClick={() => setSelectedTriage(tri.id)}
                 className={clsx(
-                  "px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5",
+                  "px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer",
                   selectedTriage === tri.id
                     ? (tri.id === 'CRITICAL'
                         ? "bg-rose-600 text-white shadow-xs"
@@ -256,7 +420,7 @@ export function FacilityStocksView() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search facility or block..."
+            placeholder={t('search_facility_placeholder', 'Search facility or block...')}
             className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
@@ -296,16 +460,29 @@ export function FacilityStocksView() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredFacilities.map(fac => {
             const hasCritical = isFacilityCritical(fac);
-            const marathiName = fac.name_mr || (
-              fac.name.includes('Paud') ? 'प्राथमिक आरोग्य केंद्र पौड' :
-              fac.name.includes('Velhe') ? 'उपकेंद्र वेल्हे' :
-              fac.name.includes('Khandala') ? 'प्राथमिक आरोग्य केंद्र खंडाळा' :
-              fac.name.includes('Shirur') ? 'उपजिल्हा रुग्णालय शिरूर' :
-              fac.name.includes('Saswad') ? 'ग्रामीण रुग्णालय सासवड' :
-              fac.name.includes('Mahabaleshwar') ? 'उपकेंद्र महाबळेश्वर' :
-              fac.name.includes('Aundh') ? 'जिल्हा रुग्णालय औंध' :
-              fac.name.includes('Satara') ? 'जिल्हा रुग्णालय सातारा' : null
-            );
+            const { marathiName, hindiName, block } = getFacilityDetails(fac, language);
+            const subtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : marathiName);
+
+            const tierCode = fac.tier || fac.facility_type || 'PHC';
+            const tierKey = {
+              'DH': 'tier_dh',
+              'SDH': 'tier_sdh',
+              'CHC': 'tier_chc',
+              'PHC': 'tier_phc_badge',
+              'SC': 'tier_sc'
+            }[tierCode] || 'tier_phc_badge';
+            const tierLabel = t(tierKey, tierCode);
+
+            const districtName = fac.district === 'Pune' ? t('pune_district', 'Pune') : t('satara_district', 'Satara');
+            const terrainKey = {
+              'GHAT_MOUNTAIN': 'terrain_ghat',
+              'HIGHWAY_CORRIDOR': 'terrain_highway',
+              'PLAINS': 'terrain_plains'
+            }[fac.terrain_type] || 'terrain_plains';
+            const terrainLabel = t(terrainKey, fac.terrain_type?.replace('_', ' ') || 'Plains');
+
+            const rawStock = fac.total_stock != null ? fac.total_stock : (fac.total_quantity != null ? fac.total_quantity : 1200);
+            const stockFormatted = language === 'mr' ? rawStock.toLocaleString('mr-IN') : rawStock.toLocaleString();
 
             return (
               <div
@@ -321,39 +498,41 @@ export function FacilityStocksView() {
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                        {fac.facility_type}
+                        {tierLabel}
                       </span>
                       <h3 className="font-bold text-sm text-slate-900 dark:text-white mt-1">
                         {fac.name}
                       </h3>
-                      {marathiName && (
+                      {subtitle && (
                         <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold font-serif">
-                          {marathiName}
+                          {subtitle}
                         </p>
                       )}
                     </div>
 
                     <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 shrink-0">
                       <Thermometer className="w-3.5 h-3.5 text-blue-500" />
-                      <span>+4°C ILR</span>
+                      <span>{t('cold_chain_badge', '+4°C ILR')}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-2">
+                  <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-2 flex-wrap">
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-rose-500" />
-                      <span>{fac.block}, {fac.district}</span>
+                      <MapPin className="w-3 h-3 text-rose-500 shrink-0" />
+                      <span>{block ? `${block}, ${districtName}` : districtName}</span>
                     </span>
                     <span>•</span>
-                    <span className="capitalize">{fac.terrain_type?.replace('_', ' ') || 'Plain'}</span>
+                    <span>{terrainLabel}</span>
                   </div>
 
                   {/* Stock Status Bar */}
                   <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
                     <div>
-                      <span className="text-[10px] text-slate-400 font-semibold block">Total Stock Available</span>
+                      <span className="text-[10px] text-slate-400 font-semibold block">
+                        {t('total_stock_available_label', 'Total Stock Available')}
+                      </span>
                       <span className="font-black text-slate-900 dark:text-white text-sm">
-                        {fac.total_stock != null ? fac.total_stock.toLocaleString() : (fac.total_quantity != null ? fac.total_quantity.toLocaleString() : '1,200')} units
+                        {stockFormatted} {t('units_suffix', 'units')}
                       </span>
                     </div>
 
