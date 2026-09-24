@@ -2,6 +2,10 @@
 
 This guide details the step-by-step procedure to deploy **PranaVahini** to **Google Cloud Run** for the **Build with AI: Code for Communities (Second Edition)** hackathon.
 
+> **Live Production URL:** [https://pranavahini-615569835878.asia-south2.run.app](https://pranavahini-615569835878.asia-south2.run.app)  
+> **Interactive Swagger API:** [https://pranavahini-615569835878.asia-south2.run.app/docs](https://pranavahini-615569835878.asia-south2.run.app/docs)  
+> **Executive Report & Dossier:** [https://pranavahini-615569835878.asia-south2.run.app/report](https://pranavahini-615569835878.asia-south2.run.app/report)  
+
 ---
 
 ## 🏗️ Deployment Architecture
@@ -47,7 +51,7 @@ This is the fastest and most reliable deployment method for hackathon evaluation
 7. Click **Create**.
 8. Cloud Build will automatically build the container image and deploy it. In 2–3 minutes, you will receive your public HTTPS URL:
    ```
-   https://pranavahini-xxxxxxxx-xx.a.run.app
+   https://pranavahini-615569835878.asia-south2.run.app
    ```
 
 ---

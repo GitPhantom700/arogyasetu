@@ -3,9 +3,9 @@
 > **Track 03:** Smart Health & Supply Chain Resilience (Theme: Resilience)  
 > **Event:** Build with AI: Code for Communities (Second Edition) — Hack2Skill & Google Cloud  
 > **Geographic Focus:** 15 Healthcare Facilities across Pune & Satara Districts, Western Ghats, Maharashtra  
-> **Live Cloud Run Deployment:** [https://arogyasetu-615569835878.asia-south2.run.app](https://arogyasetu-615569835878.asia-south2.run.app)  
-> **Interactive API Swagger:** [https://arogyasetu-615569835878.asia-south2.run.app/docs](https://arogyasetu-615569835878.asia-south2.run.app/docs)  
-> **Executive Report & Dossier:** [https://arogyasetu-615569835878.asia-south2.run.app/report](https://arogyasetu-615569835878.asia-south2.run.app/report)  
+> **Live Cloud Run Deployment:** [https://pranavahini-615569835878.asia-south2.run.app](https://pranavahini-615569835878.asia-south2.run.app)  
+> **Interactive API Swagger:** [https://pranavahini-615569835878.asia-south2.run.app/docs](https://pranavahini-615569835878.asia-south2.run.app/docs)  
+> **Executive Report & Dossier:** [https://pranavahini-615569835878.asia-south2.run.app/report](https://pranavahini-615569835878.asia-south2.run.app/report)  
 
 ---
 
