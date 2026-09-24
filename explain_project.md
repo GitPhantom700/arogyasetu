@@ -1,4 +1,4 @@
-🩺 ArogyaSetu Explained (Like You're in 10th Grade)
+🩺 PranaVahini Explained (Like You're in 10th Grade)
 Imagine this real-life story:
 
 1. The Real-Life Problem (The Scene)
@@ -15,8 +15,8 @@ Just 18 kilometers away, in the neighboring town's clinic, their fridge has 100 
 
 Because the two clinics aren't talking to each other in real-time, one village has people in danger while the next town has medicine gathering dust.
 
-2. What ArogyaSetu Does (The "Smart Medical Bridge")
-ArogyaSetu connects all 15 rural clinics in the district into one unified, live network.
+2. What PranaVahini Does (The "Smart Medical Lifeline")
+PranaVahini connects all 15 rural clinics in the district into one unified, live network.
 
 Instead of waiting for a slow truck from the city warehouse, the system notices:
 

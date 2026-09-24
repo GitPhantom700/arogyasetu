@@ -138,7 +138,7 @@ export function Header() {
           <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-emerald-500/20 border border-teal-500/30 bg-white flex items-center justify-center flex-shrink-0">
             <img
               src="/logo.jpg"
-              alt="ArogyaSetu Logo"
+              alt="PranaVahini Logo"
               className="w-full h-full object-cover"
               onError={(e) => {
                 if (!e.currentTarget.dataset.retried) {
@@ -147,7 +147,7 @@ export function Header() {
                 } else {
                   e.currentTarget.style.display = 'none';
                   e.currentTarget.parentElement.classList.add('bg-gradient-to-tr', 'from-emerald-600', 'to-teal-500', 'text-white');
-                  e.currentTarget.parentElement.innerHTML = '<span class="font-display font-black text-xl tracking-tight">AS</span>';
+                  e.currentTarget.parentElement.innerHTML = '<span class="font-display font-black text-xl tracking-tight">PV</span>';
                 }
               }}
             />
@@ -155,7 +155,7 @@ export function Header() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-display font-bold text-lg text-slate-900 dark:text-white tracking-tight leading-none">
-                {t('brand_name', 'ArogyaSetu')}
+                {t('brand_name', 'PranaVahini')}
               </h1>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-emerald-100 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
                 {t('brand_subtitle', 'Command Center')}

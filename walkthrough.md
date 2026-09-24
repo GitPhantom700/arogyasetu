@@ -1,8 +1,8 @@
-# ArogyaSetu — UI Design Audit & Usability Dossier Walkthrough (Complete App Coverage)
+# PranaVahini (प्राणवाहिनी) — UI Design Audit & Usability Dossier Walkthrough (Complete App Coverage)
 
 ## 1. Executive Summary & Full App Coverage
 
-In response to the user's requirement to **"cover the entire app"**, the UI Design Audit Dossier has been expanded from a high-level overview into an **exhaustive 23-screen visual and cognitive audit** covering every view, sub-view, modal, slide-over drawer, language variation (English, Marathi, Hindi), and operational failure mode across the ArogyaSetu platform.
+In response to the user's requirement to **"cover the entire app"**, the UI Design Audit Dossier has been expanded from a high-level overview into an **exhaustive 23-screen visual and cognitive audit** covering every view, sub-view, modal, slide-over drawer, language variation (English, Marathi, Hindi), and operational failure mode across the PranaVahini platform.
 
 📄 **Generated Vector PDF Dossier:** [arogyasetu_ui_design_audit.pdf](arogyasetu_ui_design_audit.pdf)  
 📊 **Dossier Size:** **8.30 MB** • **23 Audited Views & Interactive Workflows** • **WCAG 2.1 AAA Compliant**

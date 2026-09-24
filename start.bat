@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 echo ==============================================================================
-echo   ArogyaSetu — 1-Click Evaluator Runner
+echo   PranaVahini (प्राणवाहिनी) — 1-Click Evaluator Runner
 echo   Healthcare Supply Chain ^& Emergency Logistics Platform
 echo   Build with AI: Code for Communities (Second Edition)
 echo ==============================================================================

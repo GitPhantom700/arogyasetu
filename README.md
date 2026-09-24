@@ -1,4 +1,4 @@
-# ArogyaSetu (आरोग्यसेतु) — Public Health Logistics Command Center
+# PranaVahini (प्राणवाहिनी) — Public Health Logistics Command Center
 
 > **Track 03:** Smart Health & Supply Chain Resilience (Theme: Resilience)  
 > **Event:** Build with AI: Code for Communities (Second Edition) — Hack2Skill & Google Cloud  
@@ -11,11 +11,11 @@
 
 ## 🌟 Executive Overview
 
-**ArogyaSetu** is an autonomous, federated emergency healthcare logistics and stock rebalancing platform engineered specifically for rural primary health networks in India. 
+**PranaVahini (प्राणवाहिनी)** is an autonomous, federated emergency healthcare logistics and stock rebalancing platform engineered specifically for rural primary health networks in India. 
 
 In remote regions of the Western Ghats (Sahyadri), emergency stockouts of critical life-saving medications—such as **Polyvalent Anti-Snake Venom (ASV)**, **Anti-Rabies Vaccines (ARV)**, and **Human Insulin**—frequently lead to preventable fatalities because central district warehouses take days to dispatch supplies over flooded mountain roads. However, neighboring Primary Health Centres just 15–30 km away often hold surplus supplies that could save a patient's life within hours.
 
-ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperative mesh that:
+PranaVahini connects these fragmented rural clinics into an intelligent, cooperative mesh that:
 1. **Detects Acute Depletions in Real-Time:** Monitors facility burn rates and calculates dynamic Days of Inventory Remaining (DIR).
 2. **Orchestrates Peer-to-Peer Rebalancing:** Uses Google Gemini AI and multi-objective optimization to calculate optimal donor clinics within a 50 km radius.
 3. **Guarantees Medical & AI Safety:** Enforces a deterministic invariant firewall that physically prevents donor starvation, eliminates phantom inventory, and respects cold-chain and mountain transit physics.
@@ -28,7 +28,7 @@ ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperat
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐
-│                   ArogyaSetu Enterprise Command Center UI                        │
+│                   PranaVahini Enterprise Command Center UI                       │
 │         React 19 • Vite • Tailwind CSS • Lucide Icons • Port 5173                │
 │                                                                                  │
 │  [🗺️ Geospatial Map]  [📦 Facility Stocks]   [🤖 AI Rebalancer] [🚚 Transfers & Ledger] │
@@ -79,7 +79,7 @@ ArogyaSetu connects these fragmented rural clinics into an intelligent, cooperat
 
 ## 🛡️ AI Safety Guardrails & The 6 Core Physical Invariants
 
-ArogyaSetu enforces a strict **Zero-Hallucination, Zero-Harm** policy. All recommendations produced by Google Gemini models must pass through the deterministic `AISafetyGuard` firewall:
+PranaVahini enforces a strict **Zero-Hallucination, Zero-Harm** policy. All recommendations produced by Google Gemini models must pass through the deterministic `AISafetyGuard` firewall:
 
 | # | Physical Invariant | Formulation / Guard Condition | Safety Failure Mitigated |
 | :- | :--- | :--- | :--- |
@@ -104,7 +104,7 @@ When rural connectivity fails or cloud endpoints experience high latency:
 
 ## ⚙️ Core System Capabilities & Production Modules
 
-ArogyaSetu is engineered as a full-stack, closed-loop public health logistics platform providing role-tailored capabilities across the primary health network:
+PranaVahini is engineered as a full-stack, closed-loop public health logistics platform providing role-tailored capabilities across the primary health network:
 
 | Module / Capability | Primary Stakeholder | Operational Reality & Features |
 | :--- | :--- | :--- |
@@ -151,7 +151,7 @@ Create a `.env` file in the project root:
 ```env
 GEMINI_API_KEY=your_google_ai_studio_api_key_here
 ```
-*(Note: If no API key is provided, ArogyaSetu seamlessly operates in offline mode using the deterministic rule engine and clinical OCR emulator).*
+*(Note: If no API key is provided, PranaVahini seamlessly operates in offline mode using the deterministic rule engine and clinical OCR emulator).*
 
 ### 3. Launching the Services
 
@@ -172,7 +172,7 @@ npm --prefix frontend run dev
 
 ## 🧪 Test Verification & Quality Gates
 
-ArogyaSetu is validated against 107 automated backend regression tests across 16 test modules and strict frontend build checks:
+PranaVahini is validated against 107 automated backend regression tests across 16 test modules and strict frontend build checks:
 
 ```bash
 # Run full backend test suite (107 tests across 16 modules)
@@ -227,7 +227,7 @@ arogyasetu/
 ├── arogyasetu_ui_design_audit.html # Interactive Multi-View Audit Dossier & Adversarial AI Evaluation
 ├── walkthrough.md             # UI Design Audit walkthrough & Gemini evaluation response scorecard
 ├── executive_report.html      # Executive whitepaper, multi-model benchmark report & DSCSA ledger logs
-├── explain_project.md         # Intuitive 10th-grade educational guide to ArogyaSetu
+├── explain_project.md         # Intuitive 10th-grade educational guide to PranaVahini
 ├── implementation.md          # Locked 20-day master microtask roadmap
 ├── progress.md                # Daily progress log & 4-stage gate approval history
 ├── roadmap.md                 # Master phase roadmap & milestone tracker

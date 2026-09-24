@@ -37,8 +37,8 @@ from routes.abdm import router as abdm_router
 from routes.brics import router as brics_router
 
 app = FastAPI(
-    title="Healthcare Supply Chain & Emergency Logistics Platform",
-    description="Federated public health emergency logistics platform providing real-time visibility into medicine stocks, bed availability, and inter-PHC resource redistribution.",
+    title="PranaVahini (प्राणवाहिनी) — Public Health Logistics Platform",
+    description="Autonomous rural emergency healthcare logistics and inter-PHC medicine rebalancing engine for primary health networks.",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"

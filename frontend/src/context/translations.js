@@ -18,7 +18,7 @@ export const translations = {
     nav_crisis: 'Crisis Simulator',
 
     // Header & Global
-    brand_name: 'ArogyaSetu',
+    brand_name: 'PranaVahini',
     brand_subtitle: 'Command Center',
     brand_region: 'Maharashtra Rural Health Supply Chain • Pune & Satara Network',
     network_sync: 'Network Sync',
@@ -143,7 +143,7 @@ export const translations = {
     nav_crisis: 'आपत्कालीन सिम्युलेटर',
 
     // Header & Global
-    brand_name: 'आरोग्यसेतु',
+    brand_name: 'प्राणवाहिनी',
     brand_subtitle: 'नियंत्रण केंद्र',
     brand_region: 'पुणे व सातारा जिल्हे, महाराष्ट्र शासन',
     network_sync: 'नेटवर्क सिंक',
@@ -268,7 +268,7 @@ export const translations = {
     nav_crisis: 'संकट सिम्युलेटर',
 
     // Header & Global
-    brand_name: 'आरोग्यसेतु',
+    brand_name: 'प्राणवाहिनी',
     brand_subtitle: 'कमांड सेंटर',
     brand_region: 'पुणे एवं सतारा जिले, महाराष्ट्र',
     network_sync: 'नेटवर्क सिंक',
