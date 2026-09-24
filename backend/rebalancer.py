@@ -1,6 +1,6 @@
 """
 Autonomous Rebalancing Agent Core Engine (Google Gemini AI & Clinical Optimization).
-Build with AI: Code for Communities - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities - Track 03 Smart Health & Supply Chain Resilience.
 Microtask 3.3: Gemini Autonomous Rebalancing Agent.
 
 Features:

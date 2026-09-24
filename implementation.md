@@ -1,8 +1,8 @@
-# Track 01: Healthcare Supply Chain & Emergency Logistics
+# Track 03: Smart Health & Supply Chain Resilience (Theme: Resilience)
 ## 20-Day Anti-Hallucination Implementation Plan
 **Timeline:** September 5, 2026 – September 25, 2026  
 **Event:** Build with AI: Code for Communities (Second Edition) — Hack2Skill & Google  
-**Core Mandate:** A dynamic, stateful, end-to-end healthcare logistics platform with verified Google AI integration.
+**Core Mandate:** A federated AI platform for national-scale health resource and supply chain management across India's PHC network.
 
 ---
 

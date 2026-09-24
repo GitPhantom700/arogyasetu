@@ -1,6 +1,6 @@
 """
 Automated Test Suite for Microtask 3.3: Gemini Autonomous Rebalancing Agent.
-Build with AI: Code for Communities - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities - Track 03 Smart Health & Supply Chain Resilience.
 
 Tests:
 1. test_calculate_facility_deficit: Validates baseline deficit & target buffer calculation.

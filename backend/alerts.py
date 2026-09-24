@@ -1,6 +1,6 @@
 """
 Real-Time Alert & Event Engine for Public Health Emergency Logistics.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 Microtask 3.1: Server-Sent Events (SSE) Broadcaster & In-Memory Pub/Sub.
 
 Features:

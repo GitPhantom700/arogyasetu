@@ -1,6 +1,6 @@
 """
 Server-Sent Events (SSE) & Real-Time Alert REST API Routes.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 Microtask 3.1: Real-Time Alert Engine.
 """
 

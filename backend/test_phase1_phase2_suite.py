@@ -1,6 +1,6 @@
 """
 Master Phase 1 & Phase 2 Comprehensive Integration & Verification Suite.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 
 Verifies:
 1. Cross-Module Emergency Redistribution Workflow (Catalog -> Receipt -> Burn Rate -> Transfer -> Dispensing).

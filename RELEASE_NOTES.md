@@ -11,7 +11,7 @@ This initial production release delivers autonomous emergency medicine rebalanci
 ### 🌟 Key Highlights & Milestones
 
 #### 1. Core Logistics & Emergency Redistribution
-- **15 Simulated PHCs:** Realistic health network across Pune and Satara districts (Western Ghats) seeded with 180 critical medicine batches and 6 lifecycle transfers.
+- **15 Simulated PHCs:** Realistic health network across Pune and Satara districts (Western Ghats) seeded with 182 active critical medicine batches (183 total) and 13 lifecycle transfers.
 - **Dynamic Burn Rate Engine:** Real-time calculation of Daily Average Consumption (DAC), Days of Inventory Remaining (DIR), and acute surge velocities.
 - **Inter-PHC Transfer State Machine:** Complete 5-stage lifecycle (`REQUESTED` $\rightarrow$ `APPROVED` $\rightarrow$ `DISPATCHED` $\rightarrow$ `IN_TRANSIT` $\rightarrow$ `RECEIVED`) with physical return diversion on transit spoilage.
 - **Mountain Terrain Transit Physics:** Accurate travel calculations accounting for steep Sahyadri mountain ghat passes rather than flat geodesic lines.
@@ -23,7 +23,7 @@ This initial production release delivers autonomous emergency medicine rebalanci
 - **Thread-Safe Circuit Breaker:** Monotonic watchdog providing $< 5\text{ ms}$ offline fallback to linear programming when cloud connectivity is unavailable.
 
 #### 3. Sovereign Compliance & Cryptographic Integrity
-- **DSCSA & NHM Cryptographic Audit Trail:** Append-only SHA-256 Merkle chain across 180+ transaction blocks with zero mutation tolerance.
+- **DSCSA & NHM Cryptographic Audit Trail:** Append-only SHA-256 Merkle chain across 192 transaction blocks with zero mutation tolerance.
 - **ABDM Sovereign Stack Integration:** Mock registries supporting Health Facility Registry (HFR M1), Health Professional Registry (HPR M2), and cryptographic ABHA consent sealing (M3).
 - **BRICS+ Federated Learning Endpoints:** Global M4 weight and gradient synchronization endpoints with Laplace differential privacy noise addition.
 - **IoT Thermal Quarantine:** Cold-chain compromise quarantine endpoint (`/api/inventory/batches/{id}/flag-compromised`) with Optimistic Concurrency Control (OCC 409).
@@ -37,7 +37,7 @@ This initial production release delivers autonomous emergency medicine rebalanci
 #### 5. Verification & Test Coverage
 - **107 / 107 Backend Pytest Tests Passing (100% Green).**
 - **Production React 19 Frontend:** Built via Vite in 2.60s with 0 errors.
-- **Comprehensive 23-Screen UI/UX Design Audit Dossier:** (`pranavahini_ui_design_audit.pdf`, 8.30 MB).
+- **Comprehensive 25-Screen UI/UX Design Audit Dossier:** (`pranavahini_ui_design_audit.pdf`, 6.78 MB).
 
 ---
 

@@ -1,6 +1,6 @@
 """
 Crisis & Outbreak Simulation Engine for Public Health Emergency Logistics.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 Day 16: Microtask 5.1 — Crisis & Outbreak Simulation Engine.
 
 Enables emergency logistics coordinators to stress-test regional supply chains under acute shocks:

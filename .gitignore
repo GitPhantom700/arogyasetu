@@ -57,6 +57,7 @@ backenddecision.md
 temp_reviewrulechat.md
 output.pdf
 backend/*.db
+scratch/
 
 # Logs
 *.log

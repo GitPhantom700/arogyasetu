@@ -1,6 +1,6 @@
 """
 Crisis Simulation Engine REST API Routes.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 Day 16: Microtask 5.1 — Crisis & Outbreak Simulation Engine.
 
 Endpoints:

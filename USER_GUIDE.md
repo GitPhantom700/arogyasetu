@@ -12,9 +12,9 @@ The navigation sidebar reflects the exact modules active in the application:
 | :--- | :--- | :--- |
 | **Command Center** | District Medical Officer | Real-time network telemetry across 15 PHCs, critical stockout cards, active emergency alerts, executive metrics. |
 | **Geospatial Map** | Emergency Logistics Officer | Interactive Leaflet GIS map with dual-channel color/shape markers, mountain transit corridors, and facility slide-over drawers. |
-| **Facility Stocks** | District Pharmacist | Consolidated inventory grid across 180 stock batches, FEFO expiry countdowns, and cold-chain temperature telemetry. |
+| **Facility Stocks** | District Pharmacist | Consolidated inventory grid across 182 active stock batches (183 total), FEFO expiry countdowns, and cold-chain temperature telemetry. |
 | **AI Rebalancer** | Civil Surgeon / DMO | Autonomous peer-to-peer redistribution recommendations, mountain transit physics, medical SOAP explainability, and Human-in-the-Loop authorization. |
-| **Transfers & Ledger** | Regulatory / Logistics Officer | End-to-end transfer tracking across the 5-stage state machine, 180-block DSCSA Cryptographic Ledger Explorer, and 1-click ledger integrity verification. |
+| **Transfers & Ledger** | Regulatory / Logistics Officer | End-to-end transfer tracking across the 5-stage state machine, 192-block DSCSA Cryptographic Ledger Explorer, and 1-click ledger integrity verification. |
 | **Field Portal & OCR** | Rural PHC Nurse / ANM | Dual-mode frontline interface: Rapid touch dispensing logger with Marathi/Hindi speech dictation AND Multimodal Gemini 3.6 Flash Vision OCR for handwritten paper registers. |
 | **Crisis Simulator** | Disaster Response Team | Realistic epidemiological shock injection (Monsoon floods, snakebite spikes), automated swarm dispatch, and baseline state recovery. |
 
@@ -60,7 +60,7 @@ The navigation sidebar reflects the exact modules active in the application:
 ### 3. Consolidated Facility Stocks & FEFO Expiry Countdown
 - **Navigating:** Click **Facility Stocks** in the sidebar.
 - **Key Capabilities:**
-  - Searchable and filterable table across all 180 medicine batches distributed throughout the district.
+  - Searchable and filterable table across all 182 active medicine batches (183 total) distributed throughout the district.
   - First-Expiry-First-Out (FEFO) color-coded badges highlighting imminent shelf-life expirations.
   - Temperature compliance indicators verifying vaccine and antivenom cold-chain integrity.
 
@@ -124,7 +124,7 @@ The navigation sidebar reflects the exact modules active in the application:
 
 - **Sub-Tab 2: DSCSA Cryptographic Ledger Explorer:**
   - Switch to the **DSCSA Cryptographic Ledger Explorer** tab to inspect the blockchain-grade audit trail.
-  - Browse all 180+ SHA-256 transaction blocks with chronological timestamps, GS1 Global Location Numbers (GLN), Global Trade Item Numbers (GTIN), batch numbers, and quantity mutations.
+  - Browse all 192 SHA-256 transaction blocks with chronological timestamps, GS1 Global Location Numbers (GLN), Global Trade Item Numbers (GTIN), batch numbers, and quantity mutations.
   - Click any hash badge to copy the full 64-character SHA-256 hexadecimal hash.
 
 ![DSCSA Cryptographic Ledger Explorer](docs/ui_audit_assets/10_dscsa_block_ledger.png)
@@ -132,7 +132,7 @@ The navigation sidebar reflects the exact modules active in the application:
 - **Verifying Ledger Integrity:**
   - Click the green **Verify DSCSA Ledger** button at top right.
   - The **DSCSA Cryptographic Audit Verification Modal** appears, computing every contiguous parent-child hash pointer in real time.
-  - Displays `100% VALID`, `180 Verified Blocks`, `UNBROKEN Chain`, and the current tip block hash.
+  - Displays `100% VALID`, `192 Verified Blocks`, `UNBROKEN Chain`, and the current tip block hash.
 
 ---
 

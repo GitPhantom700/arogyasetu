@@ -288,7 +288,7 @@ export function TransfersLedgerView() {
             "px-2 py-0.5 rounded-full text-[10px] font-extrabold",
             activeViewTab === 'ledger' ? "bg-white/25 text-white" : "bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300"
           )}>
-            {ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 180} Blocks
+            {ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 192} Blocks
           </span>
         </button>
       </div>
@@ -310,7 +310,7 @@ export function TransfersLedgerView() {
                 </span>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-                All <strong>{ledgerStatus.total_blocks || ledgerStatus.total_transactions || 180}</strong> contiguous SHA-256 blocks verified with zero hash corruption or retroactive mutation.
+                All <strong>{ledgerStatus.total_blocks || ledgerStatus.total_transactions || 192}</strong> contiguous SHA-256 blocks verified with zero hash corruption or retroactive mutation.
               </p>
             </div>
           </div>
@@ -846,7 +846,7 @@ export function TransfersLedgerView() {
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 font-semibold uppercase block">Verified Blocks</span>
                 <span className="text-lg font-black text-slate-900 dark:text-white">
-                  {ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 180}
+                  {ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 192}
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">

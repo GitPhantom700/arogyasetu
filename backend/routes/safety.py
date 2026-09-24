@@ -1,6 +1,6 @@
 """
 AI Safety, Guardrails & Audit API Routes.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 Microtask 3.4: AI Safety, Guardrails & Fallback Audit.
 
 Endpoints:

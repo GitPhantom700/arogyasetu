@@ -68,7 +68,7 @@ PranaVahini connects these fragmented rural clinics into an intelligent, coopera
 │                   Persistent Relational Core (healthcare.db)                     │
 │                                                                                  │
 │   • facilities (15 PHCs)                 • medicines (10 Emergency Formulations) │
-│   • stock_batches (180 Batches)          • inventory_transactions (SHA-256)      │
+│   • stock_batches (182 Active Batches / 183 Total) • inventory_transactions (192 SHA-256 Blocks) │
 │   • transfers (State Machine Lifecycle)  • alerts (SSE Event Log)                │
 │   • ai_safety_violations (Audit Log)     • crisis_snapshots (Durable Recovery)   │
 │   • PRAGMA busy_timeout = 30000          • PRAGMA journal_mode = WAL             │
@@ -112,7 +112,7 @@ PranaVahini is engineered as a full-stack, closed-loop public health logistics p
 | **Autonomous AI Rebalancer** | Civil Surgeon / DMO | Multi-facility inventory redistribution powered by Google Gemini 3.6 Flash, calculating ghat pass transit hours and generating medical SOAP reasoning notes. |
 | **Deterministic Safety Firewall** | Clinical Governance Board | Hardcoded `AISafetyGuard` enforcing 6 physical invariants: zero donor starvation ($\ge 14\text{d}$ buffer, $\ge 21\text{d}$ in monsoon), mass conservation, and cold-chain validation. |
 | **Multimodal Vision OCR** | Rural PHC Pharmacist | Camera intake transcribing handwritten paper stock registers (*दैनिक औषध नोंदवही*) and state DHS delivery challans via Gemini 3.6 Flash Vision with RapidFuzz catalog matching. |
-| **Inter-PHC Transfers & DSCSA Ledger** | Drug Inspector / Auditor | End-to-end 5-stage state machine tracking transfers with an immutable 180-block SHA-256 Merkle audit trail and 1-click ledger integrity verification. |
+| **Inter-PHC Transfers & DSCSA Ledger** | Drug Inspector / Auditor | End-to-end 5-stage state machine tracking transfers with an immutable 192-block SHA-256 Merkle audit trail and 1-click ledger integrity verification. |
 | **Frontline Dispensing Portal** | Rural Staff Nurse / ANM | High-contrast touch interface with $48\times 48\text{px}$ PPE glove steppers, multilingual voice dictation (मराठी, हिन्दी, English), and 2G/3G offline queueing. |
 | **Epidemiological Crisis Simulator** | Disaster Preparedness Team | Emergency shock injection engine (Monsoon flooding, 400% snakebite clusters) with automated multi-facility swarm dispatch and baseline state recovery. |
 
@@ -185,7 +185,7 @@ npm --prefix frontend run build
 **Results:**
 - **Backend Tests:** `107 passed in 79.31s (100% Green)`
 - **Frontend Build:** `vite build completed in 2.94s with 0 errors`
-- **DSCSA Cryptographic Audit Ledger:** `180 verified blocks, unbroken SHA-256 chain`
+- **DSCSA Cryptographic Audit Ledger:** `192 verified blocks, unbroken SHA-256 chain`
 
 ---
 
@@ -205,7 +205,7 @@ pranavahini/
 │   ├── rebalancer.py          # Gemini AI Rebalancer & multi-objective engine
 │   ├── schema.sql             # Relational DDL with CHECK constraints & indexes
 │   ├── schemas.py             # Domain models & validation schemas
-│   ├── seed_data.py           # 15 Pune/Satara PHCs, 180 realistic medicine batches & 6 lifecycle transfers
+│   ├── seed_data.py           # 15 Pune/Satara PHCs, 182 active medicine batches (183 total) & 13 lifecycle transfers
 │   ├── transfers_core.py      # Transfer state machine & DSCSA SHA-256 ledger
 │   ├── routes/                # Modular FastAPI router endpoints
 │   ├── static/                # Fallback vanilla web dashboard

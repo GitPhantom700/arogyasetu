@@ -2,21 +2,21 @@
 
 ## 1. Executive Summary & Full App Coverage
 
-In response to the user's requirement to **"cover the entire app"**, the UI Design Audit Dossier has been expanded from a high-level overview into an **exhaustive 23-screen visual and cognitive audit** covering every view, sub-view, modal, slide-over drawer, language variation (English, Marathi, Hindi), and operational failure mode across the PranaVahini platform.
+In response to the user's requirement to **"cover the entire app"**, the UI Design Audit Dossier has been expanded from a high-level overview into an **exhaustive 25-screen visual and cognitive audit** covering every view, sub-view, modal, slide-over drawer, language variation (English, Marathi, Hindi), and operational failure mode across the PranaVahini platform.
 
 📄 **Generated Vector PDF Dossier:** [pranavahini_ui_design_audit.pdf](pranavahini_ui_design_audit.pdf)  
 📊 **Dossier Size:** **6.78 MB** • **25 Audited Views & Interactive Workflows** • **WCAG 2.1 AAA Compliant**
 
 ---
 
-## 2. Exhaustive Visual Gallery Breakdown (23 Audited Screens)
+## 2. Exhaustive Visual Gallery Breakdown (25 Audited Screens)
 
 ### Quick Reference Matrix
 
 | Section / Module | Screen ID & Title | Language / Mode | Key Elements Audited |
 |---|---|---|---|
-| **Executive Command Center** | **Screen 01:** Command Center Overview | English (`EN`) | Live sync pulse, network telemetry (15 facilities, 10 medicines, 180 batches), critical stockout cards, quick dispense widget. |
-| | **Screen 02:** Command Center Overview | Marathi (`मराठी`) | 100% Devanagari Maharashtra DHS nomenclature (*कमांड सेंटर, १५ आरोग्य केंद्रे, १८० औषध बॅचेस, थेट नेटवर्क सिंक*). |
+| **Executive Command Center** | **Screen 01:** Command Center Overview | English (`EN`) | Live sync pulse, network telemetry (15 facilities, 10 medicines, 182 active batches), critical stockout cards, quick dispense widget. |
+| | **Screen 02:** Command Center Overview | Marathi (`मराठी`) | 100% Devanagari Maharashtra DHS nomenclature (*कमांड सेंटर, १५ आरोग्य केंद्रे, १८२ औषध बॅचेस, थेट नेटवर्क सिंक*). |
 | | **Screen 03:** Command Center Overview | Hindi (`हिन्दी`) | National MoHFW Devanagari standard (*१५ नेटवर्क सुविधाएं, सक्रिय बैच, स्टॉकआउट चेतावनी*). |
 | **Inter-Facility Transfers & Ledger** | **Screen 04:** Inter-Facility Transfers & Corridors | English (`EN`) | Resolved facility names (*District Hospital Aundh* → *CHC Khed*), terrain corridors (Highway vs Ghats), distance (`km`), drive time (`min`), 5-stage state stepper. |
 | | **Screen 05:** Inter-Facility Transfers | Marathi (`मराठी`) | Administrative state verbs (*मागणी केली → मंजूर → पाठवले → मार्गावर → प्राप्त*), donor (*स्रोत केंद्र*) vs recipient (*गंतव्य केंद्र*). |
@@ -29,7 +29,7 @@ In response to the user's requirement to **"cover the entire app"**, the UI Desi
 | **AI Autonomous Rebalancer** | **Screen 12:** Rebalancing Cockpit & Deficits | Optimization Engine | Linear programming parameters (Max Radius 50km, Min Donor Buffer 14d, Monsoon Mode toggle), live deficit triage queue. |
 | | **Screen 13:** Generated Rebalancing Plan Details | AI Transparency | Transfer orders with exact allocated batches, transit distance, terrain risk rating, non-cannibalization mathematical reasoning. |
 | | **Screen 14:** Rebalance Authorization Modal | Human-in-the-Loop (`HITL`) | **Clinical Officer Official Sign-Off:** Authorizing officer name (*Dr. Ramesh Patil*), role (*Civil Surgeon & DHO*), mandatory cold-chain confirmation checkbox, and soft-reservation batch lock. |
-| **Cryptographic Blockchain Ledger** | **Screen 15:** DSCSA Cryptographic Audit Trail | Regulatory Proof | Unbroken chain of 180 SHA-256 blocks with parent/tip hashes and zero-mutation audit confirmation banner against black-market pilferage. |
+| **Cryptographic Blockchain Ledger** | **Screen 15:** DSCSA Cryptographic Audit Trail | Regulatory Proof | Unbroken chain of 192 SHA-256 blocks with parent/tip hashes and zero-mutation audit confirmation banner against black-market pilferage. |
 | **Field Staff Operations** | **Screen 16:** Field Staff Rapid Dispensing Logger | ANM / ASHA Field | Mobile-first oversized touch targets (48x48px), immediate `-1, -5, -10` decrement pills, FEFO auto-selection for rush hours. |
 | | **Screen 17:** Hands-Free Voice Dictation Modal | Voice Accessibility | Tri-lingual Web Speech recognition (`mr-IN`, `hi-IN`, `en-IN`), live audio waveform, 1-tap clinical prompt chips (*Paracetamol, Anti-Snake Venom, Rabies*). |
 | | **Screen 18:** Paper Register Photo Intake | Gemini 3.6 Flash Vision | Camera capture & upload for photographed physical registers (*दैनिक औषध नोंदवही*), 1-click authentic DHS sample challan loader. |
@@ -44,7 +44,7 @@ In response to the user's requirement to **"cover the entire app"**, the UI Desi
 ### Module 1: Executive Command Center Overview
 
 #### Screen 01: Command Center Overview (English)
-Live telemetry across 15 rural clinics, 10 critical medicines, and 180 active batches, featuring real-time Server-Sent Events (SSE) sync pulses and instant stockout warnings.
+Live telemetry across 15 rural clinics, 10 critical medicines, and 182 active batches, featuring real-time Server-Sent Events (SSE) sync pulses and instant stockout warnings.
 ![Screen 01: Command Center Overview (English)](docs/ui_audit_assets/01_overview_en.png)
 
 #### Screen 02: Command Center Overview (मराठी)
@@ -120,7 +120,7 @@ Official Clinical Officer sign-off modal requiring doctor identification, role c
 ### Module 6: DSCSA Cryptographic Blockchain Ledger
 
 #### Screen 15: DSCSA Cryptographic Audit Trail Explorer
-Regulatory blockchain explorer rendering 180+ immutable SHA-256 blocks with GS1 Global Location Numbers (GLN), Global Trade Item Numbers (GTIN), and live zero-tamper cryptographic integrity verification.
+Regulatory blockchain explorer rendering 192 immutable SHA-256 blocks with GS1 Global Location Numbers (GLN), Global Trade Item Numbers (GTIN), and live zero-tamper cryptographic integrity verification.
 ![Screen 15: DSCSA Cryptographic Audit Trail](docs/ui_audit_assets/10_dscsa_block_ledger.png)
 
 ---
@@ -221,7 +221,7 @@ Every vulnerability, cognitive trap, and recommendation identified in the critiq
 | **2. Low-Literacy & Cognitive Ergonomics** | **A-** | Hardened [`StatusBadge.jsx`](frontend/src/components/StatusBadge.jsx) with 2px high-contrast borders for outdoor Sahyadri sunlight glare and WCAG AAA dual-channel shape encoding (⚠️, 🔒, 🛡️). Expanded stepper hit-boxes to 48×48px. | **A+** |
 | **3. Data Entry & Bottleneck Elimination** | **A** | Enforced an explicit **Clinical Pharmacist Review Gate** in [`FieldStaffPortalView.jsx`](frontend/src/views/FieldStaffPortalView.jsx) with physical cross-verification checkbox to eliminate alert fatigue on borderline OCR handwriting. | **A+** |
 | **4. Monsoon Disaster & Connectivity Resilience** | **A+** | Added dual-mode **Haptic Vibration & Synthetic Audio Feedback** (`navigator.vibrate` + Web Audio API) in [`FieldStaffPortalView.jsx`](frontend/src/views/FieldStaffPortalView.jsx) for zero-panic confirmation when eyes are on patients. | **A+** |
-| **5. Clinical Governance & Anti-Diversion (DSCSA)** | **A** | 180-block SHA-256 ledger and ILR cold-chain compliance are protected behind progressive disclosure drawers ([`FacilitySlideOver.jsx`](frontend/src/components/FacilitySlideOver.jsx)) following DHIS2 & Atomic Design standards. | **A+** |
+| **5. Clinical Governance & Anti-Diversion (DSCSA)** | **A** | 192-block SHA-256 ledger and ILR cold-chain compliance are protected behind progressive disclosure drawers ([`FacilitySlideOver.jsx`](frontend/src/components/FacilitySlideOver.jsx)) following DHIS2 & Atomic Design standards. | **A+** |
 | **6. Edge Cases & Accidental Click Risks** | **B** | Built a dedicated **Non-Punitive OCC 409 Reconciliation Flow** in [`FieldStaffPortalView.jsx`](frontend/src/views/FieldStaffPortalView.jsx) explaining offline concurrent transfers empathetically with 1-tap register acknowledgment. | **A+** |
 
 ---

@@ -1,6 +1,6 @@
 """
 Unit and Integration Test Suite for Microtask 3.4: AI Safety, Guardrails & Fallback Audit.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 
 Tests:
 1. Prompt Sanitization & Injection Interception

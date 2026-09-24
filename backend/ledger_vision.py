@@ -1,6 +1,6 @@
 """
 Multimodal Paper Ledger Ingestion Service.
-Build with AI: Code for Communities (Second Edition) - Track 01 Healthcare Supply Chain.
+Build with AI: Code for Communities (Second Edition) - Track 03 Smart Health & Supply Chain Resilience.
 Microtask 3.2: Multimodal Register Ingestion (Gemini Flash Vision OCR).
 
 Extracts structured medication inventory from photos of physical paper registers,
