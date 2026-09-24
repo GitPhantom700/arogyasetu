@@ -18,6 +18,7 @@ import {
   Filter
 } from 'lucide-react';
 import clsx from 'clsx';
+import { localizeAlert } from '../utils/alertI18n';
 
 export function OverviewView() {
   const {
@@ -30,6 +31,7 @@ export function OverviewView() {
     setSelectedDeficitId,
     setTransferSearchTerm,
     acknowledgeAlert,
+    language,
     t
   } = useApp();
 
@@ -64,7 +66,7 @@ export function OverviewView() {
       return {
         label: t('btn_view_transfer', 'View Transfer'),
         icon: Truck,
-        badge: 'Transfer',
+        badge: t('badge_transfer', 'Transfer'),
         badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
         btnClass: 'bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/60 dark:text-blue-300 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/40',
         onClick: () => {
@@ -80,7 +82,7 @@ export function OverviewView() {
       return {
         label: t('btn_rebalance_deficit', 'Rebalance Deficit'),
         icon: Sparkles,
-        badge: cat === 'STOCKOUT' ? 'Stockout' : cat === 'SURGE_SPIKE' ? 'Surge' : 'Deficit',
+        badge: cat === 'STOCKOUT' ? t('badge_stockout', 'Stockout') : cat === 'SURGE_SPIKE' ? t('badge_surge', 'Surge') : t('badge_deficit', 'Deficit'),
         badgeClass: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
         btnClass: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/40',
         onClick: () => {
@@ -97,7 +99,7 @@ export function OverviewView() {
       return {
         label: t('btn_inspect_facility', 'Inspect Facility'),
         icon: ThermometerSnowflake,
-        badge: 'Cold Chain',
+        badge: t('badge_cold_chain', 'Cold Chain'),
         badgeClass: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
         btnClass: 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100 dark:bg-cyan-950/60 dark:text-cyan-300 dark:hover:bg-cyan-900/60 border border-cyan-200/60 dark:border-cyan-800/40',
         onClick: () => {
@@ -111,9 +113,9 @@ export function OverviewView() {
     }
 
     return {
-      label: alert.facility_id ? t('btn_view_facility', 'View Facility') : 'Acknowledge',
+      label: alert.facility_id ? t('btn_view_facility', 'View Facility') : t('alert_acknowledged', 'Acknowledge'),
       icon: alert.facility_id ? Building2 : CheckCircle2,
-      badge: 'System',
+      badge: t('badge_system', 'System'),
       badgeClass: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
       btnClass: 'bg-slate-50 text-slate-700 hover:bg-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60',
       onClick: () => {
@@ -137,7 +139,7 @@ export function OverviewView() {
         <div className="relative z-10 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Autonomous Rural Health Supply Chain Intelligence</span>
+            <span>{t('overview_pill', 'Autonomous Rural Health Supply Chain Intelligence')}</span>
           </div>
           <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
             {t('overview_mission_title', 'Maharashtra Emergency Stock Rebalancing')}
@@ -174,18 +176,18 @@ export function OverviewView() {
         <div className="card-clinical p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Network Facilities
+              {t('kpi_network_facilities', 'Network Facilities')}
             </span>
             <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
               <Building2 className="w-5 h-5" />
             </div>
           </div>
           <div className="text-2xl font-bold font-display text-slate-900 dark:text-white mt-2">
-            {stats?.total_facilities ?? facilities.length ?? 15}
+            {language === 'mr' ? (stats?.total_facilities ?? facilities.length ?? 15).toLocaleString('mr-IN') : (stats?.total_facilities ?? facilities.length ?? 15)}
           </div>
           <div className="flex items-center gap-2 mt-2 text-xs text-slate-500 dark:text-slate-400">
-            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">100% Active</span>
-            <span>• 2 Districts (Pune/Satara)</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{t('kpi_100_active', '100% Active')}</span>
+            <span>{t('kpi_two_districts', '• 2 Districts (Pune/Satara)')}</span>
           </div>
         </div>
 
@@ -193,21 +195,21 @@ export function OverviewView() {
         <div className="card-clinical p-5 border-red-200/70 dark:border-red-900/40 bg-red-50/20 dark:bg-red-950/10">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-red-700 dark:text-red-400 uppercase tracking-wider">
-              Critical Stockouts
+              {t('kpi_critical_stockouts', 'Critical Stockouts')}
             </span>
             <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400">
               <AlertTriangle className="w-5 h-5" />
             </div>
           </div>
           <div className="text-2xl font-bold font-display text-red-700 dark:text-red-400 mt-2 flex items-center gap-2">
-            {stats?.critical_stockouts ?? criticalAlerts.length ?? 0}
+            {language === 'mr' ? (stats?.critical_stockouts ?? criticalAlerts.length ?? 0).toLocaleString('mr-IN') : (stats?.critical_stockouts ?? criticalAlerts.length ?? 0)}
             {stats?.critical_stockouts > 0 && (
               <span className="h-2 w-2 rounded-full bg-red-500 animate-ping" />
             )}
           </div>
           <div className="flex items-center gap-1.5 mt-2 text-xs text-red-600 dark:text-red-400 font-medium">
             <TrendingDown className="w-3.5 h-3.5" />
-            <span>{warningAlerts.length} Warning Level Deficits</span>
+            <span>{language === 'mr' ? warningAlerts.length.toLocaleString('mr-IN') : warningAlerts.length} {t('kpi_warning_deficits', 'Warning Level Deficits')}</span>
           </div>
         </div>
 
@@ -215,18 +217,18 @@ export function OverviewView() {
         <div className="card-clinical p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Active Transfers
+              {t('kpi_active_transfers', 'Active Transfers')}
             </span>
             <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400">
               <Truck className="w-5 h-5" />
             </div>
           </div>
           <div className="text-2xl font-bold font-display text-slate-900 dark:text-white mt-2">
-            {stats?.in_transit_transfers ?? 0}
+            {language === 'mr' ? (stats?.in_transit_transfers ?? 0).toLocaleString('mr-IN') : (stats?.in_transit_transfers ?? 0)}
           </div>
           <div className="flex items-center gap-1.5 mt-2 text-xs text-slate-500 dark:text-slate-400">
             <Clock className="w-3.5 h-3.5 text-indigo-500" />
-            <span>Zero Teleportation Physical Flow</span>
+            <span>{t('kpi_physical_flow', 'Zero Teleportation Physical Flow')}</span>
           </div>
         </div>
 
@@ -234,17 +236,17 @@ export function OverviewView() {
         <div className="card-clinical p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              DSCSA Audit Chain
+              {t('kpi_dscsa_audit_chain', 'DSCSA Audit Chain')}
             </span>
             <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
               <ShieldCheck className="w-5 h-5" />
             </div>
           </div>
           <div className="text-2xl font-bold font-display text-emerald-700 dark:text-emerald-400 mt-2">
-            {stats?.total_batches ?? 166} Batches
+            {language === 'mr' ? (stats?.total_batches ?? 182).toLocaleString('mr-IN') : (stats?.total_batches ?? 182)} {t('kpi_batches_suffix', 'Batches')}
           </div>
           <div className="flex items-center gap-1.5 mt-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-            <span>✓ SHA-256 Chain Verified</span>
+            <span>{t('kpi_sha256_verified', '✓ SHA-256 Chain Verified')}</span>
           </div>
         </div>
 
@@ -273,7 +275,7 @@ export function OverviewView() {
               onClick={() => setActiveTab('rebalance')}
               className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 self-start sm:self-auto cursor-pointer"
             >
-              Analyze Rebalancing <ArrowRight className="w-3.5 h-3.5" />
+              {t('btn_analyze_rebalancing', 'Analyze Rebalancing')} <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -311,13 +313,14 @@ export function OverviewView() {
           <div className="divide-y divide-slate-100 dark:divide-slate-800/80 max-h-[380px] overflow-y-auto pr-1">
             {filteredAlerts.length === 0 ? (
               <div className="py-8 text-center text-xs text-slate-400">
-                No active alerts in this category. Network inventories are balanced.
+                {t('no_active_alerts', 'No active alerts in this category. Network inventories are balanced.')}
               </div>
             ) : (
               filteredAlerts.slice(0, 10).map((alert, idx) => {
                 const action = getAlertAction(alert);
                 const ActionIcon = action.icon;
                 const isAck = alert.is_acknowledged || alert.acknowledged === 1;
+                const localized = localizeAlert(alert, language);
 
                 return (
                   <div key={idx} className={clsx(
@@ -341,28 +344,28 @@ export function OverviewView() {
                           )}
                           title={alert.facility_id ? "Click to open facility inventory" : undefined}
                         >
-                          {alert.facility_name || 'Regional Facility'}
+                          {localized.facilityName}
                         </button>
                         {isAck && (
                           <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
-                            <Check className="w-3 h-3" /> Acknowledged
+                            <Check className="w-3 h-3" /> {t('alert_acknowledged', 'Acknowledged')}
                           </span>
                         )}
                       </div>
 
-                      {alert.title && (
+                      {localized.title && (
                         <div className="font-semibold text-slate-900 dark:text-slate-100 text-[11px] leading-tight truncate">
-                          {alert.title}
+                          {localized.title}
                         </div>
                       )}
 
                       <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                        {alert.message}
+                        {localized.message}
                       </p>
 
                       <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
                         <Clock className="w-3 h-3" />
-                        <span>{alert.created_at?.replace('T', ' ').slice(0, 19) || 'Just now'}</span>
+                        <span>{alert.created_at?.replace('T', ' ').slice(0, 19) || t('time_just_now', 'Just now')}</span>
                       </div>
                     </div>
 
@@ -400,27 +403,29 @@ export function OverviewView() {
         <div className="card-clinical p-5 space-y-4">
           <div className="border-b border-slate-100 dark:border-brand-dark-border pb-3">
             <h3 className="font-display font-bold text-sm text-slate-900 dark:text-white">
-              Cluster Facility Tiers
+              {t('cluster_facility_tiers_title', 'Cluster Facility Tiers')}
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Pune & Satara Multi-Tier Public Health Topology
+              {t('cluster_facility_tiers_subtitle', 'Pune & Satara Multi-Tier Public Health Topology')}
             </p>
           </div>
 
           <div className="space-y-2.5 text-xs">
             {[
-              { tier: 'District Hospital', count: 1, color: 'bg-indigo-500' },
-              { tier: 'Sub-District Hospital', count: 2, color: 'bg-blue-500' },
-              { tier: 'Community Health Centre (CHC)', count: 3, color: 'bg-teal-500' },
-              { tier: 'Primary Health Centre (PHC)', count: 5, color: 'bg-emerald-500' },
-              { tier: 'Sub-Centre (Health Post)', count: 4, color: 'bg-amber-500' },
+              { tier: t('tier_dh', 'District Hospital'), count: 1, color: 'bg-indigo-500' },
+              { tier: t('tier_sdh', 'Sub-District Hospital'), count: 2, color: 'bg-blue-500' },
+              { tier: t('tier_chc', 'Community Health Centre (CHC)'), count: 3, color: 'bg-teal-500' },
+              { tier: t('tier_phc_badge', 'Primary Health Centre (PHC)'), count: 5, color: 'bg-emerald-500' },
+              { tier: t('tier_sc', 'Sub-Centre (Health Post)'), count: 4, color: 'bg-amber-500' },
             ].map((item, idx) => (
               <div key={idx} className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${item.color}`} />
                   <span className="font-medium text-slate-700 dark:text-slate-300">{item.tier}</span>
                 </div>
-                <span className="font-bold text-slate-900 dark:text-white">{item.count}</span>
+                <span className="font-bold text-slate-900 dark:text-white">
+                  {language === 'mr' ? item.count.toLocaleString('mr-IN') : item.count}
+                </span>
               </div>
             ))}
           </div>
@@ -428,10 +433,10 @@ export function OverviewView() {
           <div className="pt-2 border-t border-slate-100 dark:border-brand-dark-border">
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface border border-slate-200/60 dark:border-brand-dark-border text-xs space-y-1.5">
               <span className="font-semibold text-slate-700 dark:text-slate-300 block">
-                🏔️ Western Ghats Monsoon Terrain:
+                {t('monsoon_terrain_title', '🏔️ Western Ghats Monsoon Terrain:')}
               </span>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                Sahyadri Mountain facilities (Velhe, Bhor, Mahabaleshwar) automatically trigger 1.5× safety stock buffers (21 days) during active monsoon season.
+                {t('monsoon_terrain_body', 'Sahyadri Mountain facilities (Velhe, Bhor, Mahabaleshwar) automatically trigger 1.5× safety stock buffers (21 days) during active monsoon season.')}
               </p>
             </div>
           </div>

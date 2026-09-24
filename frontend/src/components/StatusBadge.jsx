@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { useUI } from '../context/UIContext';
 import {
   AlertOctagon,
   AlertTriangle,
@@ -13,6 +14,87 @@ import {
   Info
 } from 'lucide-react';
 
+const STATUS_LABELS = {
+  en: {
+    CRITICAL: 'CRITICAL',
+    STOCKOUT: 'STOCKOUT',
+    EMERGENCY: 'EMERGENCY',
+    WARNING: 'WARNING',
+    LOW: 'LOW',
+    NEAR_EXPIRY: 'NEAR EXPIRY',
+    ADEQUATE: 'ADEQUATE',
+    NORMAL: 'NORMAL',
+    HEALTHY: 'HEALTHY',
+    CLOSED: 'CLOSED',
+    IN_TRANSIT: 'IN TRANSIT',
+    DISPATCHED: 'DISPATCHED',
+    APPROVED: 'APPROVED',
+    RECEIVED: 'RECEIVED',
+    EXPIRED: 'EXPIRED',
+    DAMAGED: 'DAMAGED',
+    WASTED: 'WASTED',
+    QUARANTINED: 'QUARANTINED',
+    COMPROMISED: 'COMPROMISED',
+    THERMAL_BREACH: 'THERMAL BREACH',
+    COLD_CHAIN_OK: 'COLD CHAIN OK',
+    ILR_VERIFIED: 'ILR VERIFIED',
+    LOCKED: 'LOCKED',
+    INFO: 'INFO'
+  },
+  mr: {
+    CRITICAL: 'गंभीर तुटवडा',
+    STOCKOUT: 'साठा संपला',
+    EMERGENCY: 'तातडीचे',
+    WARNING: 'चेतावणी',
+    LOW: 'कमी साठा',
+    NEAR_EXPIRY: 'कालबाह्य जवळ',
+    ADEQUATE: 'सुरक्षित साठा',
+    NORMAL: 'सामान्य',
+    HEALTHY: 'योग्य',
+    CLOSED: 'बंद',
+    IN_TRANSIT: 'वाहतुकीत',
+    DISPATCHED: 'रवाना',
+    APPROVED: 'मंजूर',
+    RECEIVED: 'प्राप्त',
+    EXPIRED: 'कालबाह्य',
+    DAMAGED: 'खराब',
+    WASTED: 'नुकसान',
+    QUARANTINED: 'विलगीकरण',
+    COMPROMISED: 'दूषित',
+    THERMAL_BREACH: 'तापमान उल्लंघन',
+    COLD_CHAIN_OK: 'शीत साखळी सुरक्षित',
+    ILR_VERIFIED: 'आयएलआर प्रमाणित',
+    LOCKED: 'सुरक्षित',
+    INFO: 'माहिती'
+  },
+  hi: {
+    CRITICAL: 'गंभीर कमी',
+    STOCKOUT: 'स्टॉक समाप्त',
+    EMERGENCY: 'आपातकालीन',
+    WARNING: 'चेतावनी',
+    LOW: 'कम स्टॉक',
+    NEAR_EXPIRY: 'समाप्ति निकट',
+    ADEQUATE: 'सुरक्षित स्टॉक',
+    NORMAL: 'सामान्य',
+    HEALTHY: 'उचित',
+    CLOSED: 'बंद',
+    IN_TRANSIT: 'मार्ग में',
+    DISPATCHED: 'रवाना',
+    APPROVED: 'स्वीकृत',
+    RECEIVED: 'प्राप्त',
+    EXPIRED: 'समाप्त',
+    DAMAGED: 'क्षतिग्रस्त',
+    WASTED: 'व्यर्थ',
+    QUARANTINED: 'संगरोध',
+    COMPROMISED: 'दूषित',
+    THERMAL_BREACH: 'तापमान उल्लंघन',
+    COLD_CHAIN_OK: 'कोल्ड चेन सुरक्षित',
+    ILR_VERIFIED: 'आईएलआर सत्यापित',
+    LOCKED: 'सुरक्षित',
+    INFO: 'सूचना'
+  }
+};
+
 /**
  * StatusBadge
  * High-contrast WCAG 2.1 AAA accessible clinical status badge (≥7:1 contrast ratio).
@@ -21,7 +103,16 @@ import {
 export function StatusBadge({ status, size = 'sm', className = '' }) {
   if (!status) return null;
 
+  let language = 'en';
+  try {
+    const ui = useUI();
+    if (ui?.language) language = ui.language;
+  } catch (e) {
+    // fallback to en
+  }
+
   const normalized = String(status).toUpperCase();
+  const localizedLabel = STATUS_LABELS[language]?.[normalized] || STATUS_LABELS.en[normalized] || normalized;
 
   // Minimum 12px (text-xs) to prevent sub-12px unreadability on low-cost mobile field monitors
   const sizeClasses = {
@@ -84,7 +175,7 @@ export function StatusBadge({ status, size = 'sm', className = '' }) {
       )}
     >
       <IconComponent className={clsx(iconClass, 'shrink-0 stroke-[2.5]')} aria-hidden="true" />
-      <span>{normalized}</span>
+      <span>{localizedLabel}</span>
     </span>
   );
 }
