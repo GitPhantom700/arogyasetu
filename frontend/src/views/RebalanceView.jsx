@@ -33,7 +33,9 @@ export function RebalanceView() {
     medicineMap,
     openAuthModal,
     selectedDeficitId,
-    setSelectedDeficitId
+    setSelectedDeficitId,
+    language,
+    t
   } = useUI();
   const { showToast } = useAlerts();
 
@@ -193,28 +195,28 @@ export function RebalanceView() {
         <div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80">
-              Peer-to-Peer Mesh Logistics
+              {t('pill_mesh_logistics', 'Peer-to-Peer Mesh Logistics')}
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
-              <span>Gemini 3.6 Flash Autonomous Agent</span>
+              <span>{t('pill_gemini_agent', 'Gemini 3.6 Flash Autonomous Agent')}</span>
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-display font-bold text-slate-900 dark:text-white mt-1.5">
-            Autonomous Stock Rebalancing Cockpit
+            {t('rebalance_title', 'Autonomous Stock Rebalancing Cockpit')}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Real-time peer-to-peer inter-PHC stock redistribution with non-cannibalization safety proof
+            {t('rebalance_subtitle', 'Real-time peer-to-peer inter-PHC stock redistribution with non-cannibalization safety proof')}
           </p>
         </div>
 
         <button
           onClick={fetchDeficits}
           disabled={loadingDeficits}
-          className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border hover:bg-slate-50 dark:hover:bg-brand-dark-surface text-slate-700 dark:text-slate-200 transition shadow-xs self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-white dark:bg-brand-dark-card border border-slate-200 dark:border-brand-dark-border hover:bg-slate-50 dark:hover:bg-brand-dark-surface text-slate-700 dark:text-slate-200 transition shadow-xs self-start sm:self-auto cursor-pointer"
         >
           <RefreshCw className={clsx('w-3.5 h-3.5', loadingDeficits && 'animate-spin')} />
-          <span>Refresh Deficits Radar</span>
+          <span>{t('btn_refresh_deficits', 'Refresh Deficits Radar')}</span>
         </button>
       </div>
 
@@ -228,25 +230,25 @@ export function RebalanceView() {
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-500" />
                 <h3 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
-                  Network Deficits Radar
+                  {t('radar_title', 'Network Deficits Radar')}
                 </h3>
               </div>
               <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                {deficits.length} Shortages Detected
+                {language === 'mr' ? deficits.length.toLocaleString('mr-IN') : deficits.length} {t('shortages_detected_suffix', 'Shortages Detected')}
               </span>
             </div>
 
             {loadingDeficits ? (
               <div className="p-8 text-center space-y-2">
                 <RefreshCw className="w-6 h-6 animate-spin text-emerald-500 mx-auto" />
-                <p className="text-xs text-slate-400">Scanning 15 facilities for clinical deficits...</p>
+                <p className="text-xs text-slate-400">{t('scanning_deficits', 'Scanning 15 facilities for clinical deficits...')}</p>
               </div>
             ) : deficits.length === 0 ? (
               <div className="p-6 text-center rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-900/40 space-y-1">
                 <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto" />
-                <h4 className="font-bold text-xs text-emerald-900 dark:text-emerald-200">Network Fully Balanced</h4>
+                <h4 className="font-bold text-xs text-emerald-900 dark:text-emerald-200">{t('network_balanced_title', 'Network Fully Balanced')}</h4>
                 <p className="text-[11px] text-emerald-700 dark:text-emerald-300">
-                  All 15 facilities across Pune & Satara maintain safe inventory buffers.
+                  {t('network_balanced_desc', 'All 15 facilities across Pune & Satara maintain safe inventory buffers.')}
                 </p>
               </div>
             ) : (
@@ -278,7 +280,7 @@ export function RebalanceView() {
                             </h4>
                           </div>
                           <span className="text-[10px] text-slate-400 block ml-3.5">
-                            {def.district} District
+                            {def.district} {t('district_suffix', 'District')}
                           </span>
                         </div>
 
@@ -288,19 +290,19 @@ export function RebalanceView() {
                             ? 'bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300'
                             : 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300'
                         )}>
-                          {def.status}
+                          {isCritical ? t('status_critical_tag', 'CRITICAL') : t('status_warning', 'WARNING')}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-slate-100 dark:border-slate-800">
                         <div>
-                          <span className="text-slate-400 block text-[10px]">Depleted Medicine:</span>
+                          <span className="text-slate-400 block text-[10px]">{t('depleted_medicine_label', 'Depleted Medicine:')}</span>
                           <span className="font-bold text-slate-800 dark:text-slate-200 truncate block">
                             {def.medicine_name}
                           </span>
                         </div>
                         <div className="text-right">
-                          <span className="text-slate-400 block text-[10px]">Shortage Deficit:</span>
+                          <span className="text-slate-400 block text-[10px]">{t('shortage_deficit_label', 'Shortage Deficit:')}</span>
                           <span className="font-bold text-rose-600 dark:text-rose-400">
                             -{def.deficit_quantity} {def.unit}
                           </span>
@@ -310,7 +312,7 @@ export function RebalanceView() {
                       {def.top_donor_facility_name && (
                         <div className="p-1.5 rounded-lg bg-slate-100/70 dark:bg-slate-800/40 text-[10px] flex items-center justify-between text-slate-600 dark:text-slate-300">
                           <span className="truncate">
-                            Candidate Donor: <strong>{def.top_donor_facility_name}</strong>
+                            {t('candidate_donor_label', 'Candidate Donor:')} <strong>{def.top_donor_facility_name}</strong>
                           </span>
                           <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0 ml-2">
                             +{def.top_donor_surplus} {def.unit} ({def.top_donor_distance_km?.toFixed(0)} km)
@@ -329,7 +331,7 @@ export function RebalanceView() {
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-brand-dark-border pb-2">
               <Sliders className="w-4 h-4 text-slate-500" />
               <h3 className="font-bold text-xs text-slate-800 dark:text-slate-200 uppercase tracking-wider">
-                Redistribution Constraints
+                {t('redistribution_constraints', 'Redistribution Constraints')}
               </h3>
             </div>
 
@@ -337,7 +339,7 @@ export function RebalanceView() {
               {/* Max Search Radius */}
               <div>
                 <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="text-slate-500">Max Search Radius:</span>
+                  <span className="text-slate-500">{t('max_search_radius', 'Max Search Radius:')}</span>
                   <span className="font-bold font-mono text-slate-900 dark:text-white">{maxRadiusKm} km</span>
                 </div>
                 <input
@@ -354,8 +356,8 @@ export function RebalanceView() {
               {/* Min Donor Retention Buffer */}
               <div>
                 <div className="flex items-center justify-between text-[11px] mb-1">
-                  <span className="text-slate-500">Donor Retention Reserve (DAC):</span>
-                  <span className="font-bold font-mono text-slate-900 dark:text-white">≥ {minDonorBufferDays} Days</span>
+                  <span className="text-slate-500">{t('donor_retention_dac', 'Donor Retention Reserve (DAC):')}</span>
+                  <span className="font-bold font-mono text-slate-900 dark:text-white">≥ {minDonorBufferDays} {t('days_suffix', 'Days')}</span>
                 </div>
                 <input
                   type="range"
@@ -374,10 +376,10 @@ export function RebalanceView() {
                   <CloudRain className={clsx('w-4 h-4', monsoonMode ? 'text-sky-500' : 'text-slate-400')} />
                   <div>
                     <span className="font-bold text-xs text-slate-800 dark:text-slate-200 block">
-                      Sahyadri Monsoon Multiplier (1.5x)
+                      {t('monsoon_multiplier_title', 'Sahyadri Monsoon Multiplier (1.5x)')}
                     </span>
                     <span className="text-[10px] text-slate-400 block">
-                      Guards against Western Ghats landslides and road washouts
+                      {t('monsoon_multiplier_desc', 'Guards against Western Ghats landslides and road washouts')}
                     </span>
                   </div>
                 </div>
@@ -401,25 +403,25 @@ export function RebalanceView() {
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-indigo-500" />
                 <h3 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
-                  Target Deficit Triage
+                  {t('target_deficit_triage', 'Target Deficit Triage')}
                 </h3>
               </div>
               <span className="text-[10px] font-mono text-slate-400">
-                Peer Optimization Engine
+                {t('peer_opt_engine', 'Peer Optimization Engine')}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
                 <label className="block text-[10px] font-semibold text-slate-500 uppercase mb-1">
-                  Recipient Facility (Deficit Node)
+                  {t('recipient_facility_label', 'Recipient Facility (Deficit Node)')}
                 </label>
                 <select
                   value={selectedFacilityId || ''}
                   onChange={(e) => setSelectedFacilityId(Number(e.target.value))}
                   className="w-full p-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-1 focus:ring-indigo-500"
                 >
-                  <option value="">Select Recipient Facility</option>
+                  <option value="">{t('select_recipient_placeholder', 'Select Recipient Facility')}</option>
                   {facilities.map(f => (
                     <option key={f.id} value={f.id}>
                       {f.name} ({f.facility_code} • {f.district})
@@ -430,14 +432,14 @@ export function RebalanceView() {
 
               <div>
                 <label className="block text-[10px] font-semibold text-slate-500 uppercase mb-1">
-                  Essential Medicine
+                  {t('essential_medicine_label', 'Essential Medicine')}
                 </label>
                 <select
                   value={selectedMedicineId || ''}
                   onChange={(e) => setSelectedMedicineId(Number(e.target.value))}
                   className="w-full p-2 rounded-xl bg-slate-100 dark:bg-brand-dark-surface border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-medium focus:ring-1 focus:ring-indigo-500"
                 >
-                  <option value="">Select Medicine</option>
+                  <option value="">{t('select_medicine_placeholder', 'Select Medicine')}</option>
                   {medicines.map(m => (
                     <option key={m.id} value={m.id}>
                       {m.name} ({m.sku} • {m.unit})
@@ -448,10 +450,11 @@ export function RebalanceView() {
             </div>
 
             <button
+              id="btn-generate-rebalance"
               onClick={handleGenerateRecommendation}
               disabled={loadingRecommendation || !selectedFacilityId || !selectedMedicineId}
               className={clsx(
-                'w-full py-2.5 px-4 rounded-xl font-bold text-xs text-white shadow-md transition flex items-center justify-center gap-2',
+                'w-full py-2.5 px-4 rounded-xl font-bold text-xs text-white shadow-md transition flex items-center justify-center gap-2 cursor-pointer',
                 loadingRecommendation || !selectedFacilityId || !selectedMedicineId
                   ? 'bg-slate-400 cursor-not-allowed'
                   : 'bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700'
@@ -460,12 +463,12 @@ export function RebalanceView() {
               {loadingRecommendation ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Evaluating Candidate Donors with Gemini AI...</span>
+                  <span>{t('evaluating_donors', 'Evaluating Candidate Donors with Gemini AI...')}</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Generate Gemini Autonomous Rebalancing Plan</span>
+                  <span>{t('btn_generate_plan', 'Generate Gemini Autonomous Rebalancing Plan')}</span>
                 </>
               )}
             </button>
@@ -491,13 +494,13 @@ export function RebalanceView() {
                   <div>
                     <h4 className="font-bold text-xs leading-tight">
                       {recommendation.is_feasible
-                        ? 'Redistribution Plan Verified: Mathematically Feasible'
-                        : 'Redistribution Infeasible: Non-Cannibalization Invariant Guarded'}
+                        ? t('plan_verified_title', 'Redistribution Plan Verified: Mathematically Feasible')
+                        : t('plan_infeasible_title', 'Redistribution Infeasible: Non-Cannibalization Invariant Guarded')}
                     </h4>
                     <p className="text-[11px] opacity-90 mt-0.5">
                       {recommendation.is_feasible
-                        ? `Optimal donor ${recommendation.recommended_donor?.facility_name} has safe surplus of ${recommendation.recommended_donor?.surplus_available ?? recommendation.recommended_quantity} ${recommendation.medicine_unit} (${recommendation.recommended_quantity} ${recommendation.medicine_unit} recommended for transfer)`
-                        : 'No candidate donor within radius possesses surplus exceeding minimum 14-day safety threshold.'}
+                        ? `${recommendation.recommended_donor?.facility_name} • ${recommendation.recommended_quantity} ${recommendation.medicine_unit}`
+                        : t('infeasible_radius_desc', 'No candidate donor within radius possesses surplus exceeding minimum 14-day safety threshold.')}
                     </p>
                   </div>
                 </div>
@@ -511,28 +514,28 @@ export function RebalanceView() {
               {recommendation.is_feasible && recommendation.recommended_donor && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Donor PHC</span>
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('donor_phc_label', 'Donor PHC')}</span>
                     <span className="font-bold text-slate-900 dark:text-white truncate block">
                       {recommendation.recommended_donor.facility_name}
                     </span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Transfer Qty</span>
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('transfer_qty_label', 'Transfer Qty')}</span>
                     <span className="font-bold text-emerald-600 dark:text-emerald-400 block font-mono">
                       {recommendation.recommended_quantity} {recommendation.medicine_unit}
                     </span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Road Distance</span>
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('road_distance_label', 'Road Distance')}</span>
                     <span className="font-bold text-slate-900 dark:text-white block font-mono">
                       {recommendation.estimated_distance_km?.toFixed(1) || recommendation.recommended_donor.distance_km?.toFixed(1)} km
                     </span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/40 border border-slate-200/60 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">Est. Transit</span>
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('est_transit_label', 'Est. Transit')}</span>
                     <span className="font-bold text-slate-900 dark:text-white block font-mono">
                       {recommendation.estimated_transit_hours?.toFixed(1) || recommendation.recommended_donor.estimated_transit_hours?.toFixed(1)} hrs
                     </span>
@@ -544,13 +547,13 @@ export function RebalanceView() {
               <div className="space-y-2.5 text-xs">
                 <h4 className="font-bold text-[11px] text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                   <FileText className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Clinical SOAP Rationale (Explainable AI Decisioning)</span>
+                  <span>{t('soap_rationale_title', 'Clinical SOAP Rationale (Explainable AI Decisioning)')}</span>
                 </h4>
 
                 {/* S - Subjective / Clinical Rationale */}
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/30 border border-slate-200/60 dark:border-slate-800 space-y-1">
                   <span className="font-bold text-[10px] text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                    [S] Subjective & Clinical Indication
+                    {t('soap_s_label', '[S] Subjective & Clinical Indication')}
                   </span>
                   <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
                     {recommendation.clinical_rationale}
@@ -560,7 +563,7 @@ export function RebalanceView() {
                 {/* O - Objective / Tradeoff Analysis */}
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/30 border border-slate-200/60 dark:border-slate-800 space-y-1">
                   <span className="font-bold text-[10px] text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                    [O] Objective Network Tradeoff Analysis
+                    {t('soap_o_label', '[O] Objective Network Tradeoff Analysis')}
                   </span>
                   <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
                     {recommendation.tradeoff_analysis}
@@ -570,7 +573,7 @@ export function RebalanceView() {
                 {/* A - Assessment / Risk Assessment */}
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/30 border border-slate-200/60 dark:border-slate-800 space-y-1">
                   <span className="font-bold text-[10px] text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                    [A] Safety & Non-Cannibalization Proof
+                    {t('soap_a_label', '[A] Safety & Non-Cannibalization Proof')}
                   </span>
                   <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
                     {recommendation.risk_assessment}
@@ -581,7 +584,7 @@ export function RebalanceView() {
                 {recommendation.suggested_route_summary && (
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/30 border border-slate-200/60 dark:border-slate-800 space-y-1">
                     <span className="font-bold text-[10px] text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                      [P] Logistical Transit Corridor
+                      {t('soap_p_label', '[P] Logistical Transit Corridor')}
                     </span>
                     <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
                       {recommendation.suggested_route_summary}
@@ -594,18 +597,18 @@ export function RebalanceView() {
               {recommendation.all_candidates_evaluated?.length > 0 && (
                 <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-brand-dark-border">
                   <h5 className="font-bold text-[11px] text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                    Candidate Donors Evaluated ({recommendation.all_candidates_evaluated.length})
+                    {t('candidates_evaluated_title', 'Candidate Donors Evaluated')} ({recommendation.all_candidates_evaluated.length})
                   </h5>
                   <div className="overflow-x-auto">
                     <table className="w-full text-[11px] text-left">
                       <thead className="text-[10px] font-bold text-slate-400 uppercase border-b border-slate-200 dark:border-slate-800">
                         <tr>
-                          <th className="py-1.5 px-2">Facility</th>
-                          <th className="py-1.5 px-2">Stock</th>
-                          <th className="py-1.5 px-2">Retained</th>
-                          <th className="py-1.5 px-2">Surplus</th>
-                          <th className="py-1.5 px-2">Distance</th>
-                          <th className="py-1.5 px-2">ETA</th>
+                          <th className="py-1.5 px-2">{t('table_facility', 'Facility')}</th>
+                          <th className="py-1.5 px-2">{t('table_stock', 'Stock')}</th>
+                          <th className="py-1.5 px-2">{t('table_retained', 'Retained')}</th>
+                          <th className="py-1.5 px-2">{t('table_surplus', 'Surplus')}</th>
+                          <th className="py-1.5 px-2">{t('table_distance', 'Distance')}</th>
+                          <th className="py-1.5 px-2">{t('table_eta', 'ETA')}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -641,11 +644,12 @@ export function RebalanceView() {
               {recommendation.is_feasible && (
                 <div className="pt-3 border-t border-slate-100 dark:border-brand-dark-border">
                   <button
+                    id="btn-open-rebalance-auth-modal"
                     onClick={handleOpenAuthModal}
-                    className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs shadow-lg transition flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Lock className="w-4 h-4" />
-                    <span>Authorize Redistribution Order (Official Sign-Off)</span>
+                    <span>{t('btn_authorize_order', 'Authorize Redistribution Order (Official Sign-Off)')}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

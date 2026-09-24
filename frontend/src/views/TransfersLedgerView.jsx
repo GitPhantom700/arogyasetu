@@ -37,7 +37,7 @@ const STATUS_STEPS = [
 ];
 
 export function TransfersLedgerView() {
-  const { t, transferSearchTerm, setTransferSearchTerm } = useUI();
+  const { t, language, transferSearchTerm, setTransferSearchTerm } = useUI();
   const { showToast } = useAlerts();
   const addToast = showToast;
 
@@ -237,7 +237,7 @@ export function TransfersLedgerView() {
             className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <RotateCw className={clsx("w-3.5 h-3.5", (loading || loadingBlocks) && "animate-spin")} />
-            <span>Refresh</span>
+            <span>{t('btn_refresh', 'Refresh')}</span>
           </button>
           <button
             type="button"
@@ -255,6 +255,7 @@ export function TransfersLedgerView() {
       {/* Primary Sub-Tab Switcher: Transfers vs Blockchain Ledger Explorer */}
       <div className="flex items-center gap-2 border-b border-slate-200 dark:border-brand-dark-border pb-2">
         <button
+          id="subtab-transfers"
           onClick={() => setActiveViewTab('transfers')}
           className={clsx(
             'flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer',
@@ -264,16 +265,17 @@ export function TransfersLedgerView() {
           )}
         >
           <Truck className="w-4 h-4" />
-          <span>Inter-Facility Transfers</span>
+          <span>{t('tab_inter_facility_transfers', 'Inter-Facility Transfers')}</span>
           <span className={clsx(
             "px-2 py-0.5 rounded-full text-[10px] font-extrabold",
             activeViewTab === 'transfers' ? "bg-white/25 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
           )}>
-            {transfers.length}
+            {language === 'mr' ? transfers.length.toLocaleString('mr-IN') : transfers.length}
           </span>
         </button>
 
         <button
+          id="subtab-ledger"
           onClick={() => setActiveViewTab('ledger')}
           className={clsx(
             'flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-xs cursor-pointer',
@@ -283,12 +285,12 @@ export function TransfersLedgerView() {
           )}
         >
           <ShieldCheck className="w-4 h-4" />
-          <span>DSCSA Cryptographic Ledger Explorer</span>
+          <span>{t('tab_dscsa_ledger_explorer', 'DSCSA Cryptographic Ledger Explorer')}</span>
           <span className={clsx(
             "px-2 py-0.5 rounded-full text-[10px] font-extrabold",
             activeViewTab === 'ledger' ? "bg-white/25 text-white" : "bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300"
           )}>
-            {ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 192} Blocks
+            {language === 'mr' ? (ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 192).toLocaleString('mr-IN') : (ledgerStatus?.total_blocks || ledgerStatus?.total_transactions || ledgerBlocks.length || 192)} {t('blocks_suffix', 'Blocks')}
           </span>
         </button>
       </div>
@@ -310,7 +312,11 @@ export function TransfersLedgerView() {
                 </span>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-                All <strong>{ledgerStatus.total_blocks || ledgerStatus.total_transactions || 192}</strong> contiguous SHA-256 blocks verified with zero hash corruption or retroactive mutation.
+                {language === 'mr'
+                  ? `सर्व ${Number(ledgerStatus.total_blocks || ledgerStatus.total_transactions || 192).toLocaleString('mr-IN')} अखंड SHA-256 ब्लॉक्स कोणत्याही हॅश त्रुटीशिवाय पूर्णतः पडताळले.`
+                  : language === 'hi'
+                  ? `सभी ${Number(ledgerStatus.total_blocks || ledgerStatus.total_transactions || 192)} अखंड SHA-256 ब्लॉक बिना किसी त्रुटि के सत्यापित किए गए।`
+                  : `All ${ledgerStatus.total_blocks || ledgerStatus.total_transactions || 192} contiguous SHA-256 blocks verified with zero hash corruption or retroactive mutation.`}
               </p>
             </div>
           </div>
@@ -333,7 +339,7 @@ export function TransfersLedgerView() {
               onClick={() => setIsVerifyModalOpen(true)}
               className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-200 font-bold text-xs border border-emerald-300 dark:border-emerald-800 transition cursor-pointer shrink-0"
             >
-              Inspect Audit Proof
+              {t('btn_inspect_audit_proof', 'Inspect Audit Proof')}
             </button>
           </div>
         </div>
@@ -382,7 +388,7 @@ export function TransfersLedgerView() {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search transfer #, medicine, facility..."
+                placeholder={t('search_transfers_placeholder', 'Search transfer #, medicine, facility...')}
                 className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -408,6 +414,16 @@ export function TransfersLedgerView() {
                 const isReceived = transfer.status === 'RECEIVED' || transfer.status === 'PARTIALLY_RECEIVED';
                 const isCancelled = transfer.status === 'CANCELLED';
 
+                const statusBadgeLabel = 
+                  transfer.status === 'RECEIVED' ? t('step_received', 'Received') :
+                  transfer.status === 'PARTIALLY_RECEIVED' ? t('status_partially_received', 'Partially Received') :
+                  transfer.status === 'IN_TRANSIT' ? t('step_in_transit', 'In-Transit') :
+                  transfer.status === 'DISPATCHED' ? t('status_dispatched', 'Dispatched') :
+                  transfer.status === 'APPROVED' ? t('step_approved', 'Approved') :
+                  transfer.status === 'CANCELLED' ? t('status_cancelled', 'Cancelled') :
+                  transfer.status === 'RETURNED' ? t('status_returned', 'Returned') :
+                  t('step_requested', 'Draft');
+
                 return (
                   <div
                     key={transfer.id}
@@ -423,7 +439,7 @@ export function TransfersLedgerView() {
                           <div>
                             <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                               <span>{transfer.medicine_name || 'Emergency Medicine'}</span>
-                              <span className="px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+                              <span className="px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 font-mono">
                                 {transfer.quantity} {transfer.medicine_unit || 'Units'}
                               </span>
                               {transfer.ai_recommended === 1 && (
@@ -434,8 +450,8 @@ export function TransfersLedgerView() {
                               )}
                             </h3>
                             <p className="text-[11px] text-slate-400 mt-0.5">
-                              Transfer ID: #{transfer.id} • Created {transfer.requested_at ? new Date(transfer.requested_at).toLocaleDateString() : 'Recently'}
-                              {transfer.reason && ` • ${transfer.reason}`}
+                              {t('transfer_id_prefix', 'Transfer ID')}: #{transfer.id} • {t('created_label', 'Created')} {transfer.requested_at ? new Date(transfer.requested_at).toLocaleDateString() : 'Recently'}
+                              {transfer.reason && ` • ${transfer.reason.includes('ABORTED') ? t('msg_aborted_fda_recall', transfer.reason) : transfer.reason}`}
                             </p>
                           </div>
                         </div>
@@ -451,7 +467,7 @@ export function TransfersLedgerView() {
                             transfer.status === 'CANCELLED' ? "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300" :
                             "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300"
                           )}>
-                            {transfer.status.replace('_', ' ')}
+                            {statusBadgeLabel}
                           </span>
 
                           <button
@@ -469,7 +485,7 @@ export function TransfersLedgerView() {
                       <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center pt-1">
                         <div className="sm:col-span-5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                            Source (Donor Facility)
+                            {t('source_facility_label', 'Source (Donor Facility)')}
                           </span>
                           <span className="font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-1.5 mt-0.5">
                             <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
@@ -479,7 +495,7 @@ export function TransfersLedgerView() {
                           </span>
                           {transfer.source_district && (
                             <span className="text-[10px] text-slate-400 block mt-0.5">
-                              {transfer.source_district} • {transfer.source_terrain ? transfer.source_terrain.replace('_', ' ') : 'Corridor'}
+                              {transfer.source_district} {t('district_suffix', 'District')} • {transfer.source_terrain ? (transfer.source_terrain === 'GHAT_MOUNTAIN' ? t('terrain_ghat', 'Ghat Mountain') : transfer.source_terrain === 'HIGHWAY_CORRIDOR' ? t('terrain_highway', 'Highway Corridor') : t('terrain_plains', 'Plains')) : 'Corridor'}
                             </span>
                           )}
                         </div>
@@ -498,7 +514,7 @@ export function TransfersLedgerView() {
 
                         <div className="sm:col-span-5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800">
                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                            Destination (Recipient PHC)
+                            {t('destination_facility_label', 'Destination (Recipient PHC)')}
                           </span>
                           <span className="font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center gap-1.5 mt-0.5">
                             <MapPin className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
@@ -508,7 +524,7 @@ export function TransfersLedgerView() {
                           </span>
                           {transfer.destination_district && (
                             <span className="text-[10px] text-slate-400 block mt-0.5">
-                              {transfer.destination_district} • {transfer.destination_terrain ? transfer.destination_terrain.replace('_', ' ') : 'Corridor'}
+                              {transfer.destination_district} {t('district_suffix', 'District')} • {transfer.destination_terrain ? (transfer.destination_terrain === 'GHAT_MOUNTAIN' ? t('terrain_ghat', 'Ghat Mountain') : transfer.destination_terrain === 'HIGHWAY_CORRIDOR' ? t('terrain_highway', 'Highway Corridor') : t('terrain_plains', 'Plains')) : 'Corridor'}
                             </span>
                           )}
                         </div>
@@ -520,6 +536,7 @@ export function TransfersLedgerView() {
                           {STATUS_STEPS.map((step, idx) => {
                             const isPast = currentStepIdx > idx || isReceived;
                             const isCurrent = currentStepIdx === idx && !isReceived;
+                            const stepLabel = step.tKey ? t(step.tKey, step.label) : step.label;
                             return (
                               <div key={step.key} className="flex flex-col items-center text-center">
                                 <div className={clsx(
@@ -535,7 +552,7 @@ export function TransfersLedgerView() {
                                   isCurrent ? "text-emerald-600 dark:text-emerald-400 font-bold" :
                                   isPast ? "text-slate-700 dark:text-slate-300" : "text-slate-400"
                                 )}>
-                                  {step.label}
+                                  {stepLabel}
                                 </span>
                               </div>
                             );
@@ -547,7 +564,7 @@ export function TransfersLedgerView() {
                       <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80">
                         <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
                           <Lock className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>DSCSA Chained SHA-256 Ledger</span>
+                          <span>{t('dscsa_chained_ledger', 'DSCSA Chained SHA-256 Ledger')}</span>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -559,7 +576,7 @@ export function TransfersLedgerView() {
                               className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-xs"
                             >
                               {actionLoading === transfer.id && <RotateCw className="w-3 h-3 animate-spin" />}
-                              <span>Approve & Soft Reserve</span>
+                              <span>{t('btn_approve_transfer', 'Approve Transfer')}</span>
                             </button>
                           )}
 
@@ -571,7 +588,7 @@ export function TransfersLedgerView() {
                               className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-xs"
                             >
                               {actionLoading === transfer.id && <RotateCw className="w-3 h-3 animate-spin" />}
-                              <span>Dispatch from Donor Facility</span>
+                              <span>{t('btn_dispatch_vehicle', 'Dispatch Vehicle')}</span>
                             </button>
                           )}
 
@@ -583,7 +600,7 @@ export function TransfersLedgerView() {
                               className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-xs"
                             >
                               {actionLoading === transfer.id && <RotateCw className="w-3 h-3 animate-spin" />}
-                              <span>Mark In-Transit (Mountain Road)</span>
+                              <span>{t('btn_mark_in_transit_mountain', 'Mark In-Transit (Mountain Road)')}</span>
                             </button>
                           )}
 
@@ -596,14 +613,14 @@ export function TransfersLedgerView() {
                             >
                               {actionLoading === transfer.id && <RotateCw className="w-3 h-3 animate-spin" />}
                               <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>Receive & Commit Stock</span>
+                              <span>{t('btn_confirm_receive', 'Confirm Receive Stock')}</span>
                             </button>
                           )}
 
                           {isReceived && (
                             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                               <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>Delivery Ledger Finalized</span>
+                              <span>{t('delivery_ledger_finalized', 'Delivery Ledger Finalized')}</span>
                             </span>
                           )}
                         </div>
@@ -834,6 +851,7 @@ export function TransfersLedgerView() {
               </div>
               <button
                 type="button"
+                id="close-verify-modal-btn"
                 onClick={() => setIsVerifyModalOpen(false)}
                 className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
               >
