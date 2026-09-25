@@ -65,12 +65,23 @@ export function UIProvider({ children }) {
   const [activeTab, setActiveTab] = useState(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.replace('#', '');
-      if (['overview', 'map', 'inventory', 'rebalance', 'transfers', 'scan', 'crisis'].includes(hash)) {
+      // If user comes with an explicit non-map tab like #inventory, respect it; otherwise default to Command Center ('overview')
+      if (hash && hash !== 'map' && ['overview', 'inventory', 'rebalance', 'transfers', 'scan', 'crisis'].includes(hash)) {
         return hash;
       }
     }
     return 'overview';
   });
+
+  // On initial mount, ensure fresh entry or leftover #map URL defaults to Command Center (#overview)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (!window.location.hash || window.location.hash === '#map' || window.location.hash === '#') {
+        window.history.replaceState(null, '', '#overview');
+        setActiveTab('overview');
+      }
+    }
+  }, []);
 
   // Sync hash changes (e.g. browser back/forward navigation)
   useEffect(() => {

@@ -124,10 +124,16 @@ def get_favicon():
 def root():
     dist_index = FRONTEND_DIST / "index.html"
     if dist_index.exists():
-        return FileResponse(dist_index)
+        response = FileResponse(dist_index)
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
     index_file = STATIC_DIR / "index.html"
     if index_file.exists():
-        return FileResponse(index_file)
+        response = FileResponse(index_file)
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        return response
     return RedirectResponse(url="/docs")
 
 
