@@ -69,8 +69,30 @@ export function UIProvider({ children }) {
         return hash;
       }
     }
-    return 'map';
+    return 'overview';
   });
+
+  // Sync hash changes (e.g. browser back/forward navigation)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (['overview', 'map', 'inventory', 'rebalance', 'transfers', 'scan', 'crisis'].includes(hash)) {
+        setActiveTab(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Keep URL hash updated with active tab
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash !== activeTab) {
+      window.history.replaceState(null, '', `#${activeTab}`);
+    }
+  }, [activeTab]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isSafetyModalOpen, setIsSafetyModalOpen] = useState(false);
   const [selectedFacilityId, setSelectedFacilityId] = useState(null);
