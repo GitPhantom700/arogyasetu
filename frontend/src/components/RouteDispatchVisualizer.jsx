@@ -34,13 +34,14 @@ export function RouteDispatchVisualizer() {
 
   const [minimized, setMinimized] = useState(false);
   const [loadingAction, setLoadingAction] = useState(false);
+  const [isSimulatingCycle, setIsSimulatingCycle] = useState(false);
 
   const route = activeTransferRoute;
   const status = route?.status || 'APPROVED';
 
   // Lightweight optimistic telemetry polling sync (every 6s while active and not final)
   useEffect(() => {
-    if (!route?.transfer_id || status === 'RECEIVED' || status === 'CANCELLED') {
+    if (!route?.transfer_id || status === 'RECEIVED' || status === 'CANCELLED' || (typeof route.transfer_id === 'number' && route.transfer_id >= 100 && route.transfer_id <= 300)) {
       return;
     }
 
@@ -172,8 +173,6 @@ export function RouteDispatchVisualizer() {
       setLoadingAction(false);
     }
   };
-
-  const [isSimulatingCycle, setIsSimulatingCycle] = useState(false);
 
   const handleReceive = async () => {
     try {
