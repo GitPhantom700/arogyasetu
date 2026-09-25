@@ -753,6 +753,8 @@ class CrisisScenarioResponse(BaseModel):
     affected_facility_codes: List[str]
     medicine_spikes: Dict[str, float]
     icon: str
+    estimated_casualties: Optional[str] = None
+    clinical_alert_message: Optional[str] = None
     model_config = ConfigDict(from_attributes=True)
 
 

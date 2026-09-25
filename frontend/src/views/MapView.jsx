@@ -166,6 +166,7 @@ export function MapView() {
     setSelectedFacilityId,
     setActiveTab,
     activeTransferRoute,
+    setActiveTransferRoute,
     theme,
     crisisStatus,
     language
@@ -176,6 +177,118 @@ export function MapView() {
   const [searchQuery, setSearchQuery] = useState('');
   const [mapCenter, setMapCenter] = useState(REGIONAL_CENTER);
   const [mapZoom, setMapZoom] = useState(DEFAULT_ZOOM);
+
+  // Pre-configured authentic transfer corridors between major donor hubs and vulnerable PHCs
+  const availableCorridors = useMemo(() => {
+    if (!facilities || facilities.length === 0) return [];
+    const dhPun = facilities.find(f => f.facility_code === 'DH-PUN-01') || facilities[0];
+    const sdhPun = facilities.find(f => f.facility_code === 'SDH-PUN-01') || facilities[1];
+    const dhSat = facilities.find(f => f.facility_code === 'DH-SAT-01') || facilities[9] || facilities[0];
+
+    const phcPaud = facilities.find(f => f.facility_code === 'PHC-PUN-02');
+    const scVelhe = facilities.find(f => f.facility_code === 'SC-PUN-01');
+    const phcMedha = facilities.find(f => f.facility_code === 'PHC-SAT-01');
+
+    const corridors = [];
+    if (dhPun && phcPaud) {
+      corridors.push({
+        transfer_id: 101,
+        transfer_code: 'TRF-20260925-ASV01',
+        source_facility_id: dhPun.id,
+        source_facility_name: dhPun.name,
+        source_lat: dhPun.latitude,
+        source_lng: dhPun.longitude,
+        destination_facility_id: phcPaud.id,
+        destination_facility_name: phcPaud.name,
+        destination_lat: phcPaud.latitude,
+        destination_lng: phcPaud.longitude,
+        medicine_name: 'Anti-Snake Venom (ASV) Polyvalent',
+        quantity: 20,
+        unit: 'vials',
+        status: 'APPROVED',
+        urgency: 'CRITICAL_EMERGENCY',
+        requires_cold_chain: true,
+        is_ghat_terrain: true
+      });
+    }
+    if (sdhPun && scVelhe) {
+      corridors.push({
+        transfer_id: 102,
+        transfer_code: 'TRF-20260925-ARV02',
+        source_facility_id: sdhPun.id,
+        source_facility_name: sdhPun.name,
+        source_lat: sdhPun.latitude,
+        source_lng: sdhPun.longitude,
+        destination_facility_id: scVelhe.id,
+        destination_facility_name: scVelhe.name,
+        destination_lat: scVelhe.latitude,
+        destination_lng: scVelhe.longitude,
+        medicine_name: 'Anti-Rabies Vaccine (ARV) Purified',
+        quantity: 15,
+        unit: 'vials',
+        status: 'APPROVED',
+        urgency: 'CRITICAL_EMERGENCY',
+        requires_cold_chain: true,
+        is_ghat_terrain: true
+      });
+    }
+    if (dhSat && phcMedha) {
+      corridors.push({
+        transfer_id: 103,
+        transfer_code: 'TRF-20260925-ASV03',
+        source_facility_id: dhSat.id,
+        source_facility_name: dhSat.name,
+        source_lat: dhSat.latitude,
+        source_lng: dhSat.longitude,
+        destination_facility_id: phcMedha.id,
+        destination_facility_name: phcMedha.name,
+        destination_lat: phcMedha.latitude,
+        destination_lng: phcMedha.longitude,
+        medicine_name: 'Anti-Snake Venom (ASV) Polyvalent',
+        quantity: 25,
+        unit: 'vials',
+        status: 'APPROVED',
+        urgency: 'CRITICAL_EMERGENCY',
+        requires_cold_chain: true,
+        is_ghat_terrain: true
+      });
+    }
+    return corridors;
+  }, [facilities]);
+
+  const handleInitiateCorridorForFacility = (destFac) => {
+    const isSatara = destFac.district?.toUpperCase() === 'SATARA';
+    const donorFac = facilities.find(f => f.facility_code === (isSatara ? 'DH-SAT-01' : 'DH-PUN-01')) || facilities[0];
+
+    const routeData = {
+      transfer_id: 200 + destFac.id,
+      transfer_code: `EMG-TRF-${destFac.facility_code}`,
+      source_facility_id: donorFac.id,
+      source_facility_name: donorFac.name,
+      source_lat: donorFac.latitude,
+      source_lng: donorFac.longitude,
+      destination_facility_id: destFac.id,
+      destination_facility_name: destFac.name,
+      destination_lat: destFac.latitude,
+      destination_lng: destFac.longitude,
+      medicine_name: destFac.tier === 'SC' ? 'Anti-Snake Venom (ASV) Polyvalent' : 'Emergency Antidotes & IV Buffer',
+      quantity: 25,
+      unit: 'vials',
+      status: 'APPROVED',
+      urgency: 'CRITICAL_EMERGENCY',
+      requires_cold_chain: Boolean(destFac.has_cold_chain),
+      is_ghat_terrain: destFac.terrain_type === 'GHAT_MOUNTAIN'
+    };
+
+    setActiveTransferRoute(routeData);
+  };
+
+  // Ready the primary corridor (DH Aundh ➔ PHC Paud) if none is active so lifecycle controls are immediately accessible
+  useEffect(() => {
+    if (!activeTransferRoute && availableCorridors.length > 0) {
+      setActiveTransferRoute(availableCorridors[0]);
+    }
+  }, [availableCorridors, activeTransferRoute, setActiveTransferRoute]);
 
   // Filter facilities based on user selection
   const filteredFacilities = useMemo(() => {
@@ -325,6 +438,33 @@ export function MapView() {
               </button>
             ))}
           </div>
+
+          {/* Active Transfer Corridors Quick Selector */}
+          {availableCorridors.length > 0 && (
+            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-brand-dark-surface p-1 px-2 rounded-xl border border-slate-200 dark:border-brand-dark-border text-xs">
+              <Truck className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+              <select
+                value={activeTransferRoute?.transfer_id || ''}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (!val) {
+                    setActiveTransferRoute(null);
+                    return;
+                  }
+                  const chosen = availableCorridors.find(r => String(r.transfer_id) === val);
+                  if (chosen) setActiveTransferRoute(chosen);
+                }}
+                className="bg-transparent text-[11px] font-semibold text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer"
+              >
+                <option value="" className="text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900">Transfer Corridors ({availableCorridors.length} active)...</option>
+                {availableCorridors.map(r => (
+                  <option key={r.transfer_id} value={r.transfer_id} className="text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900">
+                    {r.source_facility_name} ➔ {r.destination_facility_name} ({r.medicine_name.includes('ASV') ? 'ASV' : r.medicine_name.includes('ARV') ? 'ARV' : 'Meds'} - {r.quantity} {r.unit})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
         {/* Right Action: Re-center & Counter */}
@@ -535,10 +675,19 @@ export function MapView() {
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-1.5">
+                      {(status === 'CRITICAL' || status === 'WARNING') && (
+                        <button
+                          onClick={() => handleInitiateCorridorForFacility(fac)}
+                          className="w-full px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                        >
+                          <Truck className="w-3.5 h-3.5" />
+                          <span>Dispatch Replenishment Conduit</span>
+                        </button>
+                      )}
                       <button
                         onClick={() => setSelectedFacilityId(fac.id)}
-                        className="w-full px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-xs"
+                        className="w-full px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
                       >
                         <span>Inspect Live Stock</span>
                         <ArrowRight className="w-3.5 h-3.5" />

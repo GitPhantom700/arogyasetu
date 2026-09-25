@@ -37,7 +37,7 @@ const STATUS_STEPS = [
 ];
 
 export function TransfersLedgerView() {
-  const { t, language, transferSearchTerm, setTransferSearchTerm } = useUI();
+  const { t, language, transferSearchTerm, setTransferSearchTerm, updateFacilityStatus } = useUI();
   const { showToast } = useAlerts();
   const addToast = showToast;
 
@@ -161,7 +161,11 @@ export function TransfersLedgerView() {
         showToast(`Transfer #${transferId} Marked In-Transit (Mountain Road Transit)`, 'info');
       } else if (nextAction === 'receive') {
         await api.receiveTransfer(transferId);
-        showToast(`Transfer #${transferId} Successfully Received & Stock Committed`, 'success');
+        const tr = transfers.find(t => t.id === transferId);
+        if (tr?.destination_facility_id) {
+          updateFacilityStatus(tr.destination_facility_id, 'ADEQUATE');
+        }
+        showToast(`Transfer #${transferId} Successfully Received & Stock Committed. Recipient facility status is now SAFE.`, 'success');
       }
       await fetchTransfers();
       await fetchLedgerBlocks();

@@ -38,6 +38,8 @@ export function CrisisSimulatorView() {
     refreshData,
     setActiveTab,
     setActiveTransferRoute,
+    updateFacilityStatus,
+    resetFacilityStatuses,
     language,
     t
   } = useUI();
@@ -55,12 +57,12 @@ export function CrisisSimulatorView() {
   const [swarming, setSwarming] = useState(false);
   const [lastTriggerResult, setLastTriggerResult] = useState(null);
 
-  // Fetch scenarios on mount
+  // Fetch scenarios on mount and whenever language changes
   useEffect(() => {
     const fetchScenarios = async () => {
       try {
         setLoadingScenarios(true);
-        const data = await api.getCrisisScenarios();
+        const data = await api.getCrisisScenarios(language);
         setScenarios(data || []);
       } catch (err) {
         console.error('Failed to load scenarios:', err);
@@ -70,7 +72,7 @@ export function CrisisSimulatorView() {
       }
     };
     fetchScenarios();
-  }, []);
+  }, [language]);
 
   // Helpers to localize backend scenario data
   const getLocalizedScenario = (sc) => {
@@ -98,13 +100,13 @@ export function CrisisSimulatorView() {
       casualties = t('scenario_rabies_casualties') || sc.estimated_casualties;
     }
 
-    const localizedDistrict = sc.affected_district === 'Pune'
+    const localizedDistrict = (sc.affected_district === 'Pune' || sc.affected_district === 'पुणे')
       ? (t('district_pune') || 'Pune')
-      : sc.affected_district === 'Satara'
+      : (sc.affected_district === 'Satara' || sc.affected_district === 'सातारा')
         ? (t('district_satara') || 'Satara')
         : sc.affected_district;
 
-    const localizedSeverity = sc.severity === 'EMERGENCY'
+    const localizedSeverity = (sc.severity === 'EMERGENCY' || sc.severity === 'तातडीची आपत्ती' || sc.severity === 'आपातकालीन संकट')
       ? (t('severity_emergency') || 'EMERGENCY')
       : (t('severity_critical') || 'CRITICAL');
 
@@ -143,6 +145,14 @@ export function CrisisSimulatorView() {
       });
 
       setLastTriggerResult(res);
+
+      // Instantly mark depleted crisis centers as CRITICAL on the geospatial map
+      if (res?.affected_facility_ids && Array.isArray(res.affected_facility_ids)) {
+        res.affected_facility_ids.forEach(facId => {
+          updateFacilityStatus(facId, 'CRITICAL');
+        });
+      }
+
       await refreshData();
 
       const activeTitle = localizedCurrent?.localizedTitle || res.scenario_title;
@@ -165,6 +175,7 @@ export function CrisisSimulatorView() {
       setResetting(true);
       const res = await api.resetCrisis();
       setLastTriggerResult(null);
+      resetFacilityStatuses();
       await refreshData();
 
       showToast(
@@ -201,10 +212,18 @@ export function CrisisSimulatorView() {
       }));
 
       const res = await api.swarmDispatchCrisis(sanitizedPlans);
+
+      // Swarm replenishments arrive: mark deficit facilities as SAFE (ADEQUATE)
+      sanitizedPlans.forEach(p => {
+        if (p.recipient_facility_id) {
+          updateFacilityStatus(p.recipient_facility_id, 'ADEQUATE');
+        }
+      });
+
       await refreshData();
 
       showToast(
-        `⚡ Swarm Dispatched: ${res.dispatched_count} emergency corridors committed!`,
+        `⚡ Swarm Dispatched: ${res.dispatched_count} emergency corridors committed! Deficit centers transitioning to SAFE.`,
         'success',
         'Swarm Rebalance Committed'
       );

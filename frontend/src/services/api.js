@@ -169,7 +169,7 @@ export const api = {
   },
 
   // Crisis & Outbreak Simulation Engine
-  getCrisisScenarios: () => request('/crisis/scenarios'),
+  getCrisisScenarios: (lang = 'en') => request(`/crisis/scenarios?lang=${encodeURIComponent(lang)}`),
   getCrisisStatus: () => request('/crisis/status'),
   triggerCrisis: (payload) => request('/crisis/trigger', {
     method: 'POST',

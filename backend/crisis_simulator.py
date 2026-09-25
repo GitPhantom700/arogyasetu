@@ -138,6 +138,70 @@ PRESET_SCENARIOS: Dict[str, CrisisScenarioDefinition] = {
 }
 
 
+SCENARIO_TRANSLATIONS: Dict[str, Dict[str, Dict[str, str]]] = {
+    "mr": {
+        "MONSOON_FLOOD_SOUTH_SATARA": {
+            "title": "पावसाळी पूर आणि दरड कोसळणे (दक्षिण सातारा / कोयना खोरे)",
+            "description": "कोयना पाणलोट क्षेत्रात मुसळधार पावसामुळे पूर आणि घाट रस्ते खचण्याची परिस्थिती निर्माण झाली आहे. विस्थापित घोणस व फुरसे सापांमुळे सर्पदंशात ४००% वाढ, तसेच ग्रामीण सह्याद्री घाट केंद्रांमध्ये दूषित पाण्यामुळे तीव्र अतिसाराची साथ सुरू झाली आहे.",
+            "estimated_casualties": "६५-८० गंभीर रुग्ण / २४ तास",
+            "affected_district": "सातारा",
+            "severity": "तातडीची आपत्ती",
+        },
+        "LEPTOSPIROSIS_PUNE_GHATS": {
+            "title": "लेप्टोस्पायरोसिस आणि तीव्र ताप उद्रेक (मावळ आणि वेल्हे पायथा)",
+            "description": "पूरानंतर शेतातील साचलेल्या पाण्यामुळे ग्रामीण पुण्यातील पश्चिम घाटातील गावांमध्ये उंदरांमुळे होणारा लेप्टोस्पायरोसिस आणि डेंग्यू तापाच्या रुग्णांमध्ये तीव्र वाढ झाली आहे.",
+            "estimated_casualties": "१२०+ ताप / लेप्टोस्पायरोसिस संशयित",
+            "affected_district": "पुणे",
+            "severity": "अतिगंभीर संकट",
+        },
+        "HEATWAVE_PLAINS_SHIRUR": {
+            "title": "तीव्र उन्हाळी उष्णतेची लाट आणि डिहायड्रेशन संकट (पूर्व पठारी भाग)",
+            "description": "पूर्वेकडील दुष्काळी तालुक्यांमध्ये ४३.५° से पेक्षा जास्त तापमानामुळे बालकांमध्ये उष्माघात, अतिताप आणि प्राथमिक आरोग्य केंद्रांमध्ये तीव्र गॅस्ट्रोएन्टेरिटिसचे संकट निर्माण झाले आहे.",
+            "estimated_casualties": "१५०+ डिहायड्रेशन / उष्माघात भरती",
+            "affected_district": "पुणे",
+            "severity": "अतिगंभीर संकट",
+        },
+        "RABIES_CANINE_CLUSTER": {
+            "title": "श्वान रेबीज प्राणीजन्य उद्रेक (सातारा उपनगरीय सीमा)",
+            "description": "ग्रामीण आठवडे बाजारात भटक्या कुत्र्यांच्या हल्ल्यांमुळे श्रेणी ३ चावण्याच्या गंभीर घटना घडल्या असून तात्काळ रेबीज प्रतिबंधक लस (ARV) आणि इम्युनोग्लोब्युलिनची तातडीची गरज निर्माण झाली आहे.",
+            "estimated_casualties": "४५ श्रेणी ३ प्राण्यांचे चावे नोंदवले",
+            "affected_district": "सातारा",
+            "severity": "तातडीची आपत्ती",
+        },
+    },
+    "hi": {
+        "MONSOON_FLOOD_SOUTH_SATARA": {
+            "title": "मानसूनी बाढ़ और भूस्खलन (दक्षिण सतारा / कोयना बेसिन)",
+            "description": "कोयना जलग्रहण क्षेत्र में भारी बारिश से अचानक बाढ़ और घाट संपर्क बाधित होने की स्थिति। विस्थापित रसेल वाइपर और सॉ-स्केल्ड वाइपर के कारण सर्पदंश में 400% उछाल, साथ ही ग्रामीण घाट केंद्रों में जलजनित गंभीर अतिसार का प्रकोप।",
+            "estimated_casualties": "65-80 गंभीर मामले / 24 घंटे",
+            "affected_district": "सतारा",
+            "severity": "आपातकालीन संकट",
+        },
+        "LEPTOSPIROSIS_PUNE_GHATS": {
+            "title": "लेप्टोस्पायरोसिस और तीव्र ज्वर प्रकोप (मावल एवं वेल्हे तलहटी)",
+            "description": "बाढ़ के बाद खेतों में जलभराव के कारण ग्रामीण पुणे के पश्चिमी घाट क्षेत्रों में कृंतक-जनित लेप्टोस्पायरोसिस और डेंगू बुखार के मामलों में भारी उछाल।",
+            "estimated_casualties": "120+ ज्वर / लेप्टोस्पायरोसिस संदिग्ध",
+            "affected_district": "पुणे",
+            "severity": "अति गंभीर",
+        },
+        "HEATWAVE_PLAINS_SHIRUR": {
+            "title": "भीषण ग्रीष्मकालीन लू और निर्जलीकरण संकट (पूर्वी मैदानी क्षेत्र)",
+            "description": "पूर्वी शुष्क तालुकों में 43.5°C से अधिक तापमान के कारण बच्चों में लू, अतिताप और प्राथमिक स्वास्थ्य केंद्रों में गंभीर गैस्ट्रोएंटेराइटिस का संकट।",
+            "estimated_casualties": "150+ निर्जलीकरण / हीटस्ट्रोक भर्ती",
+            "affected_district": "पुणे",
+            "severity": "अति गंभीर",
+        },
+        "RABIES_CANINE_CLUSTER": {
+            "title": "श्वान रेबीज जूनोटिक प्रकोप (सतारा उपनगरीय सीमा)",
+            "description": "ग्रामीण साप्ताहिक बाजारों में आवारा कुत्तों के हमलों के कारण श्रेणी 3 काटने के गंभीर मामले, जिसके लिए तत्काल रेबीज-रोधी टीकाकरण (ARV) की आवश्यकता।",
+            "estimated_casualties": "45 श्रेणी 3 पशु दंश दर्ज",
+            "affected_district": "सतारा",
+            "severity": "आपातकालीन संकट",
+        },
+    }
+}
+
+
 class CrisisSimulatorService:
     """
     Singleton service managing crisis simulation lifecycle, FEFO emergency depletions,
@@ -174,9 +238,16 @@ class CrisisSimulatorService:
         """)
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_crisis_snapshots_active ON crisis_snapshots(is_active);")
 
-    def get_scenarios(self) -> List[Dict[str, Any]]:
-        """Returns all preset crisis scenario definitions formatted for API response."""
-        return [asdict(s) for s in PRESET_SCENARIOS.values()]
+    def get_scenarios(self, lang: str = "en") -> List[Dict[str, Any]]:
+        """Returns all preset crisis scenario definitions formatted for API response with requested locale."""
+        results = []
+        trans = SCENARIO_TRANSLATIONS.get(lang, {})
+        for s in PRESET_SCENARIOS.values():
+            d = asdict(s)
+            if s.scenario_id in trans:
+                d.update(trans[s.scenario_id])
+            results.append(d)
+        return results
 
     def get_scenario_by_id(self, scenario_id: str) -> Optional[CrisisScenarioDefinition]:
         return PRESET_SCENARIOS.get(scenario_id)
@@ -512,6 +583,7 @@ class CrisisSimulatorService:
                 "scenario_id": scenario.scenario_id,
                 "scenario_title": scenario.title,
                 "affected_facilities_count": len(affected_facility_ids),
+                "affected_facility_ids": affected_facility_ids,
                 "critically_depleted_items_count": len(newly_depleted_items),
                 "total_units_consumed": total_units_consumed,
                 "alerts_broadcast": alerts_broadcast_count,

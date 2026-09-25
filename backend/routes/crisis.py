@@ -13,7 +13,7 @@ Endpoints:
 
 from typing import List, Dict, Any, Optional
 import logging
-from fastapi import APIRouter, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, HTTPException, status, BackgroundTasks, Query
 from pydantic import BaseModel, ConfigDict, model_validator
 
 from database import get_db_path
@@ -39,9 +39,9 @@ router = APIRouter(prefix="/api/crisis", tags=["Crisis Simulation Engine"])
     response_model=List[CrisisScenarioResponse],
     summary="List all available public health emergency and outbreak simulation scenarios"
 )
-def get_crisis_scenarios():
+def get_crisis_scenarios(lang: str = Query("en", description="Locale code: en, mr, or hi")):
     """Returns available pre-configured emergency scenarios with clinical context and multipliers."""
-    return crisis_simulator_service.get_scenarios()
+    return crisis_simulator_service.get_scenarios(lang=lang)
 
 
 @router.get(

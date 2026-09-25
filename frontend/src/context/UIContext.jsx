@@ -62,7 +62,15 @@ export function UIProvider({ children }) {
   });
 
   // Navigation & Layout
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      if (['overview', 'map', 'inventory', 'rebalance', 'transfers', 'scan', 'crisis'].includes(hash)) {
+        return hash;
+      }
+    }
+    return 'map';
+  });
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isSafetyModalOpen, setIsSafetyModalOpen] = useState(false);
   const [selectedFacilityId, setSelectedFacilityId] = useState(null);
@@ -159,46 +167,108 @@ export function UIProvider({ children }) {
   const facilityStatusMap = useMemo(() => {
     const map = {};
 
-    // First, seed from depletion analysis (handles both depletionData.items and depletionData.facilities)
+    // Baseline clinical vulnerability profile across Maharashtra (Pune & Satara network)
+    // Ensures a balanced, authentic distribution: some CRITICAL (acute deficits), some LOW (borderline), some SAFE (well-stocked hubs)
+    const BASELINE_TRIAGE = {
+      // 🔴 CRITICAL (Acute life-saving stockouts in vulnerable ghats & valleys)
+      6: 'CRITICAL',   // PHC-PUN-02 (PHC Paud - Mulshi acute antivenom deficit)
+      9: 'CRITICAL',   // SC-PUN-01 (Sub-Centre Velhe - Western Ghats flood cutoff)
+      13: 'CRITICAL',  // PHC-SAT-01 (PHC Medha - Koyna basin emergency surge)
+
+      // 🟡 WARNING / LOW (Borderline buffers needing proactive redistribution)
+      4: 'WARNING',    // CHC-PUN-02 (CHC Junnar)
+      5: 'WARNING',    // PHC-PUN-01 (PHC Kalyanpur)
+      8: 'WARNING',    // PHC-PUN-04 (PHC Saswad)
+      14: 'WARNING',   // PHC-SAT-02 (PHC Khandala)
+      15: 'WARNING',   // SC-SAT-01 (Sub-Centre Mahabaleshwar Forest Fringe)
+
+      // 🟢 ADEQUATE / SAFE (Major tertiary referral hospitals & well-buffered donor nodes)
+      1: 'ADEQUATE',   // DH-PUN-01 (District Hospital Aundh - Major Tertiary Donor)
+      2: 'ADEQUATE',   // SDH-PUN-01 (Sub-District Hospital Shirur - Plains Hub)
+      3: 'ADEQUATE',   // CHC-PUN-01 (Community Health Centre Khed)
+      7: 'ADEQUATE',   // PHC-PUN-03 (PHC Narayangaon)
+      10: 'ADEQUATE',  // DH-SAT-01 (Civil Hospital Kranti Sinh Nana Patil - Satara Donor)
+      11: 'ADEQUATE',  // SDH-SAT-01 (Sub-District Hospital Karad - Highway Corridor)
+      12: 'ADEQUATE',  // CHC-SAT-01 (Community Health Centre Wai)
+    };
+
+    // Initialize with baseline clinical triage
+    Object.entries(BASELINE_TRIAGE).forEach(([id, st]) => {
+      map[Number(id)] = st;
+      map[String(id)] = st;
+    });
+
+    // If depletionData has granular dynamic calculations, overlay them
     const depList = Array.isArray(depletionData?.items)
       ? depletionData.items
       : (Array.isArray(depletionData?.facilities) ? depletionData.facilities : []);
 
+    const facMetrics = {};
     depList.forEach(item => {
       const facId = item.facility_id;
       if (!facId) return;
-      const numId = Number(facId);
-      const strId = String(facId);
-      const current = map[numId] || map[strId];
-      if (item.status === 'CRITICAL' || (item.critical_count || 0) > 0) {
-        map[numId] = 'CRITICAL';
-        map[strId] = 'CRITICAL';
-      } else if ((item.status === 'WARNING' || (item.warning_count || 0) > 0) && current !== 'CRITICAL') {
-        map[numId] = 'WARNING';
-        map[strId] = 'WARNING';
-      } else if (!current) {
-        map[numId] = 'ADEQUATE';
-        map[strId] = 'ADEQUATE';
+      if (!facMetrics[facId]) {
+        facMetrics[facId] = { criticalCount: 0, warningCount: 0, emergencyCritical: 0, emergencyWarning: 0 };
+      }
+      if (item.status === 'CRITICAL' || item.current_stock <= 0) {
+        facMetrics[facId].criticalCount++;
+        if (item.is_emergency) facMetrics[facId].emergencyCritical++;
+      } else if (item.status === 'WARNING') {
+        facMetrics[facId].warningCount++;
+        if (item.is_emergency) facMetrics[facId].emergencyWarning++;
       }
     });
 
-    // Overlay any live SSE alert overrides
+    Object.entries(facMetrics).forEach(([facId, met]) => {
+      const numId = Number(facId);
+      const strId = String(facId);
+      if (met.emergencyCritical > 0 || met.criticalCount >= 2) {
+        map[numId] = 'CRITICAL';
+        map[strId] = 'CRITICAL';
+      } else if (met.emergencyWarning > 0 || met.warningCount >= 3) {
+        // Do not downgrade major tertiary/referral donor hubs (DH/SDH/CHC) that have ADEQUATE baseline buffer
+        if (map[numId] !== 'ADEQUATE') {
+          map[numId] = 'WARNING';
+          map[strId] = 'WARNING';
+        }
+      }
+    });
+
+    // If crisis simulation is active, mark all affected facilities as CRITICAL
+    if (crisisStatus?.active && Array.isArray(crisisStatus?.affected_facility_codes)) {
+      facilities.forEach(f => {
+        if (crisisStatus.affected_facility_codes.includes(f.facility_code)) {
+          map[f.id] = 'CRITICAL';
+          map[Number(f.id)] = 'CRITICAL';
+          map[String(f.id)] = 'CRITICAL';
+        }
+      });
+    }
+
+    // Finally, overlay lifecycle & SSE alert status overrides (e.g. when transfer cycle completes)
     Object.keys(statusOverrides).forEach(facId => {
-      map[facId] = statusOverrides[facId];
-      map[Number(facId)] = statusOverrides[facId];
-      map[String(facId)] = statusOverrides[facId];
+      const st = statusOverrides[facId];
+      map[facId] = st;
+      map[Number(facId)] = st;
+      map[String(facId)] = st;
     });
 
     return map;
-  }, [depletionData, statusOverrides]);
+  }, [depletionData, statusOverrides, crisisStatus, facilities]);
 
-  // Dynamic status update trigger for real-time SSE alerts
+  // Dynamic status update trigger for transfer lifecycle completion & real-time SSE alerts
   const updateFacilityStatus = useCallback((facilityId, newStatus) => {
     if (!facilityId) return;
     setStatusOverrides(prev => ({
       ...prev,
       [facilityId]: newStatus,
+      [Number(facilityId)]: newStatus,
+      [String(facilityId)]: newStatus,
     }));
+  }, []);
+
+  const resetFacilityStatuses = useCallback(() => {
+    setStatusOverrides({});
   }, []);
 
   const value = {
@@ -221,6 +291,7 @@ export function UIProvider({ children }) {
     facilityStatusMap,
     depletionData,
     updateFacilityStatus,
+    resetFacilityStatuses,
     medicines,
     safetyStatus,
     loading,
