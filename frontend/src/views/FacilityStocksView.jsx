@@ -325,7 +325,7 @@ export function FacilityStocksView() {
           {filteredFacilities.map(fac => {
             const hasCritical = isFacilityCritical(fac);
             const { marathiName, hindiName, block } = getFacilityDetails(fac, language);
-            const subtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : marathiName);
+            const subtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : null);
 
             const tierCode = fac.tier || fac.facility_type || 'PHC';
             const tierKey = {

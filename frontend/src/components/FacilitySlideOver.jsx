@@ -95,7 +95,7 @@ export function FacilitySlideOver({ facilityId, facility, status, onClose, onNav
   const fac = { ...(facility || {}), ...(facilityDetail || {}), ...(inventory?.facility || {}) };
   const { language } = useUI();
   const { marathiName, hindiName } = getFacilityDetails(fac, language);
-  const localizedSubtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : marathiName);
+  const localizedSubtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : null);
 
   // Handle backend schema: data.inventory contains the array of medicine stock items
   const items = inventory?.inventory || inventory?.items || [];

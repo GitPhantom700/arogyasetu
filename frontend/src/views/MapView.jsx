@@ -591,7 +591,7 @@ export function MapView() {
             const icon = getClinicalPinIcon(status, fac.tier_type || fac.tier);
             const position = [fac.latitude, fac.longitude];
             const { marathiName, hindiName } = getFacilityDetails(fac, language);
-            const localizedSubtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : marathiName);
+            const localizedSubtitle = language === 'mr' ? marathiName : (language === 'hi' ? (hindiName || marathiName) : null);
 
             return (
               <Marker

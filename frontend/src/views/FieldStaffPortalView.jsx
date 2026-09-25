@@ -593,13 +593,23 @@ export function FieldStaffPortalView() {
               </div>
               <div>
                 <h3 className="font-bold text-sm text-amber-950 dark:text-amber-100 flex items-center gap-2">
-                  <span>साठा ताळमेळ सूचना • Physical Ledger Reconciliation Notice</span>
+                  <span>
+                    {language === 'mr'
+                      ? 'साठा ताळमेळ सूचना • Physical Ledger Reconciliation Notice'
+                      : language === 'hi'
+                      ? 'स्टॉक समाधान सूचना • Physical Ledger Reconciliation Notice'
+                      : 'Physical Ledger Reconciliation Notice'}
+                  </span>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-200">
                     {reconciliationList.length} Pending
                   </span>
                 </h3>
                 <p className="text-xs text-amber-800 dark:text-amber-300 mt-0.5 leading-relaxed">
-                  तुम्ही ऑफलाइन असताना या औषध बॅचचा साठा इतर केंद्रास हस्तांतरित किंवा वितरित झाला आहे. डेटाबेस अखंड आहे. कृपया तुमच्या प्रत्यक्ष नोंदवहीत (Physical Register) नोंद करून हा रेकॉर्ड अद्ययावत करा.
+                  {language === 'mr'
+                    ? 'तुम्ही ऑफलाइन असताना या औषध बॅचचा साठा इतर केंद्रास हस्तांतरित किंवा वितरित झाला आहे. डेटाबेस अखंड आहे. कृपया तुमच्या प्रत्यक्ष नोंदवहीत (Physical Register) नोंद करून हा रेकॉर्ड अद्ययावत करा.'
+                    : language === 'hi'
+                    ? 'जब आप ऑफ़लाइन थे, तब इस दवा बैच का स्टॉक दूसरे केंद्र में स्थानांतरित या वितरित किया गया है। डेटाबेस अक्षुण्ण है। कृपया अपने भौतिक रजिस्टर में प्रविष्टि करके इस रिकॉर्ड को अद्यतन करें।'
+                    : 'While you were offline, stock for this medicine batch was transferred or dispensed to another facility. Database integrity is preserved. Please reconcile and update this in your physical ledger register.'}
                 </p>
               </div>
             </div>
@@ -644,7 +654,13 @@ export function FieldStaffPortalView() {
                     className="min-h-[44px] px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer"
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>नोंदवहीत नोंद केली • Acknowledge</span>
+                    <span>
+                      {language === 'mr'
+                        ? 'नोंदवहीत नोंद केली • Acknowledge'
+                        : language === 'hi'
+                        ? 'रजिस्टर में दर्ज किया • Acknowledge'
+                        : 'Acknowledge'}
+                    </span>
                   </button>
                 </div>
               </div>
