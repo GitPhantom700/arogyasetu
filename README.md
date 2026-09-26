@@ -83,7 +83,7 @@ PranaVahini enforces a strict **Zero-Hallucination, Zero-Harm** policy. All reco
 
 | # | Physical Invariant | Formulation / Guard Condition | Safety Failure Mitigated |
 | :- | :--- | :--- | :--- |
-| **1** | **Non-Cannibalization / Zero Starvation** | $\text{Retained} \ge \max(\text{min\_stock}, \lceil 14 \times \text{DAC}\rceil)$ ($21\text{d}$ in Monsoon) | Secondary stockout at donor facility |
+| **1** | **Zero Donor Depletion / Reserve Floor** | $\text{Retained} \ge \max(\text{min\_stock}, \lceil 14 \times \text{DAC}\rceil)$ ($21\text{d}$ in Monsoon) | Secondary stockout at donor facility |
 | **2** | **Physical Bounding & Non-Negative Stock** | $\text{Allocated} \le \text{Actual Surplus}$ (Clamped to $[0, \text{Surplus}]$) | Over-allocation / phantom stock |
 | **3** | **Cold-Chain Equipment Compatibility** | $\text{Requires ILR} \implies \text{Donor Cold-Chain Status} = \text{VERIFIED}$ | Spoiled biologics / vaccines |
 | **4** | **Transit Feasibility & FEFO Buffer** | $\text{Batch Expiry} \ge \text{Today} + \lceil\text{Transit}/24\rceil + 7\text{ days}$ | In-transit medicine expiration |

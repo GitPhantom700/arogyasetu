@@ -81,14 +81,14 @@ In a classroom textbook, a simple subtraction formula works. But in the unpredic
 
 Large Language Models (LLMs) like Google Gemini are brilliant, but they can occasionally make mistakes or hallucinate. In healthcare, an AI mistake can be fatal.
 
-### The Clinical Cannibalization Dilemma:
+### The Donor Depletion Dilemma (Preventing Secondary Stockouts):
 > Consider an unconstrained algorithmic allocator operating across two rural health centres:
 > * **Facility A (Sub-Centre Velhe)** experiences an acute envenomation surge and requires **15 vials** of Anti-Snake Venom.
 > * **Facility B (Primary Health Centre Paud)** holds a modest inventory of **15 vials** (its own statutory 14-day emergency reserve).
 > 
 > A naive optimization model or unconstrained LLM would propose: *"Transfer all 15 vials from Facility B to Facility A."*
 > 
-> While Facility A is temporarily relieved, **Facility B has been rendered completely vulnerable (0 vials remaining)**. If an emergency snakebite presentation occurs at Facility B the following morning, that patient faces a preventable fatal outcome because the system cannibalized the donor clinic's safety floor.
+> While Facility A is temporarily relieved, **Facility B has been rendered completely vulnerable (0 vials remaining)**. If an emergency snakebite presentation occurs at Facility B the following morning, that patient faces a preventable fatal outcome because the system depleted the donor clinic below its mandatory safety reserve.
 
 To guarantee absolute safety, PranaVahini places a hardcoded, deterministic Python firewall called **`AISafetyGuard`** between the AI and the database:
 
@@ -105,11 +105,11 @@ graph TD
 ```
 
 ### The 6 Physical Invariants Enforced by `AISafetyGuard`
-1. **Rule 1 — Non-Cannibalization / Zero Starvation:** A donor clinic must **always** retain at least **14 days of average consumption** (extended to **21 days during monsoon season**). The AI is physically blocked from touching this emergency safety cushion.
+1. **Rule 1 — Zero Donor Depletion (Secondary Stockout Prevention):** A donor clinic must **always** retain at least **14 days of average consumption** (extended to **21 days during monsoon season**). The AI is physically blocked from touching this emergency safety cushion.
 2. **Rule 2 — Physical Stock Bounding:** The AI cannot allocate "ghost inventory." Every transferred vial is mapped to a verified, unexpired batch number physically present in the database.
 3. **Rule 3 — Cold-Chain Verification:** Heat-sensitive medications (ARV, ASV, Insulin) can only be dispatched from facilities with active, working Ice-Lined Refrigerators.
 4. **Rule 4 — Transit & FEFO Feasibility:** A batch cannot be moved if its expiration date falls within the transit time plus a 7-day clinical buffer.
-5. **Rule 5 — Rural Blackout Demand Floor:** If a remote clinic loses power and internet for 5 days during a cyclone, its recorded consumption drops to zero. The system recognizes this anomaly and enforces an automatic default consumption floor ($1.0\text{ unit/day}$) so its safety stock is never cannibalized.
+5. **Rule 5 — Rural Blackout Demand Floor:** If a remote clinic loses power and internet for 5 days during a cyclone, its recorded consumption drops to zero. The system recognizes this anomaly and enforces an automatic default consumption floor ($1.0\text{ unit/day}$) so its safety stock is never depleted.
 6. **Rule 6 — Payload Distrust & Prompt Injection Defense:** All incoming inputs pass through strict regex filters to strip adversarial manipulation attempts before reaching the AI.
 
 ---

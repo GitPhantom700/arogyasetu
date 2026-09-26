@@ -27,7 +27,7 @@ In response to the user's requirement to **"cover the entire app"**, the UI Desi
 | | **Screen 10:** Slide-Over Facility Batch Drawer | Slide-Over Drawer | Non-destructive batch drawer, FEFO expiry prioritization (<30d, <60d lots), cold-chain temperature telemetry (`2°C - 8°C OK` vs `Quarantine`). |
 | **Geospatial Decision Support** | **Screen 11:** Geospatial Map (Sahyadri Range) | Leaflet GIS | 15 facilities mapped across Pune & Satara Western Ghats, color+shape severity markers, district filter pills, mountain road corridors. |
 | **AI Autonomous Rebalancer** | **Screen 12:** Rebalancing Cockpit & Deficits | Optimization Engine | Linear programming parameters (Max Radius 50km, Min Donor Buffer 14d, Monsoon Mode toggle), live deficit triage queue. |
-| | **Screen 13:** Generated Rebalancing Plan Details | AI Transparency | Transfer orders with exact allocated batches, transit distance, terrain risk rating, non-cannibalization mathematical reasoning. |
+| | **Screen 13:** Generated Rebalancing Plan Details | AI Transparency | Transfer orders with exact allocated batches, transit distance, terrain risk rating, zero donor depletion mathematical reasoning. |
 | | **Screen 14:** Rebalance Authorization Modal | Human-in-the-Loop (`HITL`) | **Clinical Officer Official Sign-Off:** Authorizing officer name (*Dr. Ramesh Patil*), role (*Civil Surgeon & DHO*), mandatory cold-chain confirmation checkbox, and soft-reservation batch lock. |
 | **Cryptographic Blockchain Ledger** | **Screen 15:** DSCSA Cryptographic Audit Trail | Regulatory Proof | Unbroken chain of 192 SHA-256 blocks with parent/tip hashes and zero-mutation audit confirmation banner against black-market pilferage. |
 | **Field Staff Operations** | **Screen 16:** Field Staff Rapid Dispensing Logger | ANM / ASHA Field | Mobile-first oversized touch targets (48x48px), immediate `-1, -5, -10` decrement pills, FEFO auto-selection for rush hours. |
@@ -104,7 +104,7 @@ Interactive Leaflet GIS map visualizing 15 Primary Health Centres, steep mountai
 ### Module 5: Autonomous AI Rebalancer (Gemini 3.6 Flash)
 
 #### Screen 12: Rebalancing Cockpit & Deficits Triage Queue
-Algorithmic triage prioritizing acute life-saving deficits, displaying donor candidates within a 50 km radius, mountain road transit impedance, and non-cannibalization safety limits.
+Algorithmic triage prioritizing acute life-saving deficits, displaying donor candidates within a 50 km radius, mountain road transit impedance, and zero donor depletion safety limits.
 ![Screen 12: Rebalancing Cockpit & Deficits](docs/ui_audit_assets/08_ai_rebalancer.png)
 
 #### Screen 13: Generated Rebalancing Plan Details
@@ -160,7 +160,7 @@ Emergency alert state demonstrating casualty spikes, critical stockout cascades,
 ### Module 9: AI Safety Guardrails & Rural Resilience
 
 #### Screen 22: Deterministic AI Safety & 6 Invariants Modal
-Live telemetry of the deterministic Python `AISafetyGuard` circuit breaker firewall enforcing 6 non-negotiable physical constraints (non-cannibalization floor, non-negative stock, cold-chain compatibility).
+Live telemetry of the deterministic Python `AISafetyGuard` circuit breaker firewall enforcing 6 non-negotiable physical constraints (zero donor depletion floor, non-negative stock, cold-chain compatibility).
 ![Screen 22: AI Safety & 6 Invariants Modal](docs/ui_audit_assets/16_ai_safety_modal.png)
 
 #### Screen 23: Rural Offline Mode & Non-Punitive OCC 409 Sync Drill

@@ -87,7 +87,7 @@ def test_candidate_donor_discovery_and_radius_filtering():
 
 def test_donor_safety_stock_constraint():
     """
-    Test 3: Donor Safety Stock Invariant (Non-Cannibalization)
+    Test 3: Donor Safety Stock Invariant (Zero Donor Depletion)
     Strictly asserts that surplus_available = max(0, stock - max(min_safety_stock, ceil(14 * DAC))).
     Under no circumstances may a donor transfer stock that infringes on its retention buffer.
     """

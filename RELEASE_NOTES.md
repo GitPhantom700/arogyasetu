@@ -18,7 +18,7 @@ This initial production release delivers autonomous emergency medicine rebalanci
 
 #### 2. Multimodal Google AI Integration
 - **Gemini 3.6 Flash Vision OCR:** Physical paper register and invoice digitization (`/api/inventory/scan-register`) with `RapidFuzz` clinical catalog disambiguation and mandatory pharmacist-in-the-loop review.
-- **Gemini Autonomous Rebalancer:** Multi-objective redistribution engine selecting donors within 50 km based on cold-chain readiness, FEFO batch selection, and non-cannibalization safety floors.
+- **Gemini Autonomous Rebalancer:** Multi-objective redistribution engine selecting donors within 50 km based on cold-chain readiness, FEFO batch selection, and zero donor depletion safety floors.
 - **Deterministic AISafetyGuard:** Strict Python safety envelope enforcing 6 non-negotiable physical constraints, mass conservation, and rural blackout baseline floors.
 - **Thread-Safe Circuit Breaker:** Monotonic watchdog providing $< 5\text{ ms}$ offline fallback to linear programming when cloud connectivity is unavailable.
 

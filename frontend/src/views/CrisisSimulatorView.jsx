@@ -688,7 +688,7 @@ export function CrisisSimulatorView() {
                 </div>
               ) : (
                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/40 text-center text-xs text-slate-500">
-                  {t('no_donors_safe_buffer') || 'No candidate donor within safe non-cannibalization buffer for the current deficit set.'}
+                  {t('no_donors_safe_buffer') || 'No candidate donor within safe donor depletion buffer for the current deficit set.'}
                 </div>
               )}
 

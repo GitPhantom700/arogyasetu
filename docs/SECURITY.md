@@ -21,7 +21,7 @@ $$\text{Hash}_n = \text{SHA256}(\text{Hash}_{n-1} \parallel \text{GLN} \parallel
 
 Google Gemini operates within a deterministic Python safety envelope that intercepts, distrusts, and validates all proposed rebalancing actions against 6 physical invariants before any recommendation reaches a human doctor:
 
-1. **Non-Cannibalization Invariant:** Donor PHCs must preserve a minimum 14-day safety buffer (21 days during monsoon season). The firewall strips and clamps any request that touches this threshold.
+1. **Zero Donor Depletion Invariant:** Donor PHCs must preserve a minimum 14-day safety buffer (21 days during monsoon season). The firewall strips and clamps any request that touches this threshold.
 2. **Mass Conservation Invariant:** $\sum \Delta Q = 0$. Medication cannot be minted from nothing or vanish without ledger accounting.
 3. **Finite Positive Integer Quantities:** Rejects zero, negative, or fractional delivery amounts.
 4. **Valid Topological Nodes:** Rejects transfers involving unverified facilities or unregistered drug SKUs.

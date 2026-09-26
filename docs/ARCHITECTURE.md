@@ -76,7 +76,7 @@ graph TD
   2. Ice-Lined Refrigerator (ILR) cold-chain compatibility (2°C to 8°C).
   3. First-Expiry-First-Out (FEFO) shelf-life buffers.
 - **Deterministic Guardrails:** The `AISafetyGuard` enforces non-negotiable physical constraints:
-  - **Rule 1 (Non-Cannibalization):** Donor facilities must never drop below 14 days of safety stock (or 21 days during monsoon season).
+  - **Rule 1 (Zero Donor Depletion):** Donor facilities must never drop below 14 days of safety stock (or 21 days during monsoon season).
   - **Rule 2 (Anti-Ghosting):** Rejection of any medication units not verified in SQLite.
   - **Rule 3 (Rural Blackout Demand Floor):** Guarantees baseline reserves even if communication lines drop.
 - **Thread-Safe Circuit Breaker:** In the event of cloud connectivity loss, the circuit breaker opens and switches to an offline mathematical linear programming solver in $< 5\text{ ms}$.

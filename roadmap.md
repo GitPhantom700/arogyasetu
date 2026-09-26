@@ -38,7 +38,7 @@
 - **Microtask 3.1 — Real-Time Alert Engine:** High-throughput Server-Sent Events (SSE) pub/sub streaming stockout alerts and emergency spikes to command center dashboards in $< 50\text{ ms}$.
 - **Microtask 3.2 — Multimodal Vision OCR:** Camera ingestion of photographed handwritten paper registers (*दैनिक औषध नोंदवही*) and delivery challans via Google Gemini 3.6 Flash Vision with RapidFuzz catalog matching.
 - **Microtask 3.3 — Gemini Autonomous Rebalancing Agent:** Multi-objective rebalancing engine evaluating donor radius (50 km), surplus retention buffers, cold-chain readiness, and mountain road physics across Sahyadri ghat passes.
-- **Microtask 3.4 — Deterministic AI Safety Firewall:** Python `AISafetyGuard` firewall enforcing 6 physical invariants (non-cannibalization $\ge 14\text{d}$ buffer, mass conservation, rural blackout baseline demand floors) with monotonic thread-safe circuit breaker fallback ($< 5\text{ ms}$).
+- **Microtask 3.4 — Deterministic AI Safety Firewall:** Python `AISafetyGuard` firewall enforcing 6 physical invariants (zero donor depletion $\ge 14\text{d}$ buffer, mass conservation, rural blackout baseline demand floors) with monotonic thread-safe circuit breaker fallback ($< 5\text{ ms}$).
 
 ### Phase 4: Geospatial Command Center & Field Staff UI (Days 12–15)
 - **Microtask 4.1 — Frontend Design System:** Mobile-first responsive UI built with React 19, Tailwind CSS, Lucide icons, and WCAG 2.1 AAA dual-channel shape badges.

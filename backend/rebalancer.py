@@ -341,12 +341,12 @@ REBALANCER_SYSTEM_PROMPT = """You are the Principal Emergency Healthcare Logisti
 Your mandate is to evaluate Primary Health Centre (PHC) medicine deficits and recommend an optimal, safe inter-facility stock redistribution transfer.
 
 STRICT CLINICAL RULES:
-1. NON-CANNIBALIZATION INVARIANT: A donor facility must NEVER be depleted below its mandatory safety buffer (Surplus Available). You may only recommend transfer quantities less than or equal to the selected donor's surplus_available.
+1. ZERO DONOR DEPLETION INVARIANT: A donor facility must NEVER be depleted below its mandatory safety buffer (Surplus Available). You may only recommend transfer quantities less than or equal to the selected donor's surplus_available.
 2. TRANSIT FEASIBILITY: Balance distance, road transit time, and terrain type (e.g. Ghat mountains vs highways). Anti-snake venom and emergency biologics require rapid transit.
 3. EXPLAINABILITY (SOAP NOTE FORMAT): Structure clinical_rationale strictly according to standard healthcare SOAP note format:
    [S - Subjective] Recipient clinical presentation, urgency, community risk (snakebite, rabies, maternal hemorrhage).
    [O - Objective] Hard operational metrics: recipient current stock, DAC, DIR, deficit; donor current stock, retention buffer, transit hours.
-   [A - Assessment] Clinical justification of donor suitability, non-cannibalization verification, and zero-donor-harm confirmation.
+   [A - Assessment] Clinical justification of donor suitability, zero donor depletion verification, and secondary stockout prevention confirmation.
    [P - Plan] Explicit dispatch guidelines, transfer quantity, cold-chain protocol, and projected post-transfer buffer.
 4. OUTPUT FORMAT: Adhere strictly to the requested JSON schema.
 """
@@ -389,7 +389,7 @@ class AutonomousRebalancingService:
         """
         Main entrypoint: analyzes recipient deficit, finds candidates, calls Gemini AI or offline fallback,
         and constructs a complete RebalanceRecommendationResponse.
-        Enforces Monsoon Multipliers for Sahyadri Ghats, Consumption-Aware Expiry Math, and Non-Cannibalization Invariants.
+        Enforces Monsoon Multipliers for Sahyadri Ghats, Consumption-Aware Expiry Math, and Zero Donor Depletion Invariants.
         """
         now_dt = _get_utc_now()
         now_iso = now_dt.strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -519,7 +519,7 @@ class AutonomousRebalancingService:
                 recommended_urgency=urgency,
                 clinical_rationale=rationale_text,
                 tradeoff_analysis=f"Evaluated {len(candidates)} facilities within {max_radius_km} km radius; all lack surplus above {effective_min_donor_buffer_days}-day safety threshold.",
-                risk_assessment="High risk of network cannibalization if stock is forced from low-inventory facilities.",
+                risk_assessment="High risk of donor depletion and secondary stockouts if stock is forced from low-inventory facilities.",
                 all_candidates_evaluated=candidates,
                 is_feasible=False,
                 monsoon_buffer_applied=apply_monsoon
@@ -763,7 +763,7 @@ class AutonomousRebalancingService:
             f"Donor {top_donor.facility_name} possesses {top_donor.current_stock} units ({top_donor.surplus_available} units verified unreserved surplus "
             f"beyond mandatory {min_donor_buffer_days}-day retention buffer of {top_donor.retention_buffer} units; distance: {top_donor.distance_km} km; "
             f"transit: {top_donor.estimated_transit_hours} hrs).\n"
-            f"[A - Assessment] Non-cannibalization invariant verified: donor preserves {top_donor.current_stock - rec_qty} units post-transfer. "
+            f"[A - Assessment] Zero donor depletion invariant verified: donor preserves {top_donor.current_stock - rec_qty} units post-transfer. "
             f"{top_donor.facility_name} ranked optimal (suitability: {top_donor.suitability_score}/100) due to route transit speed and surplus depth. "
             f"Batches meet consumption-aware shelf life criteria.\n"
             f"[P - Plan] Dispatch {rec_qty} {recipient_info['medicine_unit']} under {'monitored cold-chain' if recipient_info['requires_cold_chain'] else 'standard'} "

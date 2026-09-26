@@ -141,7 +141,7 @@ export function RebalanceView() {
           'success'
         );
       } else {
-        showToast('No candidate donor satisfies safe non-cannibalization constraints', 'warning');
+        showToast('No candidate donor satisfies safe donor depletion constraints', 'warning');
       }
     } catch (err) {
       console.error('Recommendation failed:', err);
@@ -206,7 +206,7 @@ export function RebalanceView() {
             {t('rebalance_title', 'Autonomous Stock Rebalancing Cockpit')}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            {t('rebalance_subtitle', 'Real-time peer-to-peer inter-PHC stock redistribution with non-cannibalization safety proof')}
+            {t('rebalance_subtitle', 'Real-time peer-to-peer inter-PHC stock redistribution with zero-donor-depletion safety proof')}
           </p>
         </div>
 
@@ -495,7 +495,7 @@ export function RebalanceView() {
                     <h4 className="font-bold text-xs leading-tight">
                       {recommendation.is_feasible
                         ? t('plan_verified_title', 'Redistribution Plan Verified: Mathematically Feasible')
-                        : t('plan_infeasible_title', 'Redistribution Infeasible: Non-Cannibalization Invariant Guarded')}
+                        : t('plan_infeasible_title', 'Redistribution Infeasible: Zero-Donor-Depletion Invariant Guarded')}
                     </h4>
                     <p className="text-[11px] opacity-90 mt-0.5">
                       {recommendation.is_feasible
@@ -573,7 +573,7 @@ export function RebalanceView() {
                 {/* A - Assessment / Risk Assessment */}
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-brand-dark-surface/30 border border-slate-200/60 dark:border-slate-800 space-y-1">
                   <span className="font-bold text-[10px] text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                    {t('soap_a_label', '[A] Safety & Non-Cannibalization Proof')}
+                    {t('soap_a_label', '[A] Safety & Zero-Donor-Depletion Proof')}
                   </span>
                   <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
                     {recommendation.risk_assessment}

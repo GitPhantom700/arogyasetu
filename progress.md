@@ -65,7 +65,7 @@
   * ✅ Stage 3: Secondary Google Ecosystem Double-Audit (PASSED - Gemini 3.6 Flash scored 88/100; remediated: atomic SQLite `INSERT ... ON CONFLICT DO UPDATE ... RETURNING`, elevated 82.0 auto-match threshold + pharmacist review badge for ambiguous matches, dual-stage magic byte verification)
   * ✅ Stage 4: Interactive Human Final Approval (PASSED - Verified live by User with authentic Maharashtra DHS stock arrival delivery challan and interactive UI document preview on 2026-09-07)
 * [x] **Microtask 3.3 (Day 10):** Gemini Autonomous Rebalancing Agent (Constraint-based logistics rebalancing with explainable reasoning)
-  * ✅ Stage 1: Deterministic Implementation & Verification (PASSED - Haversine terrain routing, non-cannibalization safety buffer, cold-chain matching, offline fallback, and 9/9 automated tests in `backend/test_rebalancer.py`, 61/61 overall test suite passing 100% in 23.44s)
+  * ✅ Stage 1: Deterministic Implementation & Verification (PASSED - Haversine terrain routing, zero donor depletion safety buffer, cold-chain matching, offline fallback, and 9/9 automated tests in `backend/test_rebalancer.py`, 61/61 overall test suite passing 100% in 23.44s)
   * ✅ Stage 2: Primary Google Ecosystem Review (PASSED - Gemini Pro Latest scored 85/100; remediated: consumption-aware FEFO expiry math covering recipient consumption window + 7d, Sahyadri Ghats monsoon 1.5x buffer multipliers [14d -> 21d], atomic TOCTOU concurrency guard raising HTTP 409 Conflict, medical SOAP format clinical explainability, and 11/11 tests in `backend/test_rebalancer.py`, 63/63 overall test suite passing 100% in 21.34s)
   * ✅ Stage 3: Secondary Google Ecosystem Double-Audit (PASSED - Gemini 3.6 Flash scored 93/100 [Approved with Operational Directives]; 180-day consumption ceiling cap enforced, SQLite WAL + BEGIN IMMEDIATE + row-level OCC verified, SOAP formatting confirmed)
   * ✅ Stage 4: Interactive Human Final Approval (PASSED - Verified by User with 0 errors on 2026-09-07)
@@ -92,11 +92,11 @@
 * [x] **Microtask 4.4 (Day 15):** Rebalancing Authorization Modal & Animated Route Dispatch Visualizer
   * ✅ Stage 1: Deterministic Implementation & Verification (PASSED - Clinical authorization modal with electronic DSCSA signatures, mandatory ILR cold-chain gate, Leaflet route polyline visualizer with animated transport pulse, 82/82 backend tests passing, production bundle compiled with 0 errors)
   * ✅ Stage 2: Primary Google Ecosystem Review (PASSED - Gemini Pro Latest scored 94/100 [Approved with Conditions]; remediated: dynamic donor retention display, FEFO batch array fallbacks, real-time SSE telemetry synchronization listener)
-  * ✅ Stage 3: Secondary Google Ecosystem Double-Audit (PASSED - Gemini Flash scored 99/100 [APPROVED]; non-cannibalization invariant enforcement, memory ergonomics, zero teleportation verified)
+  * ✅ Stage 3: Secondary Google Ecosystem Double-Audit (PASSED - Gemini Flash scored 99/100 [APPROVED]; zero donor depletion invariant enforcement, memory ergonomics, zero teleportation verified)
 * [x] **Microtask 5.1 (Day 16):** Crisis & Outbreak Simulation Engine
   * ✅ Stage 1: Deterministic Implementation & Verification (PASSED - 4 authentic epidemiological shock presets, FEFO emergency depletions, SSE emergency alert broadcasts, multi-facility autonomous swarm rebalancing generation, 85/85 backend tests passing 100%, 192 continuous DSCSA blocks verified)
   * ✅ Stage 2: Primary Google Ecosystem Review (PASSED - Gemini Pro Latest re-audit scored 95/100 [APPROVED]; remediated: durable SQLite snapshot persistence in `crisis_snapshots` surviving process restarts, line-item `AUDIT_CORRECTION` transactions preserving DSCSA hash chains, sequential pre-dispatch live donor buffer checks)
-  * ✅ Stage 3: Secondary Google Ecosystem Double-Audit (PASSED - Gemini Flash scored 97/100 [APPROVED - Cross-Model Consensus]; crash resilience, zero data loss, and anti-cannibalization guarantees verified)
+  * ✅ Stage 3: Secondary Google Ecosystem Double-Audit (PASSED - Gemini Flash scored 97/100 [APPROVED - Cross-Model Consensus]; crash resilience, zero data loss, and zero donor depletion guarantees verified)
   * ✅ Stage 4: Interactive Human Final Approval (PASSED - Formally signed off by User on 2026-09-11)
 * [x] **Microtask 7.1 (Day 22):** ABDM Sovereign Stack Integration (M1-M3 Mock Gateway & ABHA Consent)
   * ✅ Stage 1: Deterministic Implementation & Verification (PASSED - HFR/HPR verification, ABHA consent sealing, 90/90 tests passing)
@@ -271,7 +271,7 @@
 * **Activity:**
   * Implemented autonomous logistics rebalancing engine in `backend/rebalancer.py` powered by Google Gemini (`gemini-2.5-flash` / `gemini-1.5-flash` with fallback) and deterministic constraint algorithms.
   * Formulated and enforced core logistics invariants:
-    1. **Non-Cannibalization / Zero Starvation Invariant:** Donors must retain surplus stock $> 14\text{ days}$ of Daily Average Consumption (DAC).
+    1. **Zero Donor Depletion / Reserve Floor Invariant:** Donors must retain surplus stock $> 14\text{ days}$ of Daily Average Consumption (DAC).
     2. **Consumption-Aware FEFO Expiry Math:** Donor batches must satisfy $\text{Expiry} \ge \text{today} + \text{transit\_days} + \min(180, \lceil\frac{\text{deficit}}{\text{dac}}\rceil) + 7\text{d}$.
     3. **Sahyadri Ghats Monsoon Multipliers:** Expanded buffer from 14d to 21d ($1.5\times$) for `GHAT_MOUNTAIN` terrain and `monsoon_mode=True`.
     4. **Atomic TOCTOU Concurrency Guard:** Inside SQLite transaction with `BEGIN IMMEDIATE`, re-checks donor surplus `actual_surplus = max(0, active_stock - donor_retention)`; raises `TOCTOUConflictError` (mapped to HTTP 409 Conflict) if stock changes before commit.
@@ -292,7 +292,7 @@
 ### 2026-09-07 (Day 11: Microtask 3.4 — AI Safety, Guardrails & Fallback Audit)
 * **Activity:**
   * Implemented deterministic AI Safety Guardrail firewall (`AISafetyGuard`) in `backend/ai_safety.py` enforcing 6 core physical and mathematical invariants across all Gemini rebalancing recommendations and vision extractions:
-    1. **Non-Cannibalization / Zero Donor Starvation:** Mandates donor retention of $\ge 14\text{ days}$ Daily Average Consumption (DAC), expanding to 21 days ($1.5\times$) in `GHAT_MOUNTAIN` terrain during monsoon mode.
+    1. **Zero Donor Depletion / Reserve Floor:** Mandates donor retention of $\ge 14\text{ days}$ Daily Average Consumption (DAC), expanding to 21 days ($1.5\times$) in `GHAT_MOUNTAIN` terrain during monsoon mode.
     2. **Physical Non-Negative Inventory Bounding:** Clamps transfer volume to $[0, \text{actual\_surplus}]$, eliminating phantom stock hallucinations.
     3. **Cold-Chain Verification Invariant:** Rejects temperature-sensitive biologicals (Anti-Rabies Vaccine, Human Insulin, Oxytocin) if donor lacks verified Ice-Lined Refrigerator (ILR) equipment.
     4. **Road Transit Feasibility & FEFO Integrity:** Ensures batch expiry exceeds transit duration plus clinical consumption window ($> 7\text{ days}$).
@@ -426,7 +426,7 @@
 
 ### 2026-09-11 (Day 15: Microtask 4.4 — Rebalancing Authorization Modal & Animated Route Dispatch Visualizer)
 * **Activity:**
-  * Implemented `RebalanceModal.jsx` featuring DSCSA electronic signature authorization, non-cannibalization dynamic retention display (retained donor days calculation), and mandatory Ice-Lined Refrigerator (ILR) cold-chain verification gates.
+  * Implemented `RebalanceModal.jsx` featuring DSCSA electronic signature authorization, zero-donor-depletion dynamic retention display (retained donor days calculation), and mandatory Ice-Lined Refrigerator (ILR) cold-chain verification gates.
   * Implemented animated route visualizer in `MapView.jsx` displaying Leaflet polylines, pulsating transfer markers, and multi-segment transit progress.
   * Integrated real-time SSE listener synchronizing dispatch events (`broadcast_transfer_event`) directly into active route layers.
 * **Deterministic Verification:**
@@ -453,7 +453,7 @@
   * Cryptographic ledger integrity: `verify_dscsa_ledger_integrity()` verified 192 continuous blocks (`status: VERIFIED`, `chain_valid: True`).
   * Frontend build: `npm run build` compiled cleanly in 1.52s with 0 errors.
   * Live browser verification: `browser_subagent` verified shock activation, alert toasts, map banners, and baseline reset.
-* **Stage 2 Gemini Pro Audit & Re-Audit:** Initial score **78 / 100** (`APPROVED WITH CONDITIONS`). Re-audit score: **95 / 100** (`APPROVED`). Remediated: durable SQLite snapshot storage (`crisis_snapshots`), line-item DSCSA audit continuity, and sequential anti-cannibalization buffer checks.
+* **Stage 2 Gemini Pro Audit & Re-Audit:** Initial score **78 / 100** (`APPROVED WITH CONDITIONS`). Re-audit score: **95 / 100** (`APPROVED`). Remediated: durable SQLite snapshot storage (`crisis_snapshots`), line-item DSCSA audit continuity, and sequential anti-depletion buffer checks.
 * **Stage 3 Gemini Flash Double-Audit:** Score **97 / 100** (`APPROVED - Cross-Model Consensus`). Crash resilience, zero data loss, and clinical non-starvation guarantees verified.
 * **Gate Status:** Stage 4 Interactive Human Final Approval PASSED (Signed off by User on 2026-09-11). Microtask 5.1 officially closed. Ready for Day 17 (Microtask 5.2: System Hardening & Edge-Case Audit).
 

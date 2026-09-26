@@ -464,7 +464,7 @@ class AISafetyGuard:
             rec["recommended_quantity"] = recommended_qty
             rec["quantity"] = recommended_qty
 
-        # 5. Non-Cannibalization Invariant Assertion
+        # 5. Zero Donor Depletion Invariant Assertion
         post_donor_stock = actual_donor_stock - rec["recommended_quantity"]
         if post_donor_stock < retention_buffer:
             violations.append({
@@ -707,7 +707,7 @@ class AISafetyGuard:
             return {
                 "guardrails_active": True,
                 "invariants_enforced": [
-                    "Non-Cannibalization Donor Safety Buffer (>= 14 days / 21d Monsoon)",
+                    "Zero Donor Depletion Safety Buffer (>= 14 days / 21d Monsoon)",
                     "Consumption-Aware FEFO Shelf-Life Horizon",
                     "Deficit & Surplus Strict Quantity Clamping",
                     "Expired Medication Ingestion Blocking",

@@ -1160,14 +1160,14 @@
         <!-- Invariant 1 -->
         <div class="invariant-card">
           <div class="invariant-header">
-            <span class="invariant-title">Invariant 1: Non-Cannibalization / Zero Donor Starvation</span>
+            <span class="invariant-title">Invariant 1: Zero Donor Depletion / Reserve Floor Protection</span>
             <span class="badge badge-danger">CRITICAL SAFETY</span>
           </div>
           <div class="invariant-formula">
             Retained_Donor_Stock ≥ max( min_safety_stock, ⌈ 14 × DAC ⌉ ) &nbsp;|&nbsp; ⌈ 21 × DAC ⌉ (Monsoon Mode)
           </div>
           <p class="invariant-desc">
-            A donor clinic can <strong>never</strong> transfer stock if doing so degrades its own inventory below 14 days of Daily Average Consumption (DAC). In monsoon conditions (June–September) across mountain terrain, this buffer is automatically scaled by 1.5× to <strong>21 days</strong>. Eliminates the hazard of "cannibalizing" one clinic to save another.
+            A donor clinic can <strong>never</strong> transfer stock if doing so degrades its own inventory below 14 days of Daily Average Consumption (DAC). In monsoon conditions (June–September) across mountain terrain, this buffer is automatically scaled by 1.5× to <strong>21 days</strong>. Eliminates the hazard of depleting one clinic's safety reserve to save another, preventing secondary stockouts.
           </p>
         </div>
 
@@ -1353,7 +1353,7 @@
           </div>
           
           <p style="color: var(--slate-700); margin-bottom: 14px; font-size: 13.5px;">
-            Intelligent logistics optimization service that discovers surplus donor clinics within a 50 km radius when an emergency stockout alert fires. Solves multi-objective constraints (distance, road transit time, cold-chain compatibility, and non-cannibalization buffer preservation) and formats clinical reasoning into medical SOAP notes.
+            Intelligent logistics optimization service that discovers surplus donor clinics within a 50 km radius when an emergency stockout alert fires. Solves multi-objective constraints (distance, road transit time, cold-chain compatibility, and zero donor depletion buffer preservation) and formats clinical reasoning into medical SOAP notes.
           </p>
 
           <div style="background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px;">
@@ -1366,7 +1366,7 @@
               </li>
               <li><strong>Optimized Proposal:</strong> Proposes transferring <strong>15 vials</strong> of Batch <code>MED-ASV-01-B1</code> from DH Aundh to SC Velhe via refrigerated medical transport. Estimated transit time: 1.4 hours.</li>
               <li><strong>SOAP Clinical Explainability:</strong> Generates structured explanation:
-                <br><em>"[S] Sub-Centre Velhe reports critical ASV stockout amidst active snakebite presentations. [O] Current stock 0 vials, DIR 0.0d. [A] Acute envenomation fatality risk within 2 hours. DH Aundh holds 92 surplus vials with verified cold-chain ILR. [P] Dispatch 15 vials via refrigerated emergency vehicle. Aundh retains 105 vials (52.5 days reserve), satisfying non-cannibalization safety invariants."</em>
+                <br><em>"[S] Sub-Centre Velhe reports critical ASV stockout amidst active snakebite presentations. [O] Current stock 0 vials, DIR 0.0d. [A] Acute envenomation fatality risk within 2 hours. DH Aundh holds 92 surplus vials with verified cold-chain ILR. [P] Dispatch 15 vials via refrigerated emergency vehicle. Aundh retains 105 vials (52.5 days reserve), satisfying zero donor depletion safety invariants."</em>
               </li>
             </ul>
           </div>
@@ -1681,7 +1681,7 @@
                 <tr>
                   <td><strong>5. Cross-District Resource Redistribution</strong><br><span style="font-size: 11.5px; color: var(--slate-500);">Automated P2P rebalancing</span></td>
                   <td>
-                    <code>backend/rebalancer.py</code> multi-objective optimizer balances road transit, distance, cold-chain ILR, and non-cannibalization safety floors across district borders.
+                    <code>backend/rebalancer.py</code> multi-objective optimizer balances road transit, distance, cold-chain ILR, and zero donor depletion safety floors across district borders.
                   </td>
                   <td>
                     <strong>Inter-District Allocation:</strong> Transfers 10 Anti-Rabies Vaccine vials from CHC Wai (Satara) to PHC Medha (Satara), and 15 ASV vials from DH Aundh (Pune) to SC Velhe (Pune), maintaining $\ge 14\text{d} / 21\text{d}$ monsoon buffer.
@@ -2300,7 +2300,7 @@
             <div class="timeline-title">Phase 2: Transactional Core & Transfer State Machine (Days 4 – 7)</div>
             <div class="timeline-meta">Completed & Verified on September 6, 2026 | 100% Passing</div>
             <div class="timeline-body">
-              Engineered ACID stock decrement endpoints (<code>/consume</code>, <code>/receive</code>, <code>/write-off</code>) with <code>BEGIN IMMEDIATE</code> locks and Optimistic Concurrency Control (OCC <code>version</code> column). Implemented the pure computational dynamic burn-rate engine in <code>backend/burn_rate.py</code> calculating rolling 7-day Daily Average Consumption (DAC), Days of Inventory Remaining (DIR), and acute surge acceleration ($V_{\text{surge}}$). Built the inter-PHC transfer state machine in <code>backend/transfers_core.py</code> enforcing non-cannibalization reservations, transit physics, and zero inventory leakage.
+              Engineered ACID stock decrement endpoints (<code>/consume</code>, <code>/receive</code>, <code>/write-off</code>) with <code>BEGIN IMMEDIATE</code> locks and Optimistic Concurrency Control (OCC <code>version</code> column). Implemented the pure computational dynamic burn-rate engine in <code>backend/burn_rate.py</code> calculating rolling 7-day Daily Average Consumption (DAC), Days of Inventory Remaining (DIR), and acute surge acceleration ($V_{\text{surge}}$). Built the inter-PHC transfer state machine in <code>backend/transfers_core.py</code> enforcing zero donor depletion reservations, transit physics, and zero inventory leakage.
             </div>
           </div>
 

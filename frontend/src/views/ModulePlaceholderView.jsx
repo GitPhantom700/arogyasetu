@@ -36,7 +36,7 @@ export function ModulePlaceholderView({ tabId }) {
       title: 'Gemini Autonomous Rebalancer & Route Dispatcher',
       badge: 'Autonomous Rebalancer',
       icon: Cpu,
-      description: 'Full-screen clinical rebalancing cockpit. Discovers candidate donor facilities within 50 km, enforces non-cannibalization safety buffers (14d/21d monsoon), generates explainable medical SOAP rationales with Gemini, and dispatches transfers with 1-click authorization.',
+      description: 'Full-screen clinical rebalancing cockpit. Discovers candidate donor facilities within 50 km, enforces zero donor depletion safety buffers (14d/21d monsoon), generates explainable medical SOAP rationales with Gemini, and dispatches transfers with 1-click authorization.',
       deliverables: [
         'Live network deficit radar with 1-click scenario analysis',
         'Multi-objective candidate donor ranking matrix',

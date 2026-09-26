@@ -320,7 +320,7 @@ export function RebalanceAuthModal() {
             <div className="p-3 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/20 flex items-center gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
               <span className="text-[11px] text-emerald-800 dark:text-emerald-200">
-                <strong>Non-Cannibalization Invariant:</strong> Donor will retain at least 14 days of Daily Average Consumption (DAC) reserve.
+                <strong>Zero Donor Depletion Invariant:</strong> Donor will retain at least 14 days of Daily Average Consumption (DAC) reserve.
               </span>
             </div>
           </div>

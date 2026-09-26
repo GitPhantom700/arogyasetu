@@ -148,7 +148,7 @@ async def swarm_dispatch_crisis_transfers(
 ):
     """
     Automates immediate swarm dispatch for all multi-facility emergency redistribution proposals.
-    Applies live anti-cannibalization validation between sequential transfers to ensure donors
+    Applies live anti-depletion validation between sequential transfers to ensure donors
     are never starved below their mandatory 14-day (21-day in Monsoon) safety floor.
     """
     dispatched = []
@@ -200,18 +200,18 @@ async def swarm_dispatch_crisis_transfers(
             retained_buffer_days = remaining_stock / daily_burn if daily_burn > 0 else 999.0
 
             if remaining_stock < min_safety or retained_buffer_days < min_required_days:
-                # Anti-cannibalization guard: calculate safe surplus
+                # Anti-depletion guard: calculate safe surplus
                 safe_surplus = max(0, int(live_donor_stock - max(min_safety, daily_burn * min_required_days)))
                 if safe_surplus <= 0:
                     logger.warning(
                         f"[SwarmDispatch] Skipping transfer: Donor {donor_name} buffer would drop to "
-                        f"{retained_buffer_days:.1f} days (minimum {min_required_days} required, min safety: {min_safety}). Cannibalization prevented."
+                        f"{retained_buffer_days:.1f} days (minimum {min_required_days} required, min safety: {min_safety}). Donor depletion prevented."
                     )
                     skipped.append({
                         "donor_facility_id": plan.donor_facility_id,
                         "recipient_facility_id": plan.recipient_facility_id,
                         "medicine_id": plan.medicine_id,
-                        "reason": f"Donor {donor_name} retention buffer violation ({retained_buffer_days:.1f}d < {min_required_days}d threshold). Cannibalization prevented."
+                        "reason": f"Donor {donor_name} retention buffer violation ({retained_buffer_days:.1f}d < {min_required_days}d threshold). Donor depletion prevented."
                     })
                     continue
                 else:
@@ -271,5 +271,5 @@ async def swarm_dispatch_crisis_transfers(
         "transfers": dispatched,
         "skipped_count": len(skipped),
         "skipped": skipped,
-        "message": f"Successfully authorized & dispatched {len(dispatched)} emergency redistribution corridors ({len(skipped)} skipped to prevent donor cannibalization)."
+        "message": f"Successfully authorized & dispatched {len(dispatched)} emergency redistribution corridors ({len(skipped)} skipped to prevent donor depletion)."
     }

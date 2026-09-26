@@ -267,7 +267,7 @@ def test_reset_records_line_item_audit_corrections():
     assert integrity["status"] == "VERIFIED"
 
 
-def test_swarm_dispatch_anti_cannibalization_donor_protection():
+def test_swarm_dispatch_anti_depletion_donor_protection():
     """
     Remediation 3 Verification:
     Verify that /api/crisis/swarm-dispatch checks live donor stock between sequential transfers
@@ -290,7 +290,7 @@ def test_swarm_dispatch_anti_cannibalization_donor_protection():
         LIMIT 1;
     """)
     row = cursor.fetchone()
-    assert row is not None, "Need a donor with 30-80 units of stock for cannibalization test"
+    assert row is not None, "Need a donor with 30-80 units of stock for donor depletion test"
     donor_id = row["donor_id"]
     med_id = row["medicine_id"]
     total_stock = row["total_stock"]
