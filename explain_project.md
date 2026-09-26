@@ -1,5 +1,5 @@
-# 🩺 PranaVahini (प्राणवाहिनी) — Intuitive System Guide
-> **The "Explain-It-Like-I'm-In-10th-Grade" Architectural & Operational Walkthrough**  
+# 🩺 PranaVahini (प्राणवाहिनी) — System Architecture & Operational Guide
+> **Executive Architectural Overview, Operational Philosophy & Clinical Logistics Guide**  
 > *Track 03: Smart Health & Supply Chain Resilience (Theme: Resilience)*  
 > *Google Cloud & Hack2Skill "Build with AI: Code for Communities"*  
 
@@ -81,15 +81,14 @@ In a classroom textbook, a simple subtraction formula works. But in the unpredic
 
 Large Language Models (LLMs) like Google Gemini are brilliant, but they can occasionally make mistakes or hallucinate. In healthcare, an AI mistake can be fatal.
 
-### The Exam Room Analogy:
-> Imagine a smart robot helping students share stationery during a final exam:
-> * **Student A** has **0 pencils** (Emergency!).
-> * **Student B** has only **2 pencils** (They need 1 to write their exam and 1 backup).
+### The Clinical Cannibalization Dilemma:
+> Consider an unconstrained algorithmic allocator operating across two rural health centres:
+> * **Facility A (Sub-Centre Velhe)** experiences an acute envenomation surge and requires **15 vials** of Anti-Snake Venom.
+> * **Facility B (Primary Health Centre Paud)** holds a modest inventory of **15 vials** (its own statutory 14-day emergency reserve).
 > 
-> If the robot says: *"Take both pencils from Student B and give them to Student A!"*
-> Now Student B has **0 pencils** and fails their exam!
+> A naive optimization model or unconstrained LLM would propose: *"Transfer all 15 vials from Facility B to Facility A."*
 > 
-> **In a hospital:** If an AI takes all 25 vials of antivenom from Clinic B to save Clinic A, Clinic B is left completely defenseless. If a farmer is bitten near Clinic B tomorrow morning, **they die because the AI cannibalized their stock!**
+> While Facility A is temporarily relieved, **Facility B has been rendered completely vulnerable (0 vials remaining)**. If an emergency snakebite presentation occurs at Facility B the following morning, that patient faces a preventable fatal outcome because the system cannibalized the donor clinic's safety floor.
 
 To guarantee absolute safety, PranaVahini places a hardcoded, deterministic Python firewall called **`AISafetyGuard`** between the AI and the database:
 
@@ -117,14 +116,10 @@ graph TD
 
 ## ⚡ Chapter 5: What is the "Circuit Breaker"?
 
-### The Power Backup Analogy:
-> In your home, if lightning strikes the power lines or an electrical surge occurs, the circuit breaker (MCB) trips instantly to prevent your appliances from catching fire.
+### The Emergency Hospital Generator Analogy:
+> Just as an intensive care unit switches to an uninterruptible local generator within milliseconds of a power grid collapse, clinical logistics software cannot freeze when a severe monsoon thunderstorm severs rural cellular connectivity or causes cloud API latency.
 > 
-> In a remote mountain clinic, what happens if a thunderstorm knocks out the cellular tower, or Google's cloud API becomes unreachable?
-> 
-> **Does the hospital screen freeze with an `"Error 500: Server Down"` while a snakebite victim is in agony?**
-> 
-> **ABSOLUTELY NOT.**
+> A critical healthcare rebalancing decision cannot halt with an `"Error 500: Service Unavailable"` while an envenomated patient awaits life-saving biologics.
 
 PranaVahini features an automated **`CircuitBreaker`**:
 * **Autonomous Trip:** If 3 consecutive calls to the cloud AI fail or timeout, the Circuit Breaker trips from `CLOSED` to `OPEN`.
